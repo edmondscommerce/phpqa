@@ -105,7 +105,7 @@ Running PHPUnit Tests
 "
 # Note the quickTests=1 = this sets a config variable of quickTests which you can then use to allow tests to run less thoroughly but more quickly
 set -x
-quickTests=1 phpNoXdebug -f bin/phpunit \
+quickTests=1 phpNoXdebug -f bin/phpunit --\
     --debug \
     tests/ \
     ${phpunitParams:-""}
@@ -174,7 +174,8 @@ Running Code Sniffer on src and tests
 -------------------------------------
 "
 set -x
-phpNoXdebug -f bin/phpcs --config-set ignore_warnings_on_exit 1
+phpNoXdebug -f bin/phpcs -- \
+    --config-set ignore_warnings_on_exit 1
 phpNoXdebug -f bin/phpcs -- \
     --standard=$codeSnifferStandardsPath \
     --colors \
@@ -191,7 +192,7 @@ echo "
 Running PHP Mess Detector
 -------------------------
 "
-phpNoXdebug -f bin/phpmd \
+phpNoXdebug -f bin/phpmd -- \
     --suffixes php,phtml \
     cleancode \
     codesize \
