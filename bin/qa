@@ -21,6 +21,8 @@ projectRoot=$(realpath ./../../../../)
 cd $projectRoot;
 mkdir -p $projectRoot/var;
 
+srcDir=
+
 function phpNoXdebug {
     set +x
     local temporaryPath="$(mktemp -t php.XXXX).ini"
@@ -106,12 +108,9 @@ Running PHPUnit Tests
 # Note the quickTests=1 = this sets a config variable of quickTests which you can then use to allow tests to run less thoroughly but more quickly
 set -x
 quickTests=1 phpNoXdebug -f bin/phpunit --\
-    --debug \
     tests/ \
     ${phpunitParams:-""}
 set +x
-
-
 
 echo "
 
@@ -119,8 +118,10 @@ Checking if Uncommitted Changes
 ------------------------------
 "
 set +e
+set -x
 git diff-index --quiet HEAD
 repoDirty=$?
+set +x
 set -e
 if (( $repoDirty > 0 ))
 then
@@ -129,6 +130,7 @@ then
 Untracked changes detected - ABORTING
 
 "
+    git diff-index HEAD
     exit 1
 fi
 
