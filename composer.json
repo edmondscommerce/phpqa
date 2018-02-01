@@ -30,7 +30,6 @@
   "require-dev": {
   },
   "config": {
-    "bin-dir": "bin/phpqa",
     "secure-http": false,
     "preferred-install": "dist",
     "optimize-autoloader": true
