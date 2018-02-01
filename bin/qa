@@ -168,6 +168,7 @@ phpNoXdebug -f bin/phpcs -- \
     --standard=$codingStandardsCheckStandard \
     --colors \
     --cache=$projectRoot/var/phpcs.cache \
+    --exclude=Symfony.Commenting.License,Symfony.Commenting.ClassComment,Symfony.Errors.ExceptionMessage,Symfony.Functions.Arguments \
     -s \
     --report-full \
     --report-summary \
@@ -179,15 +180,19 @@ echo "
 Running PHP Mess Detector
 -------------------------
 "
+set -x
 phpNoXdebug -f bin/phpmd -- \
+    src,tests,bin \
+    text \
+    cleancode,codesize,controversial,design,naming,unusedcode \
     --suffixes php,phtml \
-    cleancode \
-    codesize \
-    controversial \
-    design \
-    nameing \
-    unusedcode
-
+    --minimumpriority 5 \
+    | sort -u \
+    | sed G \
+    | sed -e 's#p:#p\nLine: #' \
+    | sed -e 's#\t\{1,\}#\n#' \
+    | sed -e 's#\. #\.\n#'
+set +x
 
 echo << WOO
 
