@@ -30,8 +30,9 @@
   "require-dev": {
   },
   "config": {
-    "secure-http": false,
-    "preferred-install": "dist",
+    "preferred-install": {
+      "*": "dist"
+    },
     "optimize-autoloader": true
   },
   "minimum-stability": "stable",
