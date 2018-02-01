@@ -17,12 +17,18 @@ echo "
 $(hostname) $0 $@
 ===========================================
 "
+
+#project root directory
 projectRoot=$(realpath ./../../../../)
+
+#Coding Standard for checking
+codingStandardsCheckStandard=$projectRoot/vendor/squizlabs/php_codesniffer/src/Standards/PSR2
+
+## PROCESS STARTS ##
 cd $projectRoot;
 mkdir -p $projectRoot/var;
 
-srcDir=
-
+# Function to run PHP without Xdebug enabled, much faster
 function phpNoXdebug {
     set +x
     local temporaryPath="$(mktemp -t php.XXXX).ini"
@@ -134,41 +140,21 @@ Untracked or Uncommited changes detected - ABORTING
     exit 1
 fi
 
-echo "
-
-Running Coding Standards Fixer
----------------------------------------------
-"
-set -x
-phpNoXdebug -f bin/php-cs-fixer -- \
-    --rules=@PSR1,@PSR2,@Symfony \
-    --cache-file=$projectRoot/var/php-cs-fixer-src.cache \
-    fix src
-phpNoXdebug -f bin/php-cs-fixer -- \
-    --rules=@PSR1,@PSR2,@Symfony \
-    --cache-file=$projectRoot/var/php-cs-fixer-tests.cache \
-    fix tests
-phpNoXdebug -f bin/php-cs-fixer -- \
-    --cache-file=$projectRoot/var/php-cs-fixer-bin.cache \
-    --rules=@PSR1,@PSR2,@Symfony \
-    fix bin
-set +x
-
-
-codeSnifferStandardsPath=$projectRoot/vendor/escapestudios/symfony2-coding-standard/Symfony
 
 echo "
 
 Running Beautifier and Fixer on src and tests
 ---------------------------------------------
 "
+set +e
 set -x
 phpNoXdebug -f bin/phpcbf -- \
-    --standard=$codeSnifferStandardsPath \
+    --standard=$codingStandardsCheckStandard \
     --colors \
     --cache=$projectRoot/var/phpcbf.cache \
     src tests bin
 set +x
+set -e
 
 echo "
 
@@ -179,10 +165,9 @@ set -x
 phpNoXdebug -f bin/phpcs -- \
     --config-set ignore_warnings_on_exit 1
 phpNoXdebug -f bin/phpcs -- \
-    --standard=$codeSnifferStandardsPath \
+    --standard=$codingStandardsCheckStandard \
     --colors \
     --cache=$projectRoot/var/phpcs.cache \
-    --exclude=Symfony.Commenting.License,Symfony.Commenting.ClassComment \
     -s \
     --report-full \
     --report-summary \
