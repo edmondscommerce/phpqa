@@ -1,2 +1,5 @@
 /.idea/
 /var/
+/vendor/
+/bin/*
+!/bin/qa
