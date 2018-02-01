@@ -120,19 +120,17 @@ Checking if Uncommitted Changes
 ------------------------------
 "
 set +e
-set -x
-git diff-index --quiet HEAD
+git status | grep -q "nothing to commit, working directory clean"
 repoDirty=$?
-set +x
 set -e
 if (( $repoDirty > 0 ))
 then
     echo "
 
-Untracked changes detected - ABORTING
+Untracked or Uncommited changes detected - ABORTING
 
 "
-    git diff-index HEAD
+    git status
     exit 1
 fi
 

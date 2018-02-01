@@ -81,12 +81,18 @@ There is an environment variable for PHPUnit set called `quickTests`
 Using this, you can allow your tests to take a different path, skip tests etc if they are long running. 
 
 ```php
-<?php
+<?php declare(strict_types=1);
+
+use EdmondsCommerce\PHPQA\Constants;
+use PHPUnit\Framework\TestCase;
+
 class MyTest extends TestCase {
     
     public function testLongRunningThing(){
-        if(isset($_SERVER['quickTests']) && $_SERVER['quickTests'] == 1){
-            $this->markTestAsSkipped();
+         if (isset($_SERVER[Constants::QA_QUICK_TESTS_KEY])
+            && $_SERVER[Constants::QA_QUICK_TESTS_KEY] == Constants::QA_QUICK_TESTS_ENABLED
+        ) {
+            $this->markTestSkipped('Quick tests is enabled');
         }
         //long running stuff
     }
