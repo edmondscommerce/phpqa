@@ -58,8 +58,19 @@ Very fast PHP linting process. Checks for syntax errors in your PHP files
 ### PHPStan
 Static Analysis of your PHP code
 
+#### Configuration 
 Configuration file should be placed in `{project-root}/tests/phpstan.neon`
 
+##### Boostrap
 In the configuration you might want to specify a [php bootstrap file](https://github.com/phpstan/phpstan#bootstrap-file) to initialise your code
+
+If you place you `phpstan-bootstrap.php` in `{project-root}/tests/phpstan-bootstrap.php`
+
+Then neon file should look like:
+
+```
+parameters:
+	bootstrap: %rootDir%/../../../../tests/phpstan-bootstrap.php
+```
 
 
