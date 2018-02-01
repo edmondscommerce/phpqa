@@ -105,9 +105,11 @@ echo "
 Running PHPUnit Tests
 ---------------------
 "
-# Note the quickTests=1 = this sets a config variable of quickTests which you can then use to allow tests to run less thoroughly but more quickly
+# Note the qaQuickTests=1
+# this sets a config variable of quickTests which you can then use
+# to allow tests to run less thoroughly but more quickly
 set -x
-quickTests=1 phpNoXdebug -f bin/phpunit --\
+qaQuickTests=1 phpNoXdebug -f bin/phpunit --\
     tests/ \
     ${phpunitParams:-""}
 set +x
