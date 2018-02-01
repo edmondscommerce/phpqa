@@ -20,7 +20,7 @@
     "jakub-onderka/php-parallel-lint": "*@stable",
     "jakub-onderka/php-console-highlighter": "*@stable",
     "sllh/composer-versions-check": "*@stable",
-    "johnkary/phpunit-speedtrap": "dev-master",
+    "johnkary/phpunit-speedtrap": "dev-master"
   },
   "bin": [
     "bin/phpqa"
