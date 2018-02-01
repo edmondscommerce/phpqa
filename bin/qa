@@ -122,6 +122,25 @@ set +x
 
 echo "
 
+Running PHP Mess Detector
+-------------------------
+"
+set -x
+phpNoXdebug -f bin/phpmd -- \
+    src,tests,bin \
+    text \
+    cleancode,codesize,controversial,design,naming,unusedcode \
+    --suffixes php,phtml \
+    --minimumpriority 5 \
+    | sort -u \
+    | sed G \
+    | sed -e 's#p:#p\nLine: #' \
+    | sed -e 's#\t\{1,\}#\n#' \
+    | sed -e 's#\. #\.\n#'
+set +x
+
+echo "
+
 Checking if Uncommitted Changes
 ------------------------------
 "
@@ -175,24 +194,7 @@ phpNoXdebug -f bin/phpcs -- \
     src tests bin
 set +x
 
-echo "
 
-Running PHP Mess Detector
--------------------------
-"
-set -x
-phpNoXdebug -f bin/phpmd -- \
-    src,tests,bin \
-    text \
-    cleancode,codesize,controversial,design,naming,unusedcode \
-    --suffixes php,phtml \
-    --minimumpriority 5 \
-    | sort -u \
-    | sed G \
-    | sed -e 's#p:#p\nLine: #' \
-    | sed -e 's#\t\{1,\}#\n#' \
-    | sed -e 's#\. #\.\n#'
-set +x
 
 echo << WOO
 
