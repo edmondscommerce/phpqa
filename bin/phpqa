@@ -84,10 +84,11 @@ Running PHPStan
 ---------------------
 "
 set -x
+neonConfigPath=$projectRoot/tests/phpstan.neon
 neonConfig=
-if [[ -f $projectRoot/test/phpstan.neon ]]
+if [[ -f $neonConfigPath ]]
 then
-    neonConfig=$projectRoot/tests/phpstan.neon
+    neonConfig=$neonConfigPath
 fi
 if [[ "" != "$neonConfig" ]]
 then
