@@ -84,7 +84,17 @@ Running PHPStan
 ---------------------
 "
 set -x
-phpNoXdebug -f bin/phpstan  -- analyse src tests bin -l7
+neonConfig=
+if [[ -f $projectRoot/test/phpstan.neon ]]
+then
+    neonConfig=$projectRoot/tests/phpstan.neon
+fi
+if [[ "" != "$neonConfig" ]]
+then
+    phpNoXdebug -f bin/phpstan  -- analyse src tests bin -l7 -c $neonConfig
+else
+    phpNoXdebug -f bin/phpstan  -- analyse src tests bin -l7
+fi
 set +x
 
 echo "
