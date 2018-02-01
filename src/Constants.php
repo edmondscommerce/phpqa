@@ -3,7 +3,7 @@
 namespace EdmondsCommerce\PHPQA;
 
 
-class constants
+class Constants
 {
     /**
      * The key in $_SERVER that we check for in our PHPUnit tests
