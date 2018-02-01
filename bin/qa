@@ -129,9 +129,8 @@ set -x
 phpNoXdebug -f bin/phpmd -- \
     src,tests,bin \
     text \
-    cleancode,codesize,controversial,design,naming,unusedcode \
+    $DIR/../phpmd/ruleset.xml \
     --suffixes php,phtml \
-    --minimumpriority 5 \
     | sort -u \
     | sed G \
     | sed -e 's#p:#p\nLine: #' \
@@ -187,7 +186,6 @@ phpNoXdebug -f bin/phpcs -- \
     --standard=$codingStandardsCheckStandard \
     --colors \
     --cache=$projectRoot/var/phpcs.cache \
-    --exclude=Symfony.Commenting.License,Symfony.Commenting.ClassComment,Symfony.Errors.ExceptionMessage,Symfony.Functions.Arguments \
     -s \
     --report-full \
     --report-summary \
