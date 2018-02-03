@@ -18,17 +18,34 @@ $(hostname) $0 $@
 ===========================================
 "
 
-#project root directory
-projectRoot=$(realpath ./../../../../)
+#### FUNCTIONS ################################################
 
-#Coding Standard for checking
-codingStandardsCheckStandard=$projectRoot/vendor/squizlabs/php_codesniffer/src/Standards/PSR2
+################################################################
+# Get the path for a config file
+# Defaults to project level and falls back to this library
+#
+# Usage:
+#
+# - relative path, falling back to the standard default config path
+# `configPath "relative/path/to/file/or/folder"`
+#
+# - relative path, falling back to a specified default
+# `configPath "relative/path/to/file/or/folder" "specified/default/path"
+function configPath(){
+    local relativePath="$1"
+    local defaultPath="${2:-"$defaultConfigPath/$relativePath"}"
+    if [[ -f $projectConfigPath/$relativePath ]]
+    then
+        echo $projectConfigPath/$relativePath
+    else
+        echo $defaultPath
+    fi
+}
 
-## PROCESS STARTS ##
-cd $projectRoot;
-mkdir -p $projectRoot/var;
-
+###############################################################
 # Function to run PHP without Xdebug enabled, much faster
+# Usage:
+# `phpNoXdebug path/to/php/file.php -- -php -args`
 function phpNoXdebug {
     set +x
     local temporaryPath="$(mktemp -t php.XXXX).ini"
@@ -38,6 +55,56 @@ function phpNoXdebug {
     rm -f "$temporaryPath"
     set -x
 }
+
+#### CONFIG ##################################################
+
+# project root directory
+projectRoot="$(realpath ./../../../../)"
+
+# the path in the project to check for config
+projectConfigPath="$projectRoot/qaConfig/"
+
+# project tests folder
+testsDir="$(find $projectRoot -maxdepth 1 -type d \( -name test -o -name tests \) | head -n1)"
+
+# project src folder
+srcDir="$projectRoot/src"
+
+# project bin dir
+binDir="$(find $projectRoot -maxdepth 2 -type d -name bin | head -n1)"
+
+# proeject var dir, sub directory for qa cache files and output files
+varDir="$projectRoot/var/qa";
+
+# the path in this library for default config
+defaultConfigPath="$(realpath ./../configDefaults/)"
+
+# PHPStan configs
+phpstanConfigPath="$(configPath phpstan.neon)"
+
+#PHP Mess Detector Configs
+phpmdConfigPath="$(configPath phpmd/ruleset.xml)"
+
+# coding Standard for checking
+# checks for a folder called 'condingStandards' in the $projectConfigPath, falls back to the PSR2 standards
+phpcsCodingStandardsPath=$(configPath \
+    codingStandards \
+    $projectRoot/vendor/squizlabs/php_codesniffer/src/Standards/PSR2
+)
+
+# override configs with project configs
+overridePath="$projectConfigPath/qaConfig.inc.bash"
+if [[ -f "$overridePath" ]]
+then
+    echo "Found override config at $overridePath"
+    source $overridePath
+fi
+
+#### PROCESS #################################################
+
+cd $projectRoot;
+
+mkdir -p $varDir;
 
 echo "
 
@@ -60,22 +127,27 @@ echo "
 Setting Strict Types If It's Missing
 -------------------------------------
 "
-for f in $(grep -r -L 'strict_types' $projectRoot/src);
+for d in "
+$srcDir
+$testsDir
+"
 do
-    echo "Found file with no strict types:"
-    echo $f;
-    echo
-    read -p "Would you like to fix? " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        sed -i 's/<?php/<\?php declare(strict_types=1);/g' $f;
-        echo "fixed $f"
-    else
-        echo "skipped $f"
-    fi
+    for f in $(grep -r -L 'strict_types' $d);
+    do
+        echo "Found file with no strict types:"
+        echo $f;
+        echo
+        read -p "Would you like to fix? " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]
+        then
+            sed -i 's/<?php/<\?php declare(strict_types=1);/g' $f;
+            echo "fixed $f"
+        else
+            echo "skipped $f"
+        fi
+    done
 done
-
 
 echo "
 
@@ -83,7 +155,7 @@ Running PHP Lint
 ----------------
 "
 set -x
-phpNoXdebug -f bin/parallel-lint -- src tests bin
+phpNoXdebug -f bin/parallel-lint -- $srcDir $testsDir $binDir
 set +x
 
 echo "
@@ -92,18 +164,7 @@ Running PHPStan
 ---------------------
 "
 set -x
-neonConfigPath=$projectRoot/tests/phpstan.neon
-neonConfig=
-if [[ -f $neonConfigPath ]]
-then
-    neonConfig=$neonConfigPath
-fi
-if [[ "" != "$neonConfig" ]]
-then
-    phpNoXdebug -f bin/phpstan  -- analyse src tests bin -l7 -c $neonConfig
-else
-    phpNoXdebug -f bin/phpstan  -- analyse src tests bin -l7
-fi
+phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath"
 set +x
 
 echo "
@@ -115,9 +176,7 @@ Running PHPUnit Tests
 # this sets a config variable of quickTests which you can then use
 # to allow tests to run less thoroughly but more quickly
 set -x
-qaQuickTests=1 phpNoXdebug -f bin/phpunit --\
-    tests/ \
-    ${phpunitParams:-""}
+qaQuickTests=1 phpNoXdebug -f bin/phpunit -- "$testsDir"
 set +x
 
 echo "
@@ -127,9 +186,9 @@ Running PHP Mess Detector
 "
 set -x
 phpNoXdebug -f bin/phpmd -- \
-    src,tests,bin \
+    "$srcDir","$testsDir","$binDir" \
     text \
-    $DIR/../phpmd/ruleset.xml \
+    "$phpmdConfigPath" \
     --suffixes php,phtml \
     | sort -u \
     | sed G \
@@ -167,9 +226,9 @@ Running Beautifier and Fixer on src and tests
 set +e
 set -x
 phpNoXdebug -f bin/phpcbf -- \
-    --standard=$codingStandardsCheckStandard \
+    --standard="$phpcsCodingStandardsPath" \
     --colors \
-    --cache=$projectRoot/var/phpcbf.cache \
+    --cache="$varDir"/phpcbf.cache \
     src tests bin
 set +x
 set -e
@@ -183,9 +242,9 @@ set -x
 phpNoXdebug -f bin/phpcs -- \
     --config-set ignore_warnings_on_exit 1
 phpNoXdebug -f bin/phpcs -- \
-    --standard=$codingStandardsCheckStandard \
+    --standard="$phpcsCodingStandardsPath" \
     --colors \
-    --cache=$projectRoot/var/phpcs.cache \
+    --cache="$varDir"/phpcs.cache \
     -s \
     --report-full \
     --report-summary \
@@ -213,7 +272,7 @@ WOO
 echo "
 Statistics:
 "
-phpNoXdebug -f bin/phploc src tests
+phpNoXdebug -f bin/phploc "$srcDir" "$testsDir"
 
 
 echo "

@@ -14,7 +14,55 @@ composer require edmondscommerce/phpqa --dev
 ./bin/phpqa
 ```
 
+## Configuration
 
+Standard configuration is in the directory [./configDefaults](./configDefaults)
+
+If your project needs to have custom configuration, you have 2 ways of doing this:
+
+### Single Tool Configuration Override
+
+For each tool, you can override the configuration by:
+
+1. Make a directory in your project root called `qaConfig`
+2. Copy the configuration from ./configDefaults](./configDefaults) into your project `qaConfig` folder.
+3. Customise the copied config as you see fit
+
+For example, for PHPStan, we would do this:
+
+```bash
+#Enter your project root
+cd /my/project/root
+
+#Make your config override directory
+mkdir -p qaConfig
+
+#Copy in the default config
+cp vendor/edmondscommerce/phpqa/configDefaults/phpstan.neon qaConfig
+
+#Edit the config
+vim qaConfig/phpstan.neon
+```
+
+### Global Configuration Override
+
+If you want to make more wholesale tweaks to `qa` customisation, you can do this:
+
+```bash
+
+#Enter your project root
+cd /my/project/root
+
+#Make your config override directory
+mkdir -p qaConfig
+
+#Copy in the default config
+cp vendor/edmondscommerce/phpqa/configDefaults/qaConfig.inc.bash.dist qaConfig/qaConfig.inc.bash
+
+#Edit the config
+vim qaConfig/qaConfig.inc.bash
+
+```
 
 ## Tools
 
@@ -41,7 +89,9 @@ https://github.com/phpstan/phpstan
 
 #### Configuration 
 
-Configuration file should be placed in `{project-root}/tests/phpstan.neon`
+Default configuration is in [](./configDefaults/phpstan.neon)
+
+To override the configuration you need to copy it to `{project-root}/qaConfig/phpstan.neon`
 
 ##### Boostrap
 
