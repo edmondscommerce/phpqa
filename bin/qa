@@ -278,7 +278,7 @@ set +x
 
 
 
-echo << WOO
+echo << 'WOO'
 
 ALL TESTS PASSING
 
