@@ -132,7 +132,12 @@ $srcDir
 $testsDir
 "
 do
-    for f in $(grep -r -L 'strict_types' $d);
+    for f in $(
+                find $d \
+                    -name '*.php' \
+                    -o -name '*.phtml' \
+                    -exec grep -L 'strict_types' {} \;
+              );
     do
         echo "Found file with no strict types:"
         echo $f;
