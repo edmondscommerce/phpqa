@@ -170,10 +170,11 @@ class MyTest extends TestCase {
      */
     public function setup(){
         if (isset($_SERVER[Constants::QA_QUICK_TESTS_KEY])
-            && $_SERVER[Constants::QA_QUICK_TESTS_KEY] == Constants::QA_QUICK_TESTS_ENABLED
+            && (int)$_SERVER[Constants::QA_QUICK_TESTS_KEY] === Constants::QA_QUICK_TESTS_ENABLED
         ) {
             return;
         }
+        //unnecessary setup stuff if not doing long running tests
     }
     
     /**
@@ -181,7 +182,7 @@ class MyTest extends TestCase {
      */    
     public function testLongRunningThing(){
          if (isset($_SERVER[Constants::QA_QUICK_TESTS_KEY])
-            && $_SERVER[Constants::QA_QUICK_TESTS_KEY] == Constants::QA_QUICK_TESTS_ENABLED
+            && (int)$_SERVER[Constants::QA_QUICK_TESTS_KEY] === Constants::QA_QUICK_TESTS_ENABLED
         ) {
             $this->markTestSkipped('Quick tests is enabled');
         }
