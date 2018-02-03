@@ -276,7 +276,7 @@ set +x
 
 
 
-echo << 'WOO'
+echo '
 
 ALL TESTS PASSING
 
@@ -290,7 +290,7 @@ ALL TESTS PASSING
         (___)__.|_____
 
 
-WOO
+'
 
 echo "
 Statistics:
