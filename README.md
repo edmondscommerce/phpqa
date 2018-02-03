@@ -78,12 +78,16 @@ cd /my/project/root
 mkdir -p qaConfig
 
 #Copy in the default config
-cp vendor/edmondscommerce/phpqa/configDefaults/qaConfig.inc.bash.dist qaConfig/qaConfig.inc.bash
+awk '/#### CONFIG /,/#### PROCESS /' bin/qa > qaConfig/qaConfig.inc.bash
 
 #Edit the config
 vim qaConfig/qaConfig.inc.bash
 
 ```
+
+When you run `qa`, it checks for a file located in `"$projectConfigPath/qaConfig.inc.bash"` and will include it if found. 
+
+Using this you can override as much of the standard configuration as you see fit.
 
 ## Tools
 

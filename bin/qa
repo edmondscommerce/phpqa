@@ -88,6 +88,8 @@ binDir="$(find $projectRoot -maxdepth 2 -type d -name bin | head -n1)"
 # proeject var dir, sub directory for qa cache files and output files
 varDir="$projectRoot/var/qa";
 
+cacheDir="$projectRoot/cache/qa";
+
 # the path in this library for default config
 defaultConfigPath="$(realpath ./../configDefaults/)"
 
@@ -107,20 +109,22 @@ phpcsCodingStandardsPath=$(configPath \
 # PHPUnit Quick Tests
 phpUnitQuickTests=${phpUnitQuickTests:-1}
 
+#### PROCESS #################################################
 
 # override configs with project configs
 overridePath="$projectConfigPath/qaConfig.inc.bash"
+
 if [[ -f "$overridePath" ]]
 then
     echo "Found override config at $overridePath"
     source $overridePath
 fi
 
-#### PROCESS #################################################
+cd "$projectRoot";
 
-cd $projectRoot;
+mkdir -p "$varDir";
 
-mkdir -p $varDir;
+mkdir -p "$cacheDir";
 
 echo "
 
@@ -249,8 +253,8 @@ set -x
 phpNoXdebug -f bin/phpcbf -- \
     --standard="$phpcsCodingStandardsPath" \
     --colors \
-    --cache="$varDir"/phpcbf.cache \
-    src tests bin
+    --cache="$cacheDir"/phpcbf.cache \
+    "$srcDir" "$testsDir" "$binDir"
 set +x
 set -e
 
@@ -265,11 +269,11 @@ phpNoXdebug -f bin/phpcs -- \
 phpNoXdebug -f bin/phpcs -- \
     --standard="$phpcsCodingStandardsPath" \
     --colors \
-    --cache="$varDir"/phpcs.cache \
+    --cache="$cacheDir"/phpcs.cache \
     -s \
     --report-full \
     --report-summary \
-    src tests bin
+    "$srcDir" "$testsDir" "$binDir"
 set +x
 
 
