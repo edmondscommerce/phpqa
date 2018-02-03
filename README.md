@@ -149,7 +149,7 @@ This step runs your PHPUnit tests
 
 #### Quick Tests
 
-There is an environment variable for PHPUnit set called `quickTests`
+There is an environment variable for PHPUnit set called `qaQuickTests`
 
 Using this, you can allow your tests to take a different path, skip tests etc if they are long running. 
 
@@ -161,6 +161,20 @@ use PHPUnit\Framework\TestCase;
 
 class MyTest extends TestCase {
     
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public function setup(){
+        if (isset($_SERVER[Constants::QA_QUICK_TESTS_KEY])
+            && $_SERVER[Constants::QA_QUICK_TESTS_KEY] == Constants::QA_QUICK_TESTS_ENABLED
+        ) {
+            return;
+        }
+    }
+    
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */    
     public function testLongRunningThing(){
          if (isset($_SERVER[Constants::QA_QUICK_TESTS_KEY])
             && $_SERVER[Constants::QA_QUICK_TESTS_KEY] == Constants::QA_QUICK_TESTS_ENABLED
@@ -178,7 +192,15 @@ But it allows you to easily skip certain tests as part of this QA pipeline allow
 
 You would then run your full test suite as normal occasionally to ensure everything is working
 
+#### Running With Full Tests
 
+If you are using the Quicktests approach but would like to run the full pipeline with full tests, then you just need to do:
+
+```bash
+phpUnitQuickTests=0 bin/qa
+```
+
+And this will then run with full tests
 
 ### Uncommitted Changes Check
 
