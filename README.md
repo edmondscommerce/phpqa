@@ -11,7 +11,13 @@ composer require edmondscommerce/phpqa --dev
 ## Running
 
 ```bash
-./bin/phpqa
+./bin/qa
+```
+
+If you want to run all PHPUnit tests, you need to do this:
+
+```bash
+phpUnitQuickTests=0 ./bin/qa
 ```
 
 ## Configuration
@@ -42,6 +48,21 @@ cp vendor/edmondscommerce/phpqa/configDefaults/phpstan.neon qaConfig
 
 #Edit the config
 vim qaConfig/phpstan.neon
+```
+
+For PHP Mess Detector, we would do this:
+
+```bash
+#Enter your project root
+cd /my/project/root
+
+#Make your config override directory
+mkdir -p qaConfig
+
+#Copy the phpmd folder as a whole
+cp vendor/edmondscommerce/phpqa/configDefaults/phpmd/ qaConfig/ -r
+
+
 ```
 
 ### Global Configuration Override

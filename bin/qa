@@ -1,4 +1,16 @@
 #!/usr/bin/env bash
+###################################################################
+#
+# PHP QA Pipeline
+#
+# Usage:
+#
+# Standard:
+# ./bin/qa
+#
+# Run all PHPUnit tests:
+# phpUnitQuickTests=0 ./bin/qa
+
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
   DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
@@ -18,7 +30,7 @@ $(hostname) $0 $@
 ===========================================
 "
 
-#### FUNCTIONS ################################################
+#### FUNCTIONS #################################################
 
 ################################################################
 # Get the path for a config file
@@ -91,6 +103,10 @@ phpcsCodingStandardsPath=$(configPath \
     codingStandards \
     $projectRoot/vendor/squizlabs/php_codesniffer/src/Standards/PSR2
 )
+
+# PHPUnit Quick Tests
+phpUnitQuickTests=${phpUnitQuickTests:-1}
+
 
 # override configs with project configs
 overridePath="$projectConfigPath/qaConfig.inc.bash"
@@ -181,7 +197,7 @@ Running PHPUnit Tests
 # this sets a config variable of quickTests which you can then use
 # to allow tests to run less thoroughly but more quickly
 set -x
-qaQuickTests=1 phpNoXdebug -f bin/phpunit -- "$testsDir"
+qaQuickTests="$phpUnitQuickTests" phpNoXdebug -f bin/phpunit -- "$testsDir"
 set +x
 
 echo "
