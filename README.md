@@ -93,6 +93,8 @@ Default configuration is in [](./configDefaults/phpstan.neon)
 
 To override the configuration you need to copy it to `{project-root}/qaConfig/phpstan.neon`
 
+For specifying paths, just know the root of the project is `%rootDir%/../../../`
+
 ##### Boostrap
 
 In the configuration you might want to specify a [php bootstrap file](https://github.com/phpstan/phpstan#bootstrap-file) to initialise your code
