@@ -214,7 +214,7 @@ phpNoXdebug -f bin/phpmd -- \
     | sort -u \
     | sed G \
     | sed -e 's#p:#p\nLine: #' \
-    | sed -e 's#\t\{1,\}#\n#' \
+    | sed -e 's#\t\{1,\}#\nMessage: #' \
     | sed -e 's#\. #\.\n#'
 set +x
 

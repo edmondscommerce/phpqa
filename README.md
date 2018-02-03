@@ -226,11 +226,14 @@ https://github.com/squizlabs/PHP_CodeSniffer/wiki/Fixing-Errors-Automatically
 
 Now we run the code sniffer to check for any remaining coding standards issues that have not been automatically fixed.
 
-Currently this is hard coded to use:
-`$projectRoot/vendor/escapestudios/symfony2-coding-standard/Symfony`
-https://github.com/djoos/Symfony-coding-standard
+The coding standard used defaults to PSR2
 
-#### _TODO_
+You can specify any standard you want thouhg.
+
+https://github.com/squizlabs/PHP_CodeSniffer
+
+
+#### _TODO_ Include more coding standards and perform platform detection
 
 Implement other coding standards. Ideally figure out some automation to select the correct coding standard based on the application code, for example 
 * [magento/marketplace-eqp](https://github.com/magento/marketplace-eqp)
@@ -238,11 +241,39 @@ Implement other coding standards. Ideally figure out some automation to select t
 
 ### PHP Mess Detector
 
-
 https://phpmd.org/
 
+We use all of the Mess Detector rules apart from the long variable name one.
 
-https://github.com/squizlabs/PHP_CodeSniffer
+If you want to suppress specific errors for certain methods etc, copy/paste some generic part of the message and then grep the `vendor/phpmd` directory, for example:
+
+To find the rule for a message that contains `to keep number of public methods under'` 
+```bash
+grep 'to keep number of public methods under' -r vendor/phpmd/src/main/rulesets -B 4 | grep -P -o '(?<=rule name=")[^"]+'
+```
+
+To make life easy for yourself, you might make this a function in your bashrc file, or just paste it into your terminal session.
+
+```bash
+
+function phpmdRule(){
+    local message="$@"
+    local phpMdPath="$(find . \
+        -wholename '*vendor/phpmd/phpmd/src/main/resources/rulesets*' \
+        -type d 
+    )"
+    grep "$message" -r  -B 4 | grep -P -o '(?<=rule name=")[^"]+'
+}
+
+```
+
+And then to use it, just:
+
+```bash
+phpmdRule public methods under
+```
+
+
 
 
 ### PHPLOC
