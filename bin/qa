@@ -59,11 +59,13 @@ function configPath(){
 # Usage:
 # `phpNoXdebug path/to/php/file.php -- -php -args`
 function phpNoXdebug {
+    set +x
     local temporaryPath="$(mktemp -t php.XXXX).ini"
     # Using awk to ensure that files ending without newlines do not lead to configuration error
     /usr/bin/php -i | grep "\.ini" | grep -o -e '\(/[a-z0-9._-]\+\)\+\.ini' | grep -v xdebug | xargs awk 'FNR==1{print ""}1' > "$temporaryPath"
     /usr/bin/php -n -c "$temporaryPath" "$@"
     rm -f "$temporaryPath"
+    set -x
 }
 
 #### CONFIG ##################################################
@@ -104,6 +106,10 @@ phpcsCodingStandardsPath=$(configPath \
     $projectRoot/vendor/squizlabs/php_codesniffer/src/Standards/PSR2
 )
 
+# should coding standards warnings be a fail?
+phpcsFailOnWarning=0
+
+
 # PHPUnit Quick Tests
 phpUnitQuickTests=${phpUnitQuickTests:-1}
 
@@ -131,6 +137,7 @@ Checking for Composer Issues
 "
 set +e
 phpNoXdebug -f $(which composer) -- diagnose
+set +x
 set -e
 
 echo "
@@ -139,8 +146,8 @@ Refreshing Composer Autoloader
 -----------------------------
 "
 phpNoXdebug -f $(which composer) -- dump-autoload
-
 set +x
+
 echo "
 Setting Strict Types If It's Missing
 -------------------------------------
@@ -177,7 +184,6 @@ echo "
 Running PHP Lint
 ----------------
 "
-set -x
 phpNoXdebug -f bin/parallel-lint -- $srcDir $testsDir $binDir
 set +x
 
@@ -186,7 +192,6 @@ echo "
 Running PHPStan
 ---------------------
 "
-set -x
 phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath"
 set +x
 
@@ -247,7 +252,6 @@ Running Beautifier and Fixer on src and tests
 ---------------------------------------------
 "
 set +e
-set -x
 phpNoXdebug -f bin/phpcbf -- \
     --standard="$phpcsCodingStandardsPath" \
     --colors \
@@ -261,9 +265,10 @@ echo "
 Running Code Sniffer on src and tests
 -------------------------------------
 "
-set -x
+
 phpNoXdebug -f bin/phpcs -- \
-    --config-set ignore_warnings_on_exit 1
+    --config-set ignore_warnings_on_exit "$phpcsFailOnWarning"
+set +x
 phpNoXdebug -f bin/phpcs -- \
     --standard="$phpcsCodingStandardsPath" \
     --colors \
@@ -302,6 +307,7 @@ echo "
 Statistics:
 "
 phpNoXdebug -f bin/phploc "$srcDir" "$testsDir"
+set +x
 
 
 echo "
