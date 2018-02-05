@@ -1,0 +1,4 @@
+parameters:
+	autoload_files: # We need to bring in different autoloaders
+		- %rootDir%/../../autoload.php # First use the one in the vendor directory
+		- %rootDir%/../../../configDefaults/phpstan-magento2-bootstrap.php # Then pull in the special M2 bootstrap

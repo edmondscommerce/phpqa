@@ -89,6 +89,25 @@ When you run `qa`, it checks for a file located in `"$projectConfigPath/qaConfig
 
 Using this you can override as much of the standard configuration as you see fit.
 
+
+### M2 Configuration
+
+Working on the assumption that this tool has been installed in the mage root folder, there are some pre-defined
+config paths in the qaConfig directory
+
+You can use these by running the following commands
+
+```bash
+
+cd /path/to/qa/tool/qaConfig
+
+cp m2Config.inc.bash qaConfig.inc.bash
+cp m2-phpstan.neon phpstan.neon
+
+```
+
+And then making any changes as required by your setup
+
 ## Tools
 
 Tools run in sequence. Any tool that fails kills the process

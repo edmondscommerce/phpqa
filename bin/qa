@@ -71,7 +71,7 @@ function phpNoXdebug {
 #### CONFIG ##################################################
 
 # project root directory
-projectRoot="$(realpath ./../../../../)"
+projectRoot="$(realpath ./../)"
 
 # the path in the project to check for config
 projectConfigPath="$projectRoot/qaConfig/"
@@ -105,6 +105,8 @@ phpcsCodingStandardsPath=$(configPath \
     codingStandards \
     $projectRoot/vendor/squizlabs/php_codesniffer/src/Standards/PSR2
 )
+
+runStrictType=1
 
 # should coding standards warnings be a fail?
 phpcsFailOnWarning=0
@@ -148,43 +150,48 @@ Refreshing Composer Autoloader
 phpNoXdebug -f $(which composer) -- dump-autoload
 set +x
 
-echo "
-Setting Strict Types If It's Missing
--------------------------------------
-"
-for d in "
-$srcDir
-$testsDir
-"
-do
-    for f in $(
-                find $d \
-                    -name '*.php' \
-                    -o -name '*.phtml' \
-                    -exec grep -L 'strict_types' {} \;
-              );
+if [[ "${runStrictType}" == 1 ]]
+then
+
+    echo "
+    Setting Strict Types If It's Missing
+    -------------------------------------
+    "
+    for d in "
+    $srcDir
+    $testsDir
+    "
     do
-        echo "Found file with no strict types:"
-        echo $f;
-        echo
-        read -p "Would you like to fix? " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]
-        then
-            sed -i 's/<?php/<\?php declare(strict_types=1);/g' $f;
-            echo "fixed $f"
-        else
-            echo "skipped $f"
-        fi
+        for f in $(
+                    find $d \
+                        -name '*.php' \
+                        -o -name '*.phtml' \
+                        -exec grep -L 'strict_types' {} \;
+                  );
+        do
+            echo "Found file with no strict types:"
+            echo $f;
+            echo
+            read -p "Would you like to fix? " -n 1 -r
+            echo
+            if [[ $REPLY =~ ^[Yy]$ ]]
+            then
+                sed -i 's/<?php/<\?php declare(strict_types=1);/g' $f;
+                echo "fixed $f"
+            else
+                echo "skipped $f"
+            fi
+        done
     done
-done
+
+fi
 
 echo "
 
 Running PHP Lint
 ----------------
 "
-phpNoXdebug -f bin/parallel-lint -- $srcDir $testsDir $binDir
+phpNoXdebug -f ${binDir}/parallel-lint -- $srcDir $testsDir $binDir
 set +x
 
 echo "
@@ -192,7 +199,8 @@ echo "
 Running PHPStan
 ---------------------
 "
-phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath"
+set -x
+phpNoXdebug -f ${binDir}/phpstan  -- analyse "$srcDir" $testsDir -l7 -c "$phpstanConfigPath"
 set +x
 
 echo "
