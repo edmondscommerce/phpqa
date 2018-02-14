@@ -218,9 +218,21 @@ Running PHPUnit Tests
 # Note the qaQuickTests=1
 # this sets a config variable of quickTests which you can then use
 # to allow tests to run less thoroughly but more quickly
+set +e
 set -x
 qaQuickTests="$phpUnitQuickTests" phpNoXdebug -f bin/phpunit -- "$testsDir"
+phpunitExitCode=$?
+if (( $phpunitExitCode > 0 ))
+then
+    if (( $phpunitExitCode > 1 ))
+    then
+        printf "\n\n\nPHPUnit Crashed\n\nRunning again with Debug mode...\n\n\n"
+        qaQuickTests="$phpUnitQuickTests" phpNoXdebug -f bin/phpunit -- "$testsDir" --debug
+    fi
+    exit $phpunitExitCode
+fi
 set +x
+set -e
 
 echo "
 
