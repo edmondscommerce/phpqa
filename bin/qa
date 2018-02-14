@@ -197,10 +197,14 @@ Running PHPStan
 set +e
 phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath"
 phpStanExitCode=$?
+#exit code 0 = fine, 1 = ran fine but found errors, else it means it crashed
 if (( $phpStanExitCode > 0 ))
 then
-    printf "\n\n\nPHPStan Crashed....\n\nrunning again with debug mode:\n\n\n"
-    phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath" --debug
+    if (( $phpStanExitCode > 1 ))
+    then
+        printf "\n\n\nPHPStan Crashed....\n\nrunning again with debug mode:\n\n\n"
+        phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath" --debug
+    fi
     exit $phpStanExitCode
 fi
 set -e
