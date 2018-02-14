@@ -20,7 +20,7 @@
     "sllh/composer-versions-check": "^2.0",
     "johnkary/phpunit-speedtrap": "^2.0",
     "phploc/phploc": "^4.0",
-    "phpmd/phpmd": "^2.6",
+    "phpmd/phpmd": "~2",
     "phpstan/phpstan-strict-rules": "^0.9.0"
   },
   "bin": [
