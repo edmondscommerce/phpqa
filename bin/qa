@@ -64,8 +64,10 @@ function phpNoXdebug {
     # Using awk to ensure that files ending without newlines do not lead to configuration error
     /usr/bin/php -i | grep "\.ini" | grep -o -e '\(/[a-z0-9._-]\+\)\+\.ini' | grep -v xdebug | xargs awk 'FNR==1{print ""}1' > "$temporaryPath"
     /usr/bin/php -n -c "$temporaryPath" "$@"
+    local exitCode=$?
     rm -f "$temporaryPath"
     set -x
+    return $exitCode
 }
 
 #### CONFIG ##################################################
@@ -192,7 +194,16 @@ echo "
 Running PHPStan
 ---------------------
 "
+set +e
 phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath"
+phpStanExitCode=$?
+if (( $phpStanExitCode > 0 ))
+then
+    printf "\n\n\nPHPStan Crashed....\n\nrunning again with debug mode:\n\n\n"
+    phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath" --debug
+    exit $phpStanExitCode
+fi
+set -e
 set +x
 
 echo "
