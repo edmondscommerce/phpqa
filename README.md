@@ -237,6 +237,22 @@ You can specify any standard you want thouhg.
 
 https://github.com/squizlabs/PHP_CodeSniffer
 
+#### Ignoring Parts of a File
+
+You can mark specific chunks of code to be not analyzed by PHPCS having the following comments:
+
+```php
+<?php
+$xmlPackage = new XMLPackage;
+// phpcs:disable
+$xmlPackage['error_code'] = get_default_error_code_value();
+$xmlPackage->send();
+// phpcs:enable
+
+```
+
+https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#ignoring-parts-of-a-file
+
 
 #### _TODO_ Include more coding standards and perform platform detection
 
