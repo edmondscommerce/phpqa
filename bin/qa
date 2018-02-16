@@ -221,8 +221,8 @@ Running PHPUnit Tests
 set +e
 set -x
 qaQuickTests="$phpUnitQuickTests" phpNoXdebug -f bin/phpunit -- "$testsDir"
-set +x
 phpunitExitCode=$?
+set +x
 if (( $phpunitExitCode > 0 ))
 then
     if (( $phpunitExitCode > 2 ))
@@ -232,7 +232,6 @@ then
     fi
     exit $phpunitExitCode
 fi
-
 set -e
 
 echo "
