@@ -318,7 +318,7 @@ echo "
 Running Markdown Links Checker
 ------------------------------
 "
-phpNoXdebug -f bin/mdlinks.php
+phpNoXdebug -f bin/mdlinks
 
 
 
