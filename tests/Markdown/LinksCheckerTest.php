@@ -9,6 +9,10 @@ class LinksCheckerTest extends TestCase
 {
     private $testMdFile;
 
+    /**
+     * @throws \Exception
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function setup()
     {
         $root             = Config::getProjectRootDirectory();
