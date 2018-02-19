@@ -30,6 +30,8 @@ $(hostname) $0 $@
 ===========================================
 "
 
+phpBinPath=$(which php)
+
 #### FUNCTIONS #################################################
 
 ################################################################
@@ -62,8 +64,8 @@ function phpNoXdebug {
     set +x
     local temporaryPath="$(mktemp -t php.XXXX).ini"
     # Using awk to ensure that files ending without newlines do not lead to configuration error
-    /usr/bin/php -i | grep "\.ini" | grep -o -e '\(/[a-z0-9._-]\+\)\+\.ini' | grep -v xdebug | xargs awk 'FNR==1{print ""}1' > "$temporaryPath"
-    /usr/bin/php -n -c "$temporaryPath" "$@"
+    $phpBinPath -i | grep "\.ini" | grep -o -e '\(/[a-z0-9._-]\+\)\+\.ini' | grep -v xdebug | xargs awk 'FNR==1{print ""}1' > "$temporaryPath"
+    $phpBinPath -n -c "$temporaryPath" "$@"
     local exitCode=$?
     rm -f "$temporaryPath"
     set -x
