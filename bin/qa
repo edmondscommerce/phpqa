@@ -73,7 +73,7 @@ function phpNoXdebug {
 #### CONFIG ##################################################
 
 # project root directory
-projectRoot="$(realpath ./../../../../)"
+projectRoot="$(readlink -f ./../../../../)"
 
 # the path in the project to check for config
 projectConfigPath="$projectRoot/qaConfig/"
@@ -93,7 +93,7 @@ varDir="$projectRoot/var/qa";
 cacheDir="$projectRoot/cache/qa";
 
 # the path in this library for default config
-defaultConfigPath="$(realpath ./../configDefaults/)"
+defaultConfigPath="$(readlink -f ./../configDefaults/)"
 
 # PHPStan configs
 phpstanConfigPath="$(configPath phpstan.neon)"
