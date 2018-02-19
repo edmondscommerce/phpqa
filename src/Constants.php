@@ -2,7 +2,6 @@
 
 namespace EdmondsCommerce\PHPQA;
 
-
 class Constants
 {
     /**
@@ -15,5 +14,4 @@ class Constants
      * tests
      */
     const QA_QUICK_TESTS_ENABLED = 1;
-
 }

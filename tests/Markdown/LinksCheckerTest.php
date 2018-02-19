@@ -23,6 +23,5 @@ Bad link for "incorrect link" to "./../nothere.md"
         LinksChecker::main();
         $actual = ob_get_clean();
         $this->assertEquals($expected, $actual);
-
     }
 }

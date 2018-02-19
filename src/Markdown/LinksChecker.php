@@ -117,5 +117,4 @@ class LinksChecker
 
         return $return;
     }
-
 }
