@@ -14,7 +14,7 @@ class Config
      * It does this by working from the Composer autoloader which we know will be in a certain place in `vendor`
      *
      * @return string
-     * @throws DoctrineStaticMetaException
+     * @throws \Exception
      */
     public static function getProjectRootDirectory(): string
     {

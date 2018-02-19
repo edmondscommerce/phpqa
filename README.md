@@ -295,8 +295,6 @@ phpmdRule public methods under
 ```
 
 
-
-
 ### PHPLOC
 
 Simply enough, some statistics about your project

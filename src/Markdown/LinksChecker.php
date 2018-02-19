@@ -6,6 +6,11 @@ use EdmondsCommerce\PHPQA\Config;
 
 class LinksChecker
 {
+    /**
+     * @return array
+     * @throws \Exception
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     private static function getFiles(): array
     {
         $dir       = Config::getProjectRootDirectory().'/docs';
@@ -28,6 +33,12 @@ class LinksChecker
         return $files;
     }
 
+    /**
+     * @param string $file
+     *
+     * @return array
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     private static function getLinks(string $file): array
     {
         $links    = [];
@@ -44,33 +55,63 @@ class LinksChecker
         return $links;
     }
 
+    /**
+     * @param array  $link
+     * @param string $file
+     * @param array  $errors
+     * @param int    $return
+     *
+     * @throws \Exception
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
+    private static function checkLink(array $link, string $file, array &$errors, int &$return)
+    {
+        $path = $link[2];
+        if (preg_match('/^(http|#)/', $path)) {
+            return;
+        }
+
+        $path  = current(explode('#', $path, 2));
+        $start = rtrim(Config::getProjectRootDirectory(), '/');
+        if ($path[0] !== '/' || 0 === strpos($path, './')) {
+            $relativeSubdirs = preg_replace(
+                '%^'.Config::getProjectRootDirectory().'%',
+                '',
+                dirname($file)
+            );
+            $start           .= '/'.rtrim($relativeSubdirs, '/');
+        }
+        $realpath = realpath($start.'/'.$path);
+        if (empty($realpath) || (!file_exists($realpath) && !is_dir($realpath))) {
+            $errors[] = sprintf("\nBad link for \"%s\" to \"%s\"\n", $link[1], $link[2]);
+            $return   = 1;
+        }
+    }
+
+
+    /**
+     * @return int
+     * @throws \Exception
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public static function main()
     {
         $return = 0;
         $files  = static::getFiles();
         foreach ($files as $file) {
+            $title = "\n$file\n".str_repeat('-', strlen($file))."\n";
             if (!file_exists($file)) {
-                echo "\nError - file $file does not exist\n";
+                echo "$title\nError - file $file does not exist\n";
+                $return = 1;
+                continue;
             }
-            $links = static::getLinks($file);
+            $errors = [];
+            $links  = static::getLinks($file);
             foreach ($links as $link) {
-                $path = $link[2];
-                if (preg_match('/^(http|#)/', $path)) {
-                    continue;
-                }
-
-                $path  = current(explode('#', $path, 2));
-                $start = rtrim(Config::getProjectRootDirectory(), '/');
-                if ($path[0] !== '/') {
-                    $start .= '/'.rtrim(dirname($file), '/');
-                }
-
-                $realpath = realpath($start.'/'.$path);
-
-                if (empty($realpath) || (!file_exists($realpath) && !is_dir($realpath))) {
-                    printf("\n%s:\nBad link for \"%s\" to \"%s\"\n", $file, $link[1], $link[2]);
-                    $return = 1;
-                }
+                static::checkLink($link, $file, $errors, $return);
+            }
+            if (!empty($errors)) {
+                echo $title.implode('', $errors);
             }
         }
 

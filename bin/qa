@@ -75,7 +75,12 @@ function phpNoXdebug {
 #### CONFIG ##################################################
 
 # project root directory
-projectRoot="$(readlink -f ./../../../../)"
+if [[ -d $DIR/../vendor ]]
+then
+    projectRoot="$(readlink -f ./../)"
+else
+    projectRoot="$(readlink -f ./../../../../)"
+fi
 
 # the path in the project to check for config
 projectConfigPath="$projectRoot/qaConfig/"
@@ -307,6 +312,13 @@ phpNoXdebug -f bin/phpcs -- \
     --report-summary \
     "$srcDir" "$testsDir" "$binDir"
 set +x
+
+echo "
+
+Running Markdown Links Checker
+------------------------------
+"
+phpNoXdebug -f bin/mdlinks.php
 
 
 
