@@ -265,7 +265,7 @@ Checking if Uncommitted Changes
 ------------------------------
 "
 set +e
-git status | grep -q "nothing to commit, working directory clean"
+git status | grep -Eq "nothing to commit, working .*? clean"
 repoDirty=$?
 set -e
 if (( $repoDirty > 0 ))
