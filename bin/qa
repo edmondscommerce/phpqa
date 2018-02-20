@@ -118,9 +118,26 @@ phpcsCodingStandardsPath=$(configPath \
 # should coding standards warnings be a fail?
 phpcsFailOnWarning=0
 
+##PHPUnit Configs
 
-# PHPUnit Quick Tests
+# PHPUnit Quick Tests - optional skip slow tests
 phpUnitQuickTests=${phpUnitQuickTests:-1}
+
+# PHPUnit Coverage - if enabled, tests will run with Xdebug and generate coverage
+phpUnitCoverage=${phpUnitCoverage:-1}
+
+if [[ -f $projectRoot/phpunit.xml ]]
+then
+    # Project root phpunit.xml trumps everything else
+    phpUnitConfigPath=$projectRoot/phpunit.xml
+else
+    if [[ "1" == "$phpUnitCoverage" ]]
+    then
+        phpUnitConfigPath=$(configPath phpunit-with-coverage.xml)
+    else
+        phpUnitConfigPath=$(configPath phpunit.xml)
+    fi
+fi
 
 #### PROCESS #################################################
 
@@ -225,9 +242,19 @@ Running PHPUnit Tests
 # Note the qaQuickTests=1
 # this sets a config variable of quickTests which you can then use
 # to allow tests to run less thoroughly but more quickly
+
 set +e
+phpCmd=phpNoXdebug
+if [[ "1" == "$phpUnitCoverage" ]]
+then
+    phpCmd=\php
+fi
 set -x
-qaQuickTests="$phpUnitQuickTests" phpNoXdebug -f bin/phpunit -- "$testsDir"
+qaQuickTests="$phpUnitQuickTests" $phpCmd -f bin/phpunit \
+    -- \
+    -c $phpUnitConfigPath \
+    "$testsDir"
+
 phpunitExitCode=$?
 set +x
 if (( $phpunitExitCode > 0 ))

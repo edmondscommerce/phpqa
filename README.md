@@ -209,6 +209,23 @@ phpUnitQuickTests=0 bin/qa
 
 And this will then run with full tests
 
+### Coverage
+
+By default, the PHPUnit command will generate both textual output and HTML coverage.
+
+The coverage report will go into the project root /var directory as configured in [./configDefaults/phpunit-with-coverage.xml](./configDefaults/phpunit-with-coverage.xml)
+
+If you want to override the coverage report location, you will need to override this config file as normal.
+
+You can disable the coverage report on the fly by doing:
+
+```bash
+phpUnitCoverage=0 bin/qa 
+```
+
+You might decide to do this if you are running these tests on travis, as you can see in [./travis.yml](./.travis.yml)
+
+
 ### PHP Mess Detector
 
 https://phpmd.org/
