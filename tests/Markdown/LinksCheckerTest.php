@@ -15,8 +15,11 @@ class LinksCheckerTest extends TestCase
      */
     public function setup()
     {
-        $root = Config::getProjectRootDirectory();
-        mkdir($root.'/docs');
+        $root    = Config::getProjectRootDirectory();
+        $docsDir = $root.'/docs';
+        if (!is_dir($docsDir)) {
+            mkdir($docsDir);
+        }
         $this->testMdFile = $root.'/docs/test.md';
     }
 
@@ -35,11 +38,12 @@ This is a test file for markdown linting
 [incorrect link](./../nothere.md) should not work
 MARKDOWN
         );
-        $expected = "\n$this->testMdFile
-----------------------------------
+        $expected = '
+/docs/test.md
+-------------
 
-Bad link for \"incorrect link\" to \"./../nothere.md\"
-";
+Bad link for "incorrect link" to "./../nothere.md"
+';
         ob_start();
         LinksChecker::main();
         $actual = ob_get_clean();
@@ -48,7 +52,7 @@ Bad link for \"incorrect link\" to \"./../nothere.md\"
 
     public function __destruct()
     {
-        if (file_exists($this->testMdFile)) {
+        if (!empty($this->testMdFile) && file_exists($this->testMdFile)) {
             unlink($this->testMdFile);
         }
     }

@@ -99,7 +99,8 @@ class LinksChecker
         $return = 0;
         $files  = static::getFiles();
         foreach ($files as $file) {
-            $title = "\n$file\n".str_repeat('-', strlen($file))."\n";
+            $relativeFile = str_replace(Config::getProjectRootDirectory(), '', $file);
+            $title        = "\n$relativeFile\n".str_repeat('-', strlen($relativeFile))."\n";
             if (!file_exists($file)) {
                 echo "$title\nError - file $file does not exist\n";
                 $return = 1;
