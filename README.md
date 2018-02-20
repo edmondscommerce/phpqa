@@ -1,6 +1,7 @@
 # phpqa
 Simple PHP QA pipeline and scripts. Largely just a collection of dependencies with configuration and scripts to run them together
 
+[![Build Status](https://travis-ci.org/edmondscommerce/phpqa.svg?branch=master)](https://travis-ci.org/edmondscommerce/phpqa)
 
 ## Installing
 
