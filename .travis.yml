@@ -7,12 +7,14 @@ git:
 
 
 php:
+  - 7.0
   - 7.1
   - 7.2
   - hhvm
 
 matrix:
   allow_failures:
+    - php: 7.0
     - php: hhvm
 
 before_script: bash -x .travis.bash
