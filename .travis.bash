@@ -16,6 +16,7 @@ gitBranch=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; 
 echo "gitBranch is $gitBranch"
 git checkout $gitBranch
 composer install
+git checkout HEAD composer.lock
 
 mkdir -p $DIR/cache/qa && chmod 777 $DIR/cache/qa
 
