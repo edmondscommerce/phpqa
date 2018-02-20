@@ -1,7 +1,7 @@
 # phpqa
 Simple PHP QA pipeline and scripts. Largely just a collection of dependencies with configuration and scripts to run them together
 
-[![Build Status](https://travis-ci.org/edmondscommerce/phpqa.svg?branch=master)](https://travis-ci.org/edmondscommerce/phpqa)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/884a284be5cd4dd3a49c199119385f58)](https://www.codacy.com/app/edmondscommerce/phpqa?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=edmondscommerce/phpqa&amp;utm_campaign=Badge_Grade)[![Build Status](https://travis-ci.org/edmondscommerce/phpqa.svg?branch=master)](https://travis-ci.org/edmondscommerce/phpqa)
 
 ## Installing
 
@@ -115,7 +115,7 @@ https://github.com/phpstan/phpstan
 
 #### Configuration 
 
-Default configuration is in [](./configDefaults/phpstan.neon)
+Default configuration is in [./configDefaults/phpstan.neon](./configDefaults/phpstan.neon)
 
 To override the configuration you need to copy it to `{project-root}/qaConfig/phpstan.neon`
 
@@ -137,13 +137,13 @@ parameters:
 
 #### Strict Rules
 
-The strict rules are brought in as a dependency
+The strict rules are brought in as a dependency and configured by default
 
-To enable them, you need to add this to your config file
+To disable them, you need to setup your own config for PHPStan and remove this from your config file
 
 ```php
 includes:
-	- vendor/phpstan/phpstan-strict-rules/rules.neon
+	- ../vendor/phpstan/phpstan-strict-rules/rules.neon
 
 ```
 https://github.com/phpstan/phpstan-strict-rules
@@ -208,17 +208,53 @@ phpUnitQuickTests=0 bin/qa
 
 And this will then run with full tests
 
+### PHP Mess Detector
+
+https://phpmd.org/
+
+We use all of the Mess Detector rules apart from the long variable name one.
+
+If you want to suppress specific errors for certain methods etc, copy/paste some generic part of the message and then grep the `vendor/phpmd` directory, for example:
+
+To find the rule for a message that contains `to keep number of public methods under'` 
+```bash
+grep 'to keep number of public methods under' -r vendor/phpmd/src/main/rulesets -B 4 | grep -P -o '(?<=rule name=")[^"]+'
+```
+
+To make life easy for yourself, you might make this a function in your bashrc file, or just paste it into your terminal session.
+
+```bash
+
+function phpmdRule(){
+    local message="$@"
+    local phpMdPath="$(find . \
+        -wholename '*vendor/phpmd/phpmd/src/main/resources/rulesets*' \
+        -type d 
+    )"
+    grep "$message" -r  -B 4 | grep -P -o '(?<=rule name=")[^"]+'
+}
+
+```
+
+And then to use it, just:
+
+```bash
+phpmdRule public methods under
+```
+
+### Markdown Links Checker
+
+This is a small utility [bundled with this repo](./src/Markdown/LinksChecker.php)
+
+It will check your `README.md` file and then recursively, all `*.md` files in the `docs` directory
+
+What it does is check for broken internal links. This can happen all the time if you link through to other md files or link to specific code files or folders.
+
 ### Uncommitted Changes Check
 
 At this point, the pipeline checks for uncommited changes in your repo. 
 
 If there are uncommited changes then the process stops. This is because beyond the point, tools are used that will actively update the code. You need to be able to `git reset --hard HEAD` etc.
-
-### Coding Standard Fixer
-
-This tool will actively update your code to fix coding standards issues
-
-https://github.com/FriendsOfPHP/PHP-CS-Fixer
 
 ### PHP Code Beautifier and Fixer
 
@@ -261,39 +297,7 @@ Implement other coding standards. Ideally figure out some automation to select t
 * [magento/marketplace-eqp](https://github.com/magento/marketplace-eqp)
 * [WordPress-Coding-Standards/WordPress-Coding-Standards](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards)
 
-### PHP Mess Detector
 
-https://phpmd.org/
-
-We use all of the Mess Detector rules apart from the long variable name one.
-
-If you want to suppress specific errors for certain methods etc, copy/paste some generic part of the message and then grep the `vendor/phpmd` directory, for example:
-
-To find the rule for a message that contains `to keep number of public methods under'` 
-```bash
-grep 'to keep number of public methods under' -r vendor/phpmd/src/main/rulesets -B 4 | grep -P -o '(?<=rule name=")[^"]+'
-```
-
-To make life easy for yourself, you might make this a function in your bashrc file, or just paste it into your terminal session.
-
-```bash
-
-function phpmdRule(){
-    local message="$@"
-    local phpMdPath="$(find . \
-        -wholename '*vendor/phpmd/phpmd/src/main/resources/rulesets*' \
-        -type d 
-    )"
-    grep "$message" -r  -B 4 | grep -P -o '(?<=rule name=")[^"]+'
-}
-
-```
-
-And then to use it, just:
-
-```bash
-phpmdRule public methods under
-```
 
 
 ### PHPLOC
@@ -301,4 +305,14 @@ phpmdRule public methods under
 Simply enough, some statistics about your project
 
 This is run last, it's not really a test, just for info
+
+If you got here you made it!
+
+## Running on Travis
+
+You can use this pipeline on Travis-CI.
+
+To see an example of how to do this, you can look at the [.travis.yml](./.travis.yml) and [./.travis.bash](./.travis.bash) files in this repo.
+
+You can also look at [Doctrine Static Meta](https://github.com/edmondscommerce/doctrine-static-meta) as a more complete example - on travis [here](https://travis-ci.org/edmondscommerce/doctrine-static-meta).
 

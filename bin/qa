@@ -261,6 +261,13 @@ set +x
 
 echo "
 
+Running Markdown Links Checker
+------------------------------
+"
+phpNoXdebug -f bin/mdlinks
+
+echo "
+
 Checking if Uncommitted Changes
 ------------------------------
 "
@@ -312,14 +319,6 @@ phpNoXdebug -f bin/phpcs -- \
     --report-summary \
     "$srcDir" "$testsDir" "$binDir"
 set +x
-
-echo "
-
-Running Markdown Links Checker
-------------------------------
-"
-phpNoXdebug -f bin/mdlinks
-
 
 
 echo '
