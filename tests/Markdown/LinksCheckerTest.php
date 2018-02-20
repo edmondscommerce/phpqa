@@ -15,7 +15,8 @@ class LinksCheckerTest extends TestCase
      */
     public function setup()
     {
-        $root             = Config::getProjectRootDirectory();
+        $root = Config::getProjectRootDirectory();
+        mkdir($root.'/docs');
         $this->testMdFile = $root.'/docs/test.md';
     }
 
