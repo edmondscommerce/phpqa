@@ -17,7 +17,7 @@ echo "gitBranch is $gitBranch"
 git checkout $gitBranch
 composer install
 
-mkdir -p $DIR/cache/qa && chmod 777 $DIR/cache/Proxies
+mkdir -p $DIR/cache/qa && chmod 777 $DIR/cache/qa
 
 echo "
 ===========================================
