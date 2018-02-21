@@ -366,19 +366,26 @@ Checking if Uncommitted Changes
 ------------------------------
 "
 set +e
-git status | grep -Eq "nothing to commit, working .*? clean"
-repoDirty=$?
-set -e
-if (( $repoDirty > 0 ))
+inGitRepo="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
+if [[ "" != "$inGitRepo" ]]
 then
-    echo "
+    git status grep -Eq "nothing to commit, working .*? clean"
+    repoDirty=$?
+    set -e
+    if (( $repoDirty > 0 ))
+    then
+        echo "
 
-Untracked or Uncommited changes detected - ABORTING
+        Untracked or Uncommited changes detected - ABORTING
 
-"
-    git status
-    exit 1
+        "
+        git status
+        exit 1
+    fi
 fi
+
+
+
 
 
 echo "
