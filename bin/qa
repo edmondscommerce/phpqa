@@ -369,7 +369,7 @@ set +e
 inGitRepo="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
 if [[ "" != "$inGitRepo" ]]
 then
-    git status grep -Eq "nothing to commit, working .*? clean"
+    git status | grep -Eq "nothing to commit, working .*? clean"
     repoDirty=$?
     set -e
     if (( $repoDirty > 0 ))
