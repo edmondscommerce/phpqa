@@ -1,6 +1,8 @@
 # phpqa
+## By [Edmonds Commerce](https://www.edmondscommerce.co.uk)
 Simple PHP QA pipeline and scripts. Largely just a collection of dependencies with configuration and scripts to run them together
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/884a284be5cd4dd3a49c199119385f58)](https://www.codacy.com/app/edmondscommerce/phpqa?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=edmondscommerce/phpqa&amp;utm_campaign=Badge_Grade) [![Build Status](https://travis-ci.org/edmondscommerce/phpqa.svg?branch=master)](https://travis-ci.org/edmondscommerce/phpqa)
 
 ## Installing
 
@@ -133,7 +135,7 @@ https://github.com/phpstan/phpstan
 
 #### Configuration 
 
-Default configuration is in [](./configDefaults/phpstan.neon)
+Default configuration is in [./configDefaults/phpstan.neon](./configDefaults/phpstan.neon)
 
 To override the configuration you need to copy it to `{project-root}/qaConfig/phpstan.neon`
 
@@ -155,13 +157,13 @@ parameters:
 
 #### Strict Rules
 
-The strict rules are brought in as a dependency
+The strict rules are brought in as a dependency and configured by default
 
-To enable them, you need to add this to your config file
+To disable them, you need to setup your own config for PHPStan and remove this from your config file
 
 ```php
 includes:
-	- vendor/phpstan/phpstan-strict-rules/rules.neon
+	- ../vendor/phpstan/phpstan-strict-rules/rules.neon
 
 ```
 https://github.com/phpstan/phpstan-strict-rules
@@ -226,42 +228,22 @@ phpUnitQuickTests=0 bin/qa
 
 And this will then run with full tests
 
-### Uncommitted Changes Check
+### Coverage
 
-At this point, the pipeline checks for uncommited changes in your repo. 
+By default, the PHPUnit command will generate both textual output and HTML coverage.
 
-If there are uncommited changes then the process stops. This is because beyond the point, tools are used that will actively update the code. You need to be able to `git reset --hard HEAD` etc.
+The coverage report will go into the project root /var directory as configured in [./configDefaults/phpunit-with-coverage.xml](./configDefaults/phpunit-with-coverage.xml)
 
-### Coding Standard Fixer
+If you want to override the coverage report location, you will need to override this config file as normal.
 
-This tool will actively update your code to fix coding standards issues
+You can disable the coverage report on the fly by doing:
 
-https://github.com/FriendsOfPHP/PHP-CS-Fixer
+```bash
+phpUnitCoverage=0 bin/qa 
+```
 
-### PHP Code Beautifier and Fixer
+You might decide to do this if you are running these tests on travis, as you can see in [./travis.yml](./.travis.yml)
 
-Part of the PHP_CodeSniffer package
-
-This will also fix any issues found
-
-https://github.com/squizlabs/PHP_CodeSniffer/wiki/Fixing-Errors-Automatically
-
-### PHP Code Sniffer
-
-Now we run the code sniffer to check for any remaining coding standards issues that have not been automatically fixed.
-
-The coding standard used defaults to PSR2
-
-You can specify any standard you want thouhg.
-
-https://github.com/squizlabs/PHP_CodeSniffer
-
-
-#### _TODO_ Include more coding standards and perform platform detection
-
-Implement other coding standards. Ideally figure out some automation to select the correct coding standard based on the application code, for example 
-* [magento/marketplace-eqp](https://github.com/magento/marketplace-eqp)
-* [WordPress-Coding-Standards/WordPress-Coding-Standards](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards)
 
 ### PHP Mess Detector
 
@@ -297,6 +279,61 @@ And then to use it, just:
 phpmdRule public methods under
 ```
 
+### Markdown Links Checker
+
+This is a small utility [bundled with this repo](./src/Markdown/LinksChecker.php)
+
+It will check your `README.md` file and then recursively, all `*.md` files in the `docs` directory
+
+What it does is check for broken internal links. This can happen all the time if you link through to other md files or link to specific code files or folders.
+
+### Uncommitted Changes Check
+
+At this point, the pipeline checks for uncommited changes in your repo. 
+
+If there are uncommited changes then the process stops. This is because beyond the point, tools are used that will actively update the code. You need to be able to `git reset --hard HEAD` etc.
+
+### PHP Code Beautifier and Fixer
+
+Part of the PHP_CodeSniffer package
+
+This will also fix any issues found
+
+https://github.com/squizlabs/PHP_CodeSniffer/wiki/Fixing-Errors-Automatically
+
+### PHP Code Sniffer
+
+Now we run the code sniffer to check for any remaining coding standards issues that have not been automatically fixed.
+
+The coding standard used defaults to PSR2
+
+You can specify any standard you want thouhg.
+
+https://github.com/squizlabs/PHP_CodeSniffer
+
+#### Ignoring Parts of a File
+
+You can mark specific chunks of code to be not analyzed by PHPCS having the following comments:
+
+```php
+<?php
+$xmlPackage = new XMLPackage;
+// phpcs:disable
+$xmlPackage['error_code'] = get_default_error_code_value();
+$xmlPackage->send();
+// phpcs:enable
+
+```
+
+https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#ignoring-parts-of-a-file
+
+
+#### _TODO_ Include more coding standards and perform platform detection
+
+Implement other coding standards. Ideally figure out some automation to select the correct coding standard based on the application code, for example 
+* [magento/marketplace-eqp](https://github.com/magento/marketplace-eqp)
+* [WordPress-Coding-Standards/WordPress-Coding-Standards](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards)
+
 
 
 
@@ -305,4 +342,14 @@ phpmdRule public methods under
 Simply enough, some statistics about your project
 
 This is run last, it's not really a test, just for info
+
+If you got here you made it!
+
+## Running on Travis
+
+You can use this pipeline on Travis-CI.
+
+To see an example of how to do this, you can look at the [.travis.yml](./.travis.yml) and [./.travis.bash](./.travis.bash) files in this repo.
+
+You can also look at [Doctrine Static Meta](https://github.com/edmondscommerce/doctrine-static-meta) as a more complete example - on travis [here](https://travis-ci.org/edmondscommerce/doctrine-static-meta).
 

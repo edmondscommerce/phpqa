@@ -30,6 +30,8 @@ $(hostname) $0 $@
 ===========================================
 "
 
+phpBinPath=$(which php)
+
 #### FUNCTIONS #################################################
 
 ################################################################
@@ -62,8 +64,9 @@ function phpNoXdebug {
     set +x
     local temporaryPath="$(mktemp -t php.XXXX).ini"
     # Using awk to ensure that files ending without newlines do not lead to configuration error
-    /usr/bin/php -i | grep "\.ini" | grep -o -e '\(/[a-z0-9._-]\+\)\+\.ini' | grep -v xdebug | xargs awk 'FNR==1{print ""}1' > "$temporaryPath"
-    /usr/bin/php -n -c "$temporaryPath" "$@"
+    $phpBinPath -i | grep "\.ini" | grep -o -e '\(/[a-z0-9._-]\+\)\+\.ini' | grep -v xdebug | xargs awk 'FNR==1{print ""}1' > "$temporaryPath"
+    $phpBinPath -n -c "$temporaryPath" "$@"
+    local exitCode=$?
     rm -f "$temporaryPath"
     set -x
 }
@@ -71,19 +74,91 @@ function phpNoXdebug {
 #### CONFIG ##################################################
 
 # project root directory
-projectRoot="$(realpath ./../)"
+if [[ -d $DIR/../vendor ]]
+then
+    projectRoot="$(readlink -f ./../)"
+else
+    projectRoot="$(readlink -f ./../../../../)"
+fi
 
 # the path in the project to check for config
 projectConfigPath="$projectRoot/qaConfig/"
 
 # project tests folder
 testsDir="$(find $projectRoot -maxdepth 1 -type d \( -name test -o -name tests \) | head -n1)"
+if [[ "" == "$testsDir" ]]
+then
+    echo "
+
+
+##### ERROR ############################################
+
+
+You have no 'tests' or 'test' directory.
+
+This is not currently supported by phpqa
+
+Please create at least an empty 'tests' directory, eg:
+
+mkdir -p $projectRoot/tests
+
+
+########################################################
+
+    "
+    exit 1
+fi
 
 # project src folder
 srcDir="$projectRoot/src"
+if [[ "" == "$srcDir" ]]
+then
+    echo "
+
+
+##### ERROR ############################################
+
+
+You have no 'src' or directory.
+
+This is not currently supported by phpqa
+
+Please create at least an empty 'src' directory, eg:
+
+mkdir -p $projectRoot/src
+
+
+########################################################
+
+    "
+    exit 1
+fi
+
 
 # project bin dir
 binDir="$(find $projectRoot -maxdepth 2 -type d -name bin | head -n1)"
+if [[ "" == "$binDir" ]]
+then
+    echo "
+
+
+##### ERROR ############################################
+
+
+You have no 'bin' or directory.
+
+This is not currently supported by phpqa
+
+Please create at least an empty 'bin' directory, eg:
+
+mkdir -p $projectRoot/bin
+
+
+########################################################
+
+    "
+    exit 1
+fi
 
 # proeject var dir, sub directory for qa cache files and output files
 varDir="$projectRoot/var/qa";
@@ -91,7 +166,7 @@ varDir="$projectRoot/var/qa";
 cacheDir="$projectRoot/cache/qa";
 
 # the path in this library for default config
-defaultConfigPath="$(realpath ./../configDefaults/)"
+defaultConfigPath="$(readlink -f ./../configDefaults/)"
 
 # PHPStan configs
 phpstanConfigPath="$(configPath phpstan.neon)"
@@ -106,14 +181,29 @@ phpcsCodingStandardsPath=$(configPath \
     $projectRoot/vendor/squizlabs/php_codesniffer/src/Standards/PSR2
 )
 
-runStrictType=1
-
 # should coding standards warnings be a fail?
 phpcsFailOnWarning=0
 
+##PHPUnit Configs
 
-# PHPUnit Quick Tests
+# PHPUnit Quick Tests - optional skip slow tests
 phpUnitQuickTests=${phpUnitQuickTests:-1}
+
+# PHPUnit Coverage - if enabled, tests will run with Xdebug and generate coverage
+phpUnitCoverage=${phpUnitCoverage:-1}
+
+if [[ -f $projectRoot/phpunit.xml ]]
+then
+    # Project root phpunit.xml trumps everything else
+    phpUnitConfigPath=$projectRoot/phpunit.xml
+else
+    if [[ "1" == "$phpUnitCoverage" ]]
+    then
+        phpUnitConfigPath=$(configPath phpunit-with-coverage.xml)
+    else
+        phpUnitConfigPath=$(configPath phpunit.xml)
+    fi
+fi
 
 #### PROCESS #################################################
 
@@ -150,48 +240,43 @@ Refreshing Composer Autoloader
 phpNoXdebug -f $(which composer) -- dump-autoload
 set +x
 
-if [[ "${runStrictType}" == 1 ]]
-then
-
-    echo "
-    Setting Strict Types If It's Missing
-    -------------------------------------
-    "
-    for d in "
-    $srcDir
-    $testsDir
-    "
+echo "
+Setting Strict Types If It's Missing
+-------------------------------------
+"
+for d in "
+$srcDir
+$testsDir
+"
+do
+    for f in $(
+                find $d \
+                    -name '*.php' \
+                    -o -name '*.phtml' \
+                    -exec grep -L 'strict_types' {} \;
+              );
     do
-        for f in $(
-                    find $d \
-                        -name '*.php' \
-                        -o -name '*.phtml' \
-                        -exec grep -L 'strict_types' {} \;
-                  );
-        do
-            echo "Found file with no strict types:"
-            echo $f;
-            echo
-            read -p "Would you like to fix? " -n 1 -r
-            echo
-            if [[ $REPLY =~ ^[Yy]$ ]]
-            then
-                sed -i 's/<?php/<\?php declare(strict_types=1);/g' $f;
-                echo "fixed $f"
-            else
-                echo "skipped $f"
-            fi
-        done
+        echo "Found file with no strict types:"
+        echo $f;
+        echo
+        read -p "Would you like to fix? " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]
+        then
+            sed -i 's/<?php/<\?php declare(strict_types=1);/g' $f;
+            echo "fixed $f"
+        else
+            echo "skipped $f"
+        fi
     done
-
-fi
+done
 
 echo "
 
 Running PHP Lint
 ----------------
 "
-phpNoXdebug -f ${binDir}/parallel-lint -- $srcDir $testsDir $binDir
+phpNoXdebug -f bin/parallel-lint -- $srcDir $testsDir $binDir
 set +x
 
 echo "
@@ -199,8 +284,20 @@ echo "
 Running PHPStan
 ---------------------
 "
-set -x
-phpNoXdebug -f ${binDir}/phpstan  -- analyse "$srcDir" $testsDir -l7 -c "$phpstanConfigPath"
+set +e
+phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath"
+phpStanExitCode=$?
+#exit code 0 = fine, 1 = ran fine but found errors, else it means it crashed
+if (( $phpStanExitCode > 0 ))
+then
+    if (( $phpStanExitCode > 1 ))
+    then
+        printf "\n\n\nPHPStan Crashed....\n\nrunning again with debug mode:\n\n\n"
+        phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath" --debug
+    fi
+    exit $phpStanExitCode
+fi
+set -e
 set +x
 
 echo "
@@ -211,9 +308,31 @@ Running PHPUnit Tests
 # Note the qaQuickTests=1
 # this sets a config variable of quickTests which you can then use
 # to allow tests to run less thoroughly but more quickly
+
+set +e
+phpCmd=phpNoXdebug
+if [[ "1" == "$phpUnitCoverage" ]]
+then
+    phpCmd=\php
+fi
 set -x
-qaQuickTests="$phpUnitQuickTests" phpNoXdebug -f bin/phpunit -- "$testsDir"
+qaQuickTests="$phpUnitQuickTests" $phpCmd -f bin/phpunit \
+    -- \
+    -c $phpUnitConfigPath \
+    "$testsDir"
+
+phpunitExitCode=$?
 set +x
+if (( $phpunitExitCode > 0 ))
+then
+    if (( $phpunitExitCode > 2 ))
+    then
+        printf "\n\n\nPHPUnit Crashed\n\nRunning again with Debug mode...\n\n\n"
+        qaQuickTests="$phpUnitQuickTests" phpNoXdebug -f bin/phpunit -- "$testsDir" --debug
+    fi
+    exit $phpunitExitCode
+fi
+set -e
 
 echo "
 
@@ -235,11 +354,18 @@ set +x
 
 echo "
 
+Running Markdown Links Checker
+------------------------------
+"
+phpNoXdebug -f bin/mdlinks
+
+echo "
+
 Checking if Uncommitted Changes
 ------------------------------
 "
 set +e
-git status | grep -q "nothing to commit, working directory clean"
+git status | grep -Eq "nothing to commit, working .*? clean"
 repoDirty=$?
 set -e
 if (( $repoDirty > 0 ))

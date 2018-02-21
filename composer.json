@@ -22,11 +22,13 @@
         "squizlabs/php_codesniffer": "^3.2"
   },
   "bin": [
-    "bin/qa"
+    "bin/qa",
+    "bin/mdlinks"
   ],
   "require-dev": {
   },
   "config": {
+    "bin-dir": "bin",
     "preferred-install": {
       "*": "dist"
     },
