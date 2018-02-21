@@ -112,9 +112,54 @@ fi
 
 # project src folder
 srcDir="$projectRoot/src"
+if [[ "" == "$srcDir" ]]
+then
+    echo "
+
+
+##### ERROR ############################################
+
+
+You have no 'src' or directory.
+
+This is not currently supported by phpqa
+
+Please create at least an empty 'src' directory, eg:
+
+mkdir -p $projectRoot/src
+
+
+########################################################
+
+    "
+    exit 1
+fi
+
 
 # project bin dir
 binDir="$(find $projectRoot -maxdepth 2 -type d -name bin | head -n1)"
+if [[ "" == "$binDir" ]]
+then
+    echo "
+
+
+##### ERROR ############################################
+
+
+You have no 'bin' or directory.
+
+This is not currently supported by phpqa
+
+Please create at least an empty 'bin' directory, eg:
+
+mkdir -p $projectRoot/bin
+
+
+########################################################
+
+    "
+    exit 1
+fi
 
 # proeject var dir, sub directory for qa cache files and output files
 varDir="$projectRoot/var/qa";
