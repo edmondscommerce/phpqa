@@ -13,7 +13,42 @@ class LinksChecker
      */
     private static function getFiles(): array
     {
-        $dir       = Config::getProjectRootDirectory().'/docs';
+        $files   = self::getDocsFiles();
+        $files[] = self::getMainReadme();
+
+        return $files;
+    }
+
+    /**
+     * @return string
+     * @throws \Exception
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
+    private static function getMainReadme(): string
+    {
+        $path = Config::getProjectRootDirectory().'/README.md';
+        if (!is_file($path)) {
+            throw new \RuntimeException(
+                "\n\nYou have no README.md file in your project"
+                ."\n\nAs the bear minimum you need to have this file to pass QA"
+            );
+        }
+
+        return $path;
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
+    private static function getDocsFiles(): array
+    {
+        $files = [];
+        $dir   = Config::getProjectRootDirectory().'/docs';
+        if (!is_dir($dir)) {
+            $files;
+        }
         $directory = new \RecursiveDirectoryIterator($dir);
         $recursive = new \RecursiveIteratorIterator($directory);
         $regex     = new \RegexIterator(
@@ -21,9 +56,6 @@ class LinksChecker
             '/^.+\.md/i',
             \RecursiveRegexIterator::GET_MATCH
         );
-
-        $files = [Config::getProjectRootDirectory().'/README.md'];
-
         foreach ($regex as $file) {
             if (!empty($file[0])) {
                 $files[] = $file[0];
