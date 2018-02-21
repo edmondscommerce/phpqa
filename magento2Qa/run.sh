@@ -91,11 +91,6 @@ ${phpcs} ${pathToCode} --standard=MEQP2 --ignore="Tests,Test,Fixtures"
 echo "Now run PHPStan"
 php "${phpStan}" analyse "${pathToCode}" -l7 -c "${DIR}/config/phpstan.neon"
 
-cd ${magentoDir}/dev/tests/static
-php ../../../vendor/bin/phpunit -c $PWD
-
-#php "${magentoDir}/bin/magento" dev:tests:run static | tee "${reportDir}/magentoStatic.log"
-
 
 
 
