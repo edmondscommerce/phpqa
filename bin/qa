@@ -87,6 +87,28 @@ projectConfigPath="$projectRoot/qaConfig/"
 
 # project tests folder
 testsDir="$(find $projectRoot -maxdepth 1 -type d \( -name test -o -name tests \) | head -n1)"
+if [[ "" == "$testsDir" ]]
+then
+    echo "
+
+
+##### ERROR ############################################
+
+
+You have no 'tests' or 'test' directory.
+
+This is not currently supported by phpqa
+
+Please create at least an empty 'tests' directory, eg:
+
+mkdir -p $projectRoot/tests
+
+
+########################################################
+
+    "
+    exit 1
+fi
 
 # project src folder
 srcDir="$projectRoot/src"
