@@ -47,7 +47,7 @@ class LinksChecker
         $files = [];
         $dir   = Config::getProjectRootDirectory().'/docs';
         if (!is_dir($dir)) {
-            $files;
+            return $files;
         }
         $directory = new \RecursiveDirectoryIterator($dir);
         $recursive = new \RecursiveIteratorIterator($directory);
