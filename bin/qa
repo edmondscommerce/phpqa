@@ -342,6 +342,7 @@ then
     then
         printf "\n\n\nPHPUnit Crashed\n\nRunning again with Debug mode...\n\n\n"
         qaQuickTests="$phpUnitQuickTests" phpNoXdebug -f bin/phpunit -- "$testsDir" --debug
+        set +x
     fi
     exit $phpunitExitCode
 fi
@@ -371,6 +372,7 @@ Running Markdown Links Checker
 ------------------------------
 "
 phpNoXdebug -f bin/mdlinks
+set +x
 
 echo "
 
@@ -386,13 +388,28 @@ then
     set -e
     if (( $repoDirty > 0 ))
     then
+        git status
         echo "
 
-        Untracked or Uncommited changes detected - ABORTING
+==================================================
+
+    Untracked or Uncommited changes detected
+
+    Would you like to commit (c) or abort (a)
+
+    (git commit will be 'git add -A; git commit')
+
+==================================================
 
         "
-        git status
-        exit 1
+        read -n 1 commitOrAbort
+        if [[ "$commitOrAbort" != "c" ]]
+        then
+            echo -n "\n\n\nAborting...\n\n\n"
+            exit 1
+        fi
+        git add -A
+        git commit
     fi
 fi
 
