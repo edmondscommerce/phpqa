@@ -209,7 +209,7 @@ phpUnitQuickTests=0 bin/qa
 
 And this will then run with full tests
 
-### Coverage
+#### Coverage
 
 By default, the PHPUnit command will generate both textual output and HTML coverage.
 
@@ -225,6 +225,32 @@ phpUnitCoverage=0 bin/qa
 
 You might decide to do this if you are running these tests on travis, as you can see in [./travis.yml](./.travis.yml)
 
+#### Persitantly Setting Coverage or Quick Tests
+
+If in your development session you want to, for example, configure PHPUnit to run as quickly as possible, you might want to disable coverage persistantly in your shell session.
+
+
+##### For Fastest Iterations
+
+To have qa run as quickly as possible, you need to disable coverage
+
+To do this you can simply 
+
+```bash
+export phpUnitCoverage=0
+```
+
+and then every time you run `./bin/qa` it will be as if you ran it like `phpUnitCoverage=0 ./bin/qa`
+
+##### For Most Comprehensive Checking
+
+For the most comprehensive checking, you need coverage enabled and also quick tests
+
+```bash
+export phpUnitQuickTests=0
+```
+
+and then every time you run `./bin/qa` it will be as if you ran it like `phpUnitQuickTests=0 ./bin/qa`
 
 ### PHP Mess Detector
 
