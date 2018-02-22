@@ -405,7 +405,7 @@ then
         read -n 1 commitOrAbort
         if [[ "$commitOrAbort" != "c" ]]
         then
-            echo -n "\n\n\nAborting...\n\n\n"
+            printf "\n\n\nAborting...\n\n\n"
             exit 1
         fi
         git add -A
