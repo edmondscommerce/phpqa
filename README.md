@@ -91,10 +91,32 @@ When you run `qa`, it checks for a file located in `"$projectConfigPath/qaConfig
 
 Using this you can override as much of the standard configuration as you see fit.
 
-## Tools
+## The Pipeline
 
-Tools run in sequence. Any tool that fails kills the process
+Steps are run in sequence. Any step that fails kills the process.
 
+In general the steps are in a logical progression of importance. So for example there is no point static analyzing PHP code if the code syntax is not even valid.
+
+Below is a description of each step in order.
+
+### Pre Hook
+
+If you would like to have some custom actions taken at the beginning of your qa process, after all configs are in placed (and possibly overridden) but before any of the main checks take place then you can do this by creating a preHook.bash file in your `qaConfig` folder
+
+This is an arbitrary bash script that can do anything you want.
+
+It is sourced into the main qa process and so has access to all of the config variables as defined in te main script and overridden in your project config.
+
+If you need something in this pre hook to fail the whole process, it is important that do the following:
+
+```bash
+
+# something in prehook needs to mark the process as failed...
+exit 1;
+```
+
+In Bash - an exit code of greater than 0 indicates an error. You can pick any number you want, but 1 is the standard for "general error".
+ 
 ### Composer Check For Issues
 Runs a diagnose on composer to make sure it's all good
 
@@ -359,4 +381,14 @@ You can use this pipeline on Travis-CI.
 To see an example of how to do this, you can look at the [.travis.yml](./.travis.yml) and [./.travis.bash](./.travis.bash) files in this repo.
 
 You can also look at [Doctrine Static Meta](https://github.com/edmondscommerce/doctrine-static-meta) as a more complete example - on travis [here](https://travis-ci.org/edmondscommerce/doctrine-static-meta).
+
+
+### Post Hook
+
+If you would like to have some custom actions taken at the end of your qa process once everythign is passed, then you can do this by creating a postHook.bash file in your `qaConfig` folder
+
+This is an arbitrary bash script that can do anything you want.
+
+It is sourced into the main qa process and so has access to all of the config variables as defined in te main script and overridden in your project config.
+
 

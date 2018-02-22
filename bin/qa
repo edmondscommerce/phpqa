@@ -223,6 +223,18 @@ mkdir -p "$varDir";
 
 mkdir -p "$cacheDir";
 
+
+if [[ -f $projectConfigPath/hookPre.bash ]]
+then
+    echo "
+
+Running Pre Hook $projectConfigPath/hookPre.bash
+------------------------------------------------
+"
+    source $projectConfigPath/hookPre.bash
+fi
+
+
 echo "
 
 Checking for Composer Issues
@@ -449,6 +461,16 @@ Statistics:
 "
 phpNoXdebug -f bin/phploc "$srcDir" "$testsDir"
 set +x
+
+if [[ -f $projectConfigPath/hookPost.bash ]]
+then
+    echo "
+
+Running Post Hook $projectConfigPath/hookPost.bash
+------------------------------------------------
+"
+    source $projectConfigPath/hookPost.bash
+fi
 
 
 echo "
