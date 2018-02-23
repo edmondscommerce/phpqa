@@ -59,7 +59,7 @@ function configPath(){
 ###############################################################
 # Function to run PHP without Xdebug enabled, much faster
 # Usage:
-# `phpNoXdebug path/to/php/file.php -- -php -args`
+# `phpNoXdebug path/to/php/file.php -- -arg1 -arg2`
 function phpNoXdebug {
     set +x
     local temporaryPath="$(mktemp -t php.XXXX).ini"
@@ -70,6 +70,49 @@ function phpNoXdebug {
     rm -f "$temporaryPath"
     set -x
     return $exitCode
+}
+
+###############################################################
+# Function to check there are no uncommitted changes.
+#
+# This will also prompt you to commit these changes if you want to.
+#
+# Usage:
+# checkForUncommitedChanges
+function checkForUncommittedChanges {
+    set +e
+    inGitRepo="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
+    if [[ "" != "$inGitRepo" ]]
+    then
+        git status | grep -Eq "nothing to commit, working .*? clean"
+        repoDirty=$?
+        set -e
+        if (( $repoDirty > 0 ))
+        then
+            git status
+            echo "
+
+    ==================================================
+
+        Untracked or Uncommited changes detected
+
+        Would you like to commit (c) or abort (a)
+
+        (git commit will be 'git add -A; git commit')
+
+    ==================================================
+
+            "
+            read -n 1 commitOrAbort
+            if [[ "$commitOrAbort" != "c" ]]
+            then
+                printf "\n\n\nAborting...\n\n\n"
+                exit 1
+            fi
+            git add -A
+            git commit
+        fi
+    fi
 }
 
 #### CONFIG ##################################################
@@ -222,7 +265,6 @@ cd "$projectRoot";
 mkdir -p "$varDir";
 
 mkdir -p "$cacheDir";
-
 
 if [[ -f $projectConfigPath/hookPre.bash ]]
 then
@@ -379,43 +421,7 @@ echo "
 Checking if Uncommitted Changes
 ------------------------------
 "
-set +e
-inGitRepo="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
-if [[ "" != "$inGitRepo" ]]
-then
-    git status | grep -Eq "nothing to commit, working .*? clean"
-    repoDirty=$?
-    set -e
-    if (( $repoDirty > 0 ))
-    then
-        git status
-        echo "
-
-==================================================
-
-    Untracked or Uncommited changes detected
-
-    Would you like to commit (c) or abort (a)
-
-    (git commit will be 'git add -A; git commit')
-
-==================================================
-
-        "
-        read -n 1 commitOrAbort
-        if [[ "$commitOrAbort" != "c" ]]
-        then
-            printf "\n\n\nAborting...\n\n\n"
-            exit 1
-        fi
-        git add -A
-        git commit
-    fi
-fi
-
-
-
-
+checkForUncommittedChanges
 
 echo "
 
