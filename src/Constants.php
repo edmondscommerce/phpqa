@@ -7,7 +7,7 @@ class Constants
     /**
      * The key in $_SERVER that we check for in our PHPUnit tests
      */
-    const QA_QUICK_TESTS_KEY = 'qaQuickTests';
+    const QA_QUICK_TESTS_KEY = 'phpUnitQuickTests';
 
     /**
      * The value for the key in $_SERVER that we check for in our PHPUnit tests. If equal to this value, we can skip
