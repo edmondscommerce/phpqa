@@ -80,6 +80,11 @@ function phpNoXdebug {
 # Usage:
 # checkForUncommitedChanges
 function checkForUncommittedChanges {
+    if [[ "true" == "$CI" ]]
+    then
+        echo "Skipping uncommited changes check in CI"
+        return 0;
+    fi
     set +e
     inGitRepo="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
     if [[ "" != "$inGitRepo" ]]
@@ -248,6 +253,11 @@ else
         phpUnitConfigPath=$(configPath phpunit.xml)
     fi
 fi
+
+# If a CI variable is set, we use that, otherwise default to false.
+# Travis-CI sets a CI variable. You can eaisly set this in any other CI system
+# The value should the the string 'true' if this is CI
+CI=${CI:-'false'}
 
 #### PROCESS #################################################
 
