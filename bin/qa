@@ -33,92 +33,7 @@ $(hostname) $0 $@
 phpBinPath=$(which php)
 
 #### FUNCTIONS #################################################
-
-################################################################
-# Get the path for a config file
-# Defaults to project level and falls back to this library
-#
-# Usage:
-#
-# - relative path, falling back to the standard default config path
-# `configPath "relative/path/to/file/or/folder"`
-#
-# - relative path, falling back to a specified default
-# `configPath "relative/path/to/file/or/folder" "specified/default/path"
-function configPath(){
-    local relativePath="$1"
-    local defaultPath="${2:-"$defaultConfigPath/$relativePath"}"
-    if [[ -f $projectConfigPath/$relativePath ]]
-    then
-        echo $projectConfigPath/$relativePath
-    else
-        echo $defaultPath
-    fi
-}
-
-###############################################################
-# Function to run PHP without Xdebug enabled, much faster
-# Usage:
-# `phpNoXdebug path/to/php/file.php -- -arg1 -arg2`
-function phpNoXdebug {
-    set +x
-    local temporaryPath="$(mktemp -t php.XXXX).ini"
-    # Using awk to ensure that files ending without newlines do not lead to configuration error
-    $phpBinPath -i | grep "\.ini" | grep -o -e '\(/[a-z0-9._-]\+\)\+\.ini' | grep -v xdebug | xargs awk 'FNR==1{print ""}1' > "$temporaryPath"
-    $phpBinPath -n -c "$temporaryPath" "$@"
-    local exitCode=$?
-    rm -f "$temporaryPath"
-    set -x
-    return $exitCode
-}
-
-###############################################################
-# Function to check there are no uncommitted changes.
-#
-# This will also prompt you to commit these changes if you want to.
-#
-# Usage:
-# checkForUncommitedChanges
-function checkForUncommittedChanges {
-    if [[ "true" == "$CI" ]]
-    then
-        echo "Skipping uncommited changes check in CI"
-        return 0;
-    fi
-    set +e
-    inGitRepo="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
-    if [[ "" != "$inGitRepo" ]]
-    then
-        git status | grep -Eq "nothing to commit, working .*? clean"
-        repoDirty=$?
-        set -e
-        if (( $repoDirty > 0 ))
-        then
-            git status
-            echo "
-
-    ==================================================
-
-        Untracked or Uncommited changes detected
-
-        Would you like to commit (c) or abort (a)
-
-        (git commit will be 'git add -A; git commit')
-
-    ==================================================
-
-            "
-            read -n 1 commitOrAbort
-            if [[ "$commitOrAbort" != "c" ]]
-            then
-                printf "\n\n\nAborting...\n\n\n"
-                exit 1
-            fi
-            git add -A
-            git commit
-        fi
-    fi
-}
+source ./../includes/functions.inc.bash
 
 #### CONFIG ##################################################
 
@@ -134,82 +49,15 @@ fi
 projectConfigPath="$projectRoot/qaConfig/"
 
 # project tests folder
-testsDir="$(find $projectRoot -maxdepth 1 -type d \( -name test -o -name tests \) | head -n1)"
-if [[ "" == "$testsDir" ]]
-then
-    echo "
-
-
-##### ERROR ############################################
-
-
-You have no 'tests' or 'test' directory.
-
-This is not currently supported by phpqa
-
-Please create at least an empty 'tests' directory, eg:
-
-mkdir -p $projectRoot/tests
-
-
-########################################################
-
-    "
-    exit 1
-fi
+testsDir="$(findTestsDir)"
 
 # project src folder
-srcDir="$projectRoot/src"
-if [[ "" == "$srcDir" ]]
-then
-    echo "
-
-
-##### ERROR ############################################
-
-
-You have no 'src' or directory.
-
-This is not currently supported by phpqa
-
-Please create at least an empty 'src' directory, eg:
-
-mkdir -p $projectRoot/src
-
-
-########################################################
-
-    "
-    exit 1
-fi
-
+srcDir="$(findSrcDir)"
 
 # project bin dir
-binDir="$(find $projectRoot -maxdepth 2 -type d -name bin | head -n1)"
-if [[ "" == "$binDir" ]]
-then
-    echo "
+binDir="$(findBinDir)"
 
-
-##### ERROR ############################################
-
-
-You have no 'bin' or directory.
-
-This is not currently supported by phpqa
-
-Please create at least an empty 'bin' directory, eg:
-
-mkdir -p $projectRoot/bin
-
-
-########################################################
-
-    "
-    exit 1
-fi
-
-# proeject var dir, sub directory for qa cache files and output files
+# project var dir, sub directory for qa cache files and output files
 varDir="$projectRoot/var/qa";
 
 cacheDir="$projectRoot/cache/qa";
@@ -405,18 +253,36 @@ echo "
 Running PHP Mess Detector
 -------------------------
 "
-set -x
-phpNoXdebug -f bin/phpmd -- \
-    "$srcDir","$testsDir","$binDir" \
-    text \
-    "$phpmdConfigPath" \
-    --suffixes php,phtml \
-    | sort -u \
-    | sed G \
-    | sed -e 's#p:#p\nLine: #' \
-    | sed -e 's#\t\{1,\}#\nMessage: #' \
-    | sed -e 's#\. #\.\n#'
+set +e
+phpMdExitCode=99
+while [[ "$phpMdExitCode" != 0 ]]
+do
+    phpNoXdebug -f bin/phpmd -- \
+        "$srcDir","$testsDir","$binDir" \
+        text \
+        "$phpmdConfigPath" \
+        --suffixes php,phtml \
+        | sort -u \
+        | sed G \
+        | sed -e 's#p:#p\nLine: #' \
+        | sed -e 's#\t\{1,\}#\nMessage: #' \
+        | sed -e 's#\. #\.\n#'
+    phpMdExitCode=$?
+    set +x
+    if [[ "0" != "$phpMdExitCode" ]]
+    then
+        printf "\n\nPHP Mess Detector Failed, would you like to try again? (y/n)\n\n"
+        read -n 1 tryAgainOrAbort
+        if [[ "y" != "$tryAgainOrAbort" ]]
+        then
+            printf "\n\nAborting...\n\n"
+            exit 1
+        fi
+        printf "\n\nTrying again, good luck!\n\n"
+    fi
+done
 set +x
+set -e
 
 echo "
 
