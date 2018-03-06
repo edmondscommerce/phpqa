@@ -91,29 +91,32 @@ When you run `qa`, it checks for a file located in `"$projectConfigPath/qaConfig
 
 Using this you can override as much of the standard configuration as you see fit.
 
+## The Pipeline
 
-### M2 Configuration
+Steps are run in sequence. Any step that fails kills the process.
 
-Working on the assumption that this tool has been installed in the mage root folder, there are some pre-defined
-config paths in the qaConfig directory
+In general the steps are in a logical progression of importance. So for example there is no point static analyzing PHP code if the code syntax is not even valid.
 
-You can use these by running the following commands
+Below is a description of each step in order.
+
+### Pre Hook
+
+If you would like to have some custom actions taken at the beginning of your qa process, after all configs are in placed (and possibly overridden) but before any of the main checks take place then you can do this by creating a preHook.bash file in your `qaConfig` folder
+
+This is an arbitrary bash script that can do anything you want.
+
+It is sourced into the main qa process and so has access to all of the config variables as defined in te main script and overridden in your project config.
+
+If you need something in this pre hook to fail the whole process, it is important that do the following:
 
 ```bash
 
-cd /path/to/qa/tool/qaConfig
-
-cp m2Config.inc.bash qaConfig.inc.bash
-cp m2-phpstan.neon phpstan.neon
-
+# something in prehook needs to mark the process as failed...
+exit 1;
 ```
 
-And then making any changes as required by your setup
-
-## Tools
-
-Tools run in sequence. Any tool that fails kills the process
-
+In Bash - an exit code of greater than 0 indicates an error. You can pick any number you want, but 1 is the standard for "general error".
+ 
 ### Composer Check For Issues
 Runs a diagnose on composer to make sure it's all good
 
@@ -228,7 +231,7 @@ phpUnitQuickTests=0 bin/qa
 
 And this will then run with full tests
 
-### Coverage
+#### Coverage
 
 By default, the PHPUnit command will generate both textual output and HTML coverage.
 
@@ -244,6 +247,32 @@ phpUnitCoverage=0 bin/qa
 
 You might decide to do this if you are running these tests on travis, as you can see in [./travis.yml](./.travis.yml)
 
+#### Persitantly Setting Coverage or Quick Tests
+
+If in your development session you want to, for example, configure PHPUnit to run as quickly as possible, you might want to disable coverage persistantly in your shell session.
+
+
+##### For Fastest Iterations
+
+To have qa run as quickly as possible, you need to disable coverage
+
+To do this you can simply 
+
+```bash
+export phpUnitCoverage=0
+```
+
+and then every time you run `./bin/qa` it will be as if you ran it like `phpUnitCoverage=0 ./bin/qa`
+
+##### For Most Comprehensive Checking
+
+For the most comprehensive checking, you need coverage enabled and also quick tests
+
+```bash
+export phpUnitQuickTests=0
+```
+
+and then every time you run `./bin/qa` it will be as if you ran it like `phpUnitQuickTests=0 ./bin/qa`
 
 ### PHP Mess Detector
 
@@ -277,6 +306,16 @@ And then to use it, just:
 
 ```bash
 phpmdRule public methods under
+```
+
+Whatever ruel is returned by phpmdRule call, supress it in PHP using dock block.
+
+
+```php
+    /**
+     * @SuppressWarnings(PHPMD.SomeRule) 
+     */
+     publinc function someMethod() { }
 ```
 
 ### Markdown Links Checker
@@ -352,4 +391,14 @@ You can use this pipeline on Travis-CI.
 To see an example of how to do this, you can look at the [.travis.yml](./.travis.yml) and [./.travis.bash](./.travis.bash) files in this repo.
 
 You can also look at [Doctrine Static Meta](https://github.com/edmondscommerce/doctrine-static-meta) as a more complete example - on travis [here](https://travis-ci.org/edmondscommerce/doctrine-static-meta).
+
+
+### Post Hook
+
+If you would like to have some custom actions taken at the end of your qa process once everythign is passed, then you can do this by creating a postHook.bash file in your `qaConfig` folder
+
+This is an arbitrary bash script that can do anything you want.
+
+It is sourced into the main qa process and so has access to all of the config variables as defined in te main script and overridden in your project config.
+
 

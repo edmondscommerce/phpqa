@@ -33,43 +33,7 @@ $(hostname) $0 $@
 phpBinPath=$(which php)
 
 #### FUNCTIONS #################################################
-
-################################################################
-# Get the path for a config file
-# Defaults to project level and falls back to this library
-#
-# Usage:
-#
-# - relative path, falling back to the standard default config path
-# `configPath "relative/path/to/file/or/folder"`
-#
-# - relative path, falling back to a specified default
-# `configPath "relative/path/to/file/or/folder" "specified/default/path"
-function configPath(){
-    local relativePath="$1"
-    local defaultPath="${2:-"$defaultConfigPath/$relativePath"}"
-    if [[ -f $projectConfigPath/$relativePath ]]
-    then
-        echo $projectConfigPath/$relativePath
-    else
-        echo $defaultPath
-    fi
-}
-
-###############################################################
-# Function to run PHP without Xdebug enabled, much faster
-# Usage:
-# `phpNoXdebug path/to/php/file.php -- -php -args`
-function phpNoXdebug {
-    set +x
-    local temporaryPath="$(mktemp -t php.XXXX).ini"
-    # Using awk to ensure that files ending without newlines do not lead to configuration error
-    $phpBinPath -i | grep "\.ini" | grep -o -e '\(/[a-z0-9._-]\+\)\+\.ini' | grep -v xdebug | xargs awk 'FNR==1{print ""}1' > "$temporaryPath"
-    $phpBinPath -n -c "$temporaryPath" "$@"
-    local exitCode=$?
-    rm -f "$temporaryPath"
-    set -x
-}
+source ./../includes/functions.inc.bash
 
 #### CONFIG ##################################################
 
@@ -85,82 +49,15 @@ fi
 projectConfigPath="$projectRoot/qaConfig/"
 
 # project tests folder
-testsDir="$(find $projectRoot -maxdepth 1 -type d \( -name test -o -name tests \) | head -n1)"
-if [[ "" == "$testsDir" ]]
-then
-    echo "
-
-
-##### ERROR ############################################
-
-
-You have no 'tests' or 'test' directory.
-
-This is not currently supported by phpqa
-
-Please create at least an empty 'tests' directory, eg:
-
-mkdir -p $projectRoot/tests
-
-
-########################################################
-
-    "
-    exit 1
-fi
+testsDir="$(findTestsDir)"
 
 # project src folder
-srcDir="$projectRoot/src"
-if [[ "" == "$srcDir" ]]
-then
-    echo "
-
-
-##### ERROR ############################################
-
-
-You have no 'src' or directory.
-
-This is not currently supported by phpqa
-
-Please create at least an empty 'src' directory, eg:
-
-mkdir -p $projectRoot/src
-
-
-########################################################
-
-    "
-    exit 1
-fi
-
+srcDir="$(findSrcDir)"
 
 # project bin dir
-binDir="$(find $projectRoot -maxdepth 2 -type d -name bin | head -n1)"
-if [[ "" == "$binDir" ]]
-then
-    echo "
+binDir="$(findBinDir)"
 
-
-##### ERROR ############################################
-
-
-You have no 'bin' or directory.
-
-This is not currently supported by phpqa
-
-Please create at least an empty 'bin' directory, eg:
-
-mkdir -p $projectRoot/bin
-
-
-########################################################
-
-    "
-    exit 1
-fi
-
-# proeject var dir, sub directory for qa cache files and output files
+# project var dir, sub directory for qa cache files and output files
 varDir="$projectRoot/var/qa";
 
 cacheDir="$projectRoot/cache/qa";
@@ -205,7 +102,14 @@ else
     fi
 fi
 
+# If a CI variable is set, we use that, otherwise default to false.
+# Travis-CI sets a CI variable. You can eaisly set this in any other CI system
+# The value should the the string 'true' if this is CI
+CI=${CI:-'false'}
+
 #### PROCESS #################################################
+
+hasBeenRestarted="false"
 
 # override configs with project configs
 overridePath="$projectConfigPath/qaConfig.inc.bash"
@@ -221,6 +125,17 @@ cd "$projectRoot";
 mkdir -p "$varDir";
 
 mkdir -p "$cacheDir";
+
+if [[ -f $projectConfigPath/hookPre.bash ]]
+then
+    echo "
+
+Running Pre Hook $projectConfigPath/hookPre.bash
+------------------------------------------------
+"
+    source $projectConfigPath/hookPre.bash
+fi
+
 
 echo "
 
@@ -285,20 +200,27 @@ Running PHPStan
 ---------------------
 "
 set +e
-phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath"
-phpStanExitCode=$?
-#exit code 0 = fine, 1 = ran fine but found errors, else it means it crashed
-if (( $phpStanExitCode > 0 ))
-then
-    if (( $phpStanExitCode > 1 ))
+set +e
+phpStanExitCode=99
+while (( phpStanExitCode > 0 ))
+do
+    phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath"
+    phpStanExitCode=$?
+    set +x
+    #exit code 0 = fine, 1 = ran fine but found errors, else it means it crashed
+    if (( phpStanExitCode > 1 ))
     then
         printf "\n\n\nPHPStan Crashed....\n\nrunning again with debug mode:\n\n\n"
         phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath" --debug
+        exit 1
     fi
-    exit $phpStanExitCode
-fi
+    if (( phpStanExitCode > 0 ))
+    then
+        tryAgainOrAbort "PHPStan"
+    fi
+done
 set -e
-set +x
+
 
 echo "
 
@@ -329,6 +251,7 @@ then
     then
         printf "\n\n\nPHPUnit Crashed\n\nRunning again with Debug mode...\n\n\n"
         qaQuickTests="$phpUnitQuickTests" phpNoXdebug -f bin/phpunit -- "$testsDir" --debug
+        set +x
     fi
     exit $phpunitExitCode
 fi
@@ -339,18 +262,29 @@ echo "
 Running PHP Mess Detector
 -------------------------
 "
-set -x
-phpNoXdebug -f bin/phpmd -- \
-    "$srcDir","$testsDir","$binDir" \
-    text \
-    "$phpmdConfigPath" \
-    --suffixes php,phtml \
-    | sort -u \
-    | sed G \
-    | sed -e 's#p:#p\nLine: #' \
-    | sed -e 's#\t\{1,\}#\nMessage: #' \
-    | sed -e 's#\. #\.\n#'
+set +e
+phpMdExitCode=99
+while (( phpMdExitCode > 0 ))
+do
+    phpNoXdebug -f bin/phpmd -- \
+        "$srcDir","$testsDir","$binDir" \
+        text \
+        "$phpmdConfigPath" \
+        --suffixes php,phtml \
+        | sort -u \
+        | sed G \
+        | sed -e 's#p:#p\nLine: #' \
+        | sed -e 's#\t\{1,\}#\nMessage: #' \
+        | sed -e 's#\. #\.\n#'
+    phpMdExitCode=$?
+    set +x
+    if (( phpMdExitCode > 0 ))
+    then
+        tryAgainOrAbort "PHP Mess Detector"
+    fi
+done
 set +x
+set -e
 
 echo "
 
@@ -358,27 +292,14 @@ Running Markdown Links Checker
 ------------------------------
 "
 phpNoXdebug -f bin/mdlinks
+set +x
 
 echo "
 
 Checking if Uncommitted Changes
 ------------------------------
 "
-set +e
-git status | grep -Eq "nothing to commit, working .*? clean"
-repoDirty=$?
-set -e
-if (( $repoDirty > 0 ))
-then
-    echo "
-
-Untracked or Uncommited changes detected - ABORTING
-
-"
-    git status
-    exit 1
-fi
-
+checkForUncommittedChanges
 
 echo "
 
@@ -403,17 +324,26 @@ Running Code Sniffer on src and tests
 phpNoXdebug -f bin/phpcs -- \
     --config-set ignore_warnings_on_exit "$phpcsFailOnWarning"
 set +x
-phpNoXdebug -f bin/phpcs -- \
-    --standard="$phpcsCodingStandardsPath" \
-    --colors \
-    --cache="$cacheDir"/phpcs.cache \
-    -s \
-    --report-full \
-    --report-summary \
-    "$srcDir" "$testsDir" "$binDir"
-set +x
+set +e
+phpcsExitCode=99
+while (( phpcsExitCode > 0 ))
+do
+    phpNoXdebug -f bin/phpcs -- \
+        --standard="$phpcsCodingStandardsPath" \
+        --colors \
+        --cache="$cacheDir"/phpcs.cache \
+        -s \
+        --report-full \
+        --report-summary \
+        "$srcDir" "$testsDir" "$binDir"
+    phpcsExitCode=$?
+    set +x
+    if (( phpcsExitCode > 0 ))
+    then
+        tryAgainOrAbort "Code Sniffer"
+    fi
 
-
+done
 
 echo '
 
@@ -443,6 +373,30 @@ Statistics:
 phpNoXdebug -f bin/phploc "$srcDir" "$testsDir"
 set +x
 
+if [[ -f $projectConfigPath/hookPost.bash ]]
+then
+    echo "
+
+Running Post Hook $projectConfigPath/hookPost.bash
+------------------------------------------------
+"
+    source $projectConfigPath/hookPost.bash
+fi
+
+if [[ "false" != "$hasBeenRestarted" ]]
+then
+    echo "
+
+####################################################################
+
+WARNING - RAN WITH RETRIES
+
+As you have restarted steps in this run,
+you should run the whole process again to be sure everything is fine
+
+####################################################################
+"
+fi
 
 echo "
 ===========================================
