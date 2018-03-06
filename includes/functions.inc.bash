@@ -85,6 +85,29 @@ function checkForUncommittedChanges {
     fi
 }
 
+function tryAgainOrAbort(){
+    toolname="$1"
+    echo "
+
+    ==================================================
+
+        $toolname Failed...
+
+        would you like to try again? (y/n)
+
+    ==================================================
+
+    "
+    read -n 1 tryAgainOrAbort
+    if [[ "y" != "$tryAgainOrAbort" ]]
+    then
+        printf "\n\nAborting...\n\n"
+        exit 1
+    fi
+    printf "\n\nTrying again, good luck!\n\n"
+    hasBeenRestarted="true"
+}
+
 function findTestsDir(){
     testsDir="$(find $projectRoot -maxdepth 1 -type d \( -name test -o -name tests \) | head -n1)"
     if [[ "" == "$testsDir" ]]

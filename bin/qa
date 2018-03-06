@@ -109,6 +109,8 @@ CI=${CI:-'false'}
 
 #### PROCESS #################################################
 
+hasBeenRestarted="false"
+
 # override configs with project configs
 overridePath="$projectConfigPath/qaConfig.inc.bash"
 
@@ -198,20 +200,27 @@ Running PHPStan
 ---------------------
 "
 set +e
-phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath"
-phpStanExitCode=$?
-#exit code 0 = fine, 1 = ran fine but found errors, else it means it crashed
-if (( $phpStanExitCode > 0 ))
-then
-    if (( $phpStanExitCode > 1 ))
+set +e
+phpStanExitCode=99
+while (( phpStanExitCode > 0 ))
+do
+    phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath"
+    phpStanExitCode=$?
+    set +x
+    #exit code 0 = fine, 1 = ran fine but found errors, else it means it crashed
+    if (( phpStanExitCode > 1 ))
     then
         printf "\n\n\nPHPStan Crashed....\n\nrunning again with debug mode:\n\n\n"
         phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath" --debug
+        exit 1
     fi
-    exit $phpStanExitCode
-fi
+    if (( phpStanExitCode > 0 ))
+    then
+        tryAgainOrAbort "PHPStan"
+    fi
+done
 set -e
-set +x
+
 
 echo "
 
@@ -255,7 +264,7 @@ Running PHP Mess Detector
 "
 set +e
 phpMdExitCode=99
-while [[ "$phpMdExitCode" != 0 ]]
+while (( phpMdExitCode > 0 ))
 do
     phpNoXdebug -f bin/phpmd -- \
         "$srcDir","$testsDir","$binDir" \
@@ -269,16 +278,9 @@ do
         | sed -e 's#\. #\.\n#'
     phpMdExitCode=$?
     set +x
-    if [[ "0" != "$phpMdExitCode" ]]
+    if (( phpMdExitCode > 0 ))
     then
-        printf "\n\nPHP Mess Detector Failed, would you like to try again? (y/n)\n\n"
-        read -n 1 tryAgainOrAbort
-        if [[ "y" != "$tryAgainOrAbort" ]]
-        then
-            printf "\n\nAborting...\n\n"
-            exit 1
-        fi
-        printf "\n\nTrying again, good luck!\n\n"
+        tryAgainOrAbort "PHP Mess Detector"
     fi
 done
 set +x
@@ -322,16 +324,26 @@ Running Code Sniffer on src and tests
 phpNoXdebug -f bin/phpcs -- \
     --config-set ignore_warnings_on_exit "$phpcsFailOnWarning"
 set +x
-phpNoXdebug -f bin/phpcs -- \
-    --standard="$phpcsCodingStandardsPath" \
-    --colors \
-    --cache="$cacheDir"/phpcs.cache \
-    -s \
-    --report-full \
-    --report-summary \
-    "$srcDir" "$testsDir" "$binDir"
-set +x
+set +e
+phpcsExitCode=99
+while (( phpcsExitCode > 0 ))
+do
+    phpNoXdebug -f bin/phpcs -- \
+        --standard="$phpcsCodingStandardsPath" \
+        --colors \
+        --cache="$cacheDir"/phpcs.cache \
+        -s \
+        --report-full \
+        --report-summary \
+        "$srcDir" "$testsDir" "$binDir"
+    phpcsExitCode=$?
+    set +x
+    if (( phpcsExitCode > 0 ))
+    then
+        tryAgainOrAbort "Code Sniffer"
+    fi
 
+done
 
 echo '
 
@@ -371,6 +383,20 @@ Running Post Hook $projectConfigPath/hookPost.bash
     source $projectConfigPath/hookPost.bash
 fi
 
+if [[ "false" != "$hasBeenRestarted" ]]
+then
+    echo "
+
+####################################################################
+
+WARNING - RAN WITH RETRIES
+
+As you have restarted steps in this run,
+you should run the whole process again to be sure everything is fine
+
+####################################################################
+"
+fi
 
 echo "
 ===========================================
