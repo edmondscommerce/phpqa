@@ -308,6 +308,16 @@ And then to use it, just:
 phpmdRule public methods under
 ```
 
+Whatever ruel is returned by phpmdRule call, supress it in PHP using dock block.
+
+
+```php
+    /**
+     * @SuppressWarnings(PHPMD.SomeRule) 
+     */
+     publinc function someMethod() { }
+```
+
 ### Markdown Links Checker
 
 This is a small utility [bundled with this repo](./src/Markdown/LinksChecker.php)
