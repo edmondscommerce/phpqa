@@ -87,6 +87,19 @@ function checkForUncommittedChanges {
 
 function tryAgainOrAbort(){
     toolname="$1"
+    if [[ "false" != "${CI:-'false'}" ]]
+    then
+        echo "
+
+    ==================================================
+
+        $toolname Failed...
+
+    ==================================================
+
+        "
+        exit 1
+    fi
     echo "
 
     ==================================================
