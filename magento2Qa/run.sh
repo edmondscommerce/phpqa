@@ -12,6 +12,12 @@ $(hostname) $0 $@
 ===========================================
 "
 
+if (( $# != 1 ))
+then
+    echo "$0 /path/to/code-to-be-tested/";
+    exit 1;
+fi;
+
 magentoDir=${DIR}
 
 while [[ ! -e ${magentoDir}/app/etc/env.php ]]

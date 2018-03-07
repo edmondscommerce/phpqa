@@ -1,4 +1,37 @@
 #!/usr/bin/env bash
+
+readonly platformMagento2Project="magento2-project"
+readonly platformMagento2Module="magento2-module"
+readonly platformGeneric="generic"
+
+function detectPlatform(){
+    if [[ -f $projectRoot/bin/magento ]]
+    then
+        echo $platformMagento2Project
+        return 0
+    fi
+
+    if [[ -f $projectRoot/etc/module.xml && -f $projectRoot/registration.php ]]
+    then
+        echo $platformMagento2Module
+        return 0
+    fi
+
+    echo $platformGeneric
+}
+
+function runTool(){
+    local tool="$1"
+    local pathToTool="$DIR/../includes/$platform/$tool.inc.bash"
+    if [[ -f $pathToTool ]]
+    then
+        source $pathToTool
+        return 0
+    fi
+    pwd
+    source "$DIR/../includes/generic/$tool.inc.bash"
+}
+
 ################################################################
 # Get the path for a config file
 # Defaults to project level and falls back to this library
