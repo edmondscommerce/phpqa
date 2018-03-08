@@ -34,23 +34,26 @@ function runTool(){
 
 ################################################################
 # Get the path for a config file
-# Defaults to project level and falls back to this library
+# Config file will be search for in:
+#   A qaConfig folder in the project root
+#   The phpqa library's configDefaults/{platform}
+#   The phpqa library's configDefaults/generic
 #
 # Usage:
 #
-# - relative path, falling back to the standard default config path
-# `configPath "relative/path/to/file/or/folder"`
-#
-# - relative path, falling back to a specified default
-# `configPath "relative/path/to/file/or/folder" "specified/default/path"
+# `configPath "relative/path/to/file/or/folder"
 function configPath(){
     local relativePath="$1"
-    local defaultPath="${2:-"$defaultConfigPath/$relativePath"}"
+    local platformPath="$defaultConfigPath/$platform/$relativePath"
+    local genericPath="$defaultConfigPath/generic/$relativePath"
     if [[ -f $projectConfigPath/$relativePath ]]
     then
         echo $projectConfigPath/$relativePath
+    elif [[ -f $platformPath ]]
+    then
+        echo $platformPath
     else
-        echo $defaultPath
+        echo $genericPath
     fi
 }
 

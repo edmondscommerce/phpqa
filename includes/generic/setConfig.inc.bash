@@ -13,7 +13,7 @@ varDir="$projectRoot/var/qa";
 cacheDir="$projectRoot/cache/qa";
 
 # the path in this library for default config
-defaultConfigPath="$(readlink -f ./../configDefaults/)"
+defaultConfigPath="$(readlink -f $DIR/../configDefaults/)"
 
 # PHPStan configs
 phpstanConfigPath="$(configPath phpstan.neon)"

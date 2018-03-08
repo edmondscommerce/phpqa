@@ -1,11 +1,11 @@
 # project tests folder
-testsDir="dev/tests/"
+testsDir=""
 
 # project src folder
-srcDir="$(findSrcDir)"
+srcDir="app"
 
 # project bin dir
-binDir="$(findBinDir)"
+binDir=""
 
 # project var dir, sub directory for qa cache files and output files
 varDir="$projectRoot/var/qa";
@@ -13,7 +13,7 @@ varDir="$projectRoot/var/qa";
 cacheDir="$projectRoot/cache/qa";
 
 # the path in this library for default config
-defaultConfigPath="$(readlink -f ./../configDefaults/)"
+defaultConfigPath="$(readlink -f $DIR/../configDefaults/)"
 
 # PHPStan configs
 phpstanConfigPath="$(configPath phpstan.neon)"

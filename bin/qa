@@ -37,7 +37,7 @@ source ./../includes/functions.inc.bash
 
 
 #### CONFIG ##################################################
-
+cd
 # If a CI variable is set, we use that, otherwise default to false.
 # Travis-CI sets a CI variable. You can eaisly set this in any other CI system
 # The value should the the string 'true' if this is CI
@@ -46,9 +46,9 @@ CI=${CI:-'false'}
 # project root directory
 if [[ -d $DIR/../vendor ]]
 then
-    projectRoot="$(readlink -f ./../)"
+    projectRoot="$(readlink -f $DIR/../)"
 else
-    projectRoot="$(readlink -f ./../../../../)"
+    projectRoot="$(readlink -f $DIR/../../../../)"
 fi
 
 # the path in the project to check for config

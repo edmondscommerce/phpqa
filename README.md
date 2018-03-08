@@ -24,72 +24,11 @@ phpUnitQuickTests=0 ./bin/qa
 
 ## Configuration
 
-Standard configuration is in the directory [./configDefaults](./configDefaults)
+Standard configuration is in the directory [./configDefaults](./configDefaults). If you have no need to override or extend these then you don't need to do anything.
 
-If your project needs to have custom configuration, you have 2 ways of doing this:
+If your project needs to have custom configuration, you'll need to copy the relevant config files into a new `qaConfig` folder in the root of your project.
 
-### Single Tool Configuration Override
-
-For each tool, you can override the configuration by:
-
-1. Make a directory in your project root called `qaConfig`
-2. Copy the configuration from ./configDefaults](./configDefaults) into your project `qaConfig` folder.
-3. Customise the copied config as you see fit
-
-For example, for PHPStan, we would do this:
-
-```bash
-#Enter your project root
-cd /my/project/root
-
-#Make your config override directory
-mkdir -p qaConfig
-
-#Copy in the default config
-cp vendor/edmondscommerce/phpqa/configDefaults/phpstan.neon qaConfig
-
-#Edit the config
-vim qaConfig/phpstan.neon
-```
-
-For PHP Mess Detector, we would do this:
-
-```bash
-#Enter your project root
-cd /my/project/root
-
-#Make your config override directory
-mkdir -p qaConfig
-
-#Copy the phpmd folder as a whole
-cp vendor/edmondscommerce/phpqa/configDefaults/phpmd/ qaConfig/ -r
-
-
-```
-
-### Global Configuration Override
-
-If you want to make more wholesale tweaks to `qa` customisation, you can do this:
-
-```bash
-
-#Enter your project root
-cd /my/project/root
-
-#Make your config override directory
-mkdir -p qaConfig
-
-#Copy in the default config
-awk '/#### CONFIG /,/#### PROCESS /' bin/qa > qaConfig/qaConfig.inc.bash
-
-#Edit the config
-vim qaConfig/qaConfig.inc.bash
-
-```
-
-When you run `qa`, it checks for a file located in `"$projectConfigPath/qaConfig.inc.bash"` and will include it if found. 
-
-Using this you can override as much of the standard configuration as you see fit.
+See the [Configuration docs](./docs/configuration.md) for more details. 
 
 ## The Pipeline
 
