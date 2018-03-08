@@ -1,4 +1,4 @@
-for directory in "$projectRoot/app/code" "$projectRoot/app/design" "$projectRoot/vendor"
+for directory in "$projectRoot/app/code" "$projectRoot/app/design"
 do
     if [[ ! -d $directory ]]
     then

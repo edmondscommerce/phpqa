@@ -1,11 +1,6 @@
-# project tests folder
-testsDir=""
-
-# project src folder
-srcDir="app"
-
-# project bin dir
-binDir=""
+codeDir="$projectRoot/app/code"
+designDir="$projectRoot/app/dir"
+vendorDir="$projectRoot/vendor"
 
 # project var dir, sub directory for qa cache files and output files
 varDir="$projectRoot/var/qa";
