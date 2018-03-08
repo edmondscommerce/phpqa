@@ -10,6 +10,16 @@ Simple PHP QA pipeline and scripts. Largely just a collection of dependencies wi
 composer require edmondscommerce/phpqa --dev
 ```
 
+Your project's `composer.json` needs to specify a bin folder. If it's not already present, add this:
+
+```
+    ...
+    "config": {
+        "bin-dir": "bin"
+    }
+    ...
+``` 
+
 ## Running
 
 ```bash
