@@ -1,5 +1,11 @@
 for directory in "$projectRoot/app/code" "$projectRoot/app/design" "$projectRoot/vendor"
 do
+    if [[ ! -d $directory ]]
+    then
+        echo "Skipping nonexistent $directory
+        "
+        continue;
+    fi
     set +e
     phpStanExitCode=99
     while (( phpStanExitCode > 0 ))
