@@ -10,6 +10,10 @@ Simple PHP QA pipeline and scripts. Largely just a collection of dependencies wi
 composer require edmondscommerce/phpqa --dev
 ```
 
+## Installing Extra Coding Standards
+
+Have a look at [https://github.com/Dealerdirect/phpcodesniffer-composer-installer/](Dealerdirect/phpcodesniffer-composer-installer/) for a nice way to easily add extra coding standards to code sniffer
+
 ## Running
 
 ```bash
