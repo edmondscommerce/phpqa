@@ -14,7 +14,7 @@ defaultConfigPath="$(readlink -f $DIR/../configDefaults/)"
 phpstanConfigPath="$(configPath phpstan.neon)"
 
 #PHP Mess Detector Configs
-phpmdConfigPath="$(configPath phpmd/ruleset.xml)"
+phpmdConfigPath="$projectRoot/dev/tests/static/testsuite/Magento/Test/Php/_files/phpmd/ruleset.xml"
 
 # coding Standard for checking
 # checks for a folder called 'condingStandards' in the $projectConfigPath, falls back to the PSR2 standards
@@ -34,15 +34,12 @@ phpUnitQuickTests=${phpUnitQuickTests:-1}
 # PHPUnit Coverage - if enabled, tests will run with Xdebug and generate coverage
 phpUnitCoverage=${phpUnitCoverage:-1}
 
-if [[ -f $projectRoot/phpunit.xml ]]
+if [[ -f $projectRoot/dev/tests/unit/phpunit.xml ]]
 then
     # Project root phpunit.xml trumps everything else
-    phpUnitConfigPath=$projectRoot/phpunit.xml
-else
-    if [[ "1" == "$phpUnitCoverage" ]]
-    then
-        phpUnitConfigPath=$(configPath phpunit-with-coverage.xml)
-    else
-        phpUnitConfigPath=$(configPath phpunit.xml)
-    fi
+    phpUnitConfigPath=$projectRoot/dev/tests/unit/phpunit.xml
+elif [[ -f $projectRoot/dev/tests/unit/phpunit.xml ]]
+then
+    # Project root phpunit.xml trumps everything else
+    phpUnitConfigPath=$projectRoot/dev/tests/unit/phpunit.xml.dist
 fi
