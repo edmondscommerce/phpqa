@@ -175,6 +175,11 @@ includes:
 ```
 https://github.com/phpstan/phpstan-strict-rules
 
+#### Supressing Errors
+
+[Here](https://github.com/phpstan/phpstan#ignore-error-messages-with-regular-expressions) you can read more about, how to
+ignore errors by modifying `phpstan.neon` file.
+
 ### PHPUnit
 
 This step runs your PHPUnit tests
