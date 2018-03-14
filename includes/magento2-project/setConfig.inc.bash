@@ -18,10 +18,7 @@ phpmdConfigPath="$projectRoot/dev/tests/static/testsuite/Magento/Test/Php/_files
 
 # coding Standard for checking
 # checks for a folder called 'condingStandards' in the $projectConfigPath, falls back to the PSR2 standards
-phpcsCodingStandardsPath=$(configPath \
-    codingStandards \
-    $projectRoot/vendor/squizlabs/php_codesniffer/src/Standards/PSR2
-)
+phpcsCodingStandardsPath="$projectRoot/vendor/magento/marketplace-eqp/MEQP2/"
 
 # should coding standards warnings be a fail?
 phpcsFailOnWarning=0
