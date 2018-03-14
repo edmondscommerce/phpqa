@@ -12,7 +12,7 @@ composer require edmondscommerce/phpqa --dev
 
 ## Installing Extra Coding Standards
 
-Have a look at [https://github.com/Dealerdirect/phpcodesniffer-composer-installer/](Dealerdirect/phpcodesniffer-composer-installer/) for a nice way to easily add extra coding standards to code sniffer
+Have a look at [Dealerdirect/phpcodesniffer-composer-installer/](https://github.com/Dealerdirect/phpcodesniffer-composer-installer/) for a nice way to easily add extra coding standards to code sniffer
 
 ## Running
 
