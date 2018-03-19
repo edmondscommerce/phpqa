@@ -232,9 +232,10 @@ echo "
 Running PHPUnit Tests
 ---------------------
 "
-# Note the qaQuickTests=1
-# this sets a config variable of quickTests which you can then use
+# Note the phpUnitQuickTests=$phpUnitQuickTests
+# this sets a config variable which you can then use
 # to allow tests to run less thoroughly but more quickly
+# @see https://github.com/edmondscommerce/phpqa#quick-tests
 
 set +e
 phpCmd=phpNoXdebug
@@ -243,7 +244,7 @@ then
     phpCmd=\php
 fi
 set -x
-qaQuickTests="$phpUnitQuickTests" $phpCmd -f bin/phpunit \
+phpUnitQuickTests="$phpUnitQuickTests" $phpCmd -f bin/phpunit \
     -- \
     -c $phpUnitConfigPath \
     "$testsDir"
