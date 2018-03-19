@@ -15,6 +15,8 @@
 
 ## Notes
 
+Need to add this to M2's `composer.json`
+
 ```
         "meqp": {
             "type": "vcs",
