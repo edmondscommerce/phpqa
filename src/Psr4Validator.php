@@ -11,20 +11,23 @@ class Psr4Validator
     /**
      * @throws \Exception
      */
-    public function main()
+    public function main(): void
     {
         $this->loop();
         if (empty($this->psr4Errors) && empty($this->parseErrors)) {
-            throw new \RuntimeException(
-                'Errors validating PSR4:'.\print_r(
-                    [
-                        'PSR-4 Errors:' => $this->psr4Errors,
-                        'Parse Errors:' => $this->parseErrors,
-                    ],
-                    true
-                )
-            );
+            return;
         }
+        echo "\nErrors found:\n"
+             .\print_r(
+                 [
+                     'PSR-4 Errors:' => $this->psr4Errors,
+                     'Parse Errors:' => $this->parseErrors,
+                 ],
+                 true
+             );
+        throw new \RuntimeException(
+            'Errors validating PSR4'
+        );
     }
 
     /**
@@ -58,9 +61,12 @@ class Psr4Validator
     {
         $relativePath = \substr($fileInfo->getPathname(), \strlen($absPathRoot));
         $relativeDir  = \dirname($relativePath);
-        $relativeNs   = \str_replace('/', '\\', $relativeDir);
+        $relativeNs   = '';
+        if ($relativeDir !== '.') {
+            $relativeNs = \str_replace('/', '\\', $relativeDir);
+        }
 
-        return $namespaceRoot.$relativeNs;
+        return rtrim($namespaceRoot.$relativeNs, '\\');
     }
 
     private function getActualNamespace(\SplFileInfo $fileInfo): string
