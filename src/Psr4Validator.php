@@ -6,7 +6,7 @@ class Psr4Validator
 {
 
     private $parseErrors = [];
-    private $psr4Errors = [];
+    private $psr4Errors  = [];
 
     /**
      * @throws \Exception
@@ -57,8 +57,9 @@ class Psr4Validator
     private function expectedFileNamespace(string $absPathRoot, string $namespaceRoot, \SplFileInfo $fileInfo): string
     {
         $relativePath = \substr($fileInfo->getPathname(), \strlen($absPathRoot));
-        $relativeDir = \dirname($relativePath);
-        $relativeNs = \str_replace('/', '\\', $relativeDir);
+        $relativeDir  = \dirname($relativePath);
+        $relativeNs   = \str_replace('/', '\\', $relativeDir);
+
         return $namespaceRoot.$relativeNs;
     }
 
@@ -68,13 +69,16 @@ class Psr4Validator
         \preg_match('%namespace\s+?([^;]+)%', $contents, $matches);
         if (empty($matches) || !isset($matches[1])) {
             $this->parseErrors[] = $fileInfo;
+
             return '';
         }
+
         return $matches[1];
     }
 
     /**
      * @param string $path
+     *
      * @return \RecursiveIteratorIterator|\SplFileInfo[]
      */
     private function getDirectoryIterator(string $path): \RecursiveIteratorIterator
@@ -83,10 +87,11 @@ class Psr4Validator
             \realpath($path),
             \RecursiveDirectoryIterator::SKIP_DOTS
         );
-        $iterator = new \RecursiveIteratorIterator(
+        $iterator          = new \RecursiveIteratorIterator(
             $directoryIterator,
             \RecursiveIteratorIterator::SELF_FIRST
         );
+
         return $iterator;
     }
 
@@ -95,11 +100,12 @@ class Psr4Validator
      */
     private function getComposerJson(): array
     {
-        $path = Config::getProjectRootDirectory().'/composer.json';
+        $path    = Config::getProjectRootDirectory().'/composer.json';
         $decoded = \json_decode(\file_get_contents($path), true);
         if (JSON_ERROR_NONE !== \json_last_error()) {
             throw new \RuntimeException('Failed loading composer.json: '.\json_last_error_msg());
         }
+
         return $decoded;
     }
 
@@ -116,9 +122,12 @@ class Psr4Validator
             }
             $psr4 = $json[$autoload]['psr-4'];
             foreach ($psr4 as $namespaceRoot => $paths) {
+                if (!\is_array($paths)) {
+                    $paths = [$paths];
+                }
                 foreach ($paths as $path) {
                     $absPathRoot = Config::getProjectRootDirectory().'/'.$path;
-                    $iterator = $this->getDirectoryIterator($absPathRoot);
+                    $iterator    = $this->getDirectoryIterator($absPathRoot);
                     foreach ($iterator as $fileInfo) {
                         if ('php' !== $fileInfo->getExtension()) {
                             continue;
