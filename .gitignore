@@ -1,7 +1,8 @@
 /.idea/
 /var/
 /vendor/
+/cache/
 /bin/*
 !/bin/qa
 !/bin/mdlinks
-/cache/
+!/bin/psr4-validate

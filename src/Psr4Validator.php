@@ -75,7 +75,7 @@ class Psr4Validator
 
     /**
      * @param string $path
-     * @return \RecursiveIteratorIterator|SplFileInfo[]
+     * @return \RecursiveIteratorIterator|\SplFileInfo[]
      */
     private function getDirectoryIterator(string $path): \RecursiveIteratorIterator
     {

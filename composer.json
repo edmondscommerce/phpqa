@@ -25,7 +25,8 @@
   },
   "bin": [
     "bin/qa",
-    "bin/mdlinks"
+    "bin/mdlinks",
+    "bin/psr4-validate"
   ],
   "require-dev": {
   },
