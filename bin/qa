@@ -245,8 +245,15 @@ if [[ "1" == "$phpUnitCoverage" ]]
 then
     phpCmd=\php
 fi
+phpunitPath=bin/phpunit
+echo "Checking for paratest"
+if [[ -f bin/paratest ]]
+then
+    echo "Found paratest, using this instead of standard bin/phpunit"
+    phpunitPath=bin/paratest
+fi
 set -x
-phpUnitQuickTests="$phpUnitQuickTests" $phpCmd -f bin/phpunit \
+phpUnitQuickTests="$phpUnitQuickTests" $phpCmd -f $phpunitPath \
     -- \
     -c $phpUnitConfigPath \
     "$testsDir"
