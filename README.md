@@ -10,6 +10,10 @@ Simple PHP QA pipeline and scripts. Largely just a collection of dependencies wi
 composer require edmondscommerce/phpqa --dev
 ```
 
+## Installing Extra Coding Standards
+
+Have a look at [Dealerdirect/phpcodesniffer-composer-installer/](https://github.com/Dealerdirect/phpcodesniffer-composer-installer/) for a nice way to easily add extra coding standards to code sniffer
+
 ## Running
 
 ```bash
@@ -171,6 +175,11 @@ includes:
 ```
 https://github.com/phpstan/phpstan-strict-rules
 
+#### Supressing Errors
+
+[Here](https://github.com/phpstan/phpstan#ignore-error-messages-with-regular-expressions) you can read more about, how to
+ignore errors by modifying `phpstan.neon` file.
+
 ### PHPUnit
 
 This step runs your PHPUnit tests
@@ -306,6 +315,16 @@ And then to use it, just:
 
 ```bash
 phpmdRule public methods under
+```
+
+Whatever ruel is returned by phpmdRule call, supress it in PHP using dock block.
+
+
+```php
+    /**
+     * @SuppressWarnings(PHPMD.SomeRule) 
+     */
+     publinc function someMethod() { }
 ```
 
 ### Markdown Links Checker
