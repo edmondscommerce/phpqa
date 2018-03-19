@@ -246,16 +246,19 @@ then
     phpCmd=\php
 fi
 phpunitPath=bin/phpunit
+paratestConfig=
 echo "Checking for paratest"
 if [[ -f bin/paratest ]]
 then
     echo "Found paratest, using this instead of standard bin/phpunit"
     phpunitPath=bin/paratest
+    paratestConfig=(--phpunit bin/phpunit)
 fi
 set -x
 phpUnitQuickTests="$phpUnitQuickTests" $phpCmd -f $phpunitPath \
     -- \
-    -c $phpUnitConfigPath \
+    ${paratestConfig[*]} \
+    -c ${phpUnitConfigPath} \
     "$testsDir"
 
 phpunitExitCode=$?
