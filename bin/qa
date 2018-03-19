@@ -149,8 +149,10 @@ echo "
 Checking for Composer Issues
 ----------------------------
 "
+set +e
 phpNoXdebug -f $(which composer) -- diagnose
 set +x
+set -e
 
 echo "
 
