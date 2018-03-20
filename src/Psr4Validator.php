@@ -7,6 +7,17 @@ class Psr4Validator
 
     private $parseErrors = [];
     private $psr4Errors  = [];
+    private $ignoreRegexPatterns = [];
+    private $ignoredFiles = [];
+
+    /**
+     * Psr4Validator constructor.
+     * @param array $ignoreRegexPatterns Set of regex patterns used to exclude files or directories
+     */
+    public function __construct(array $ignoreRegexPatterns)
+    {
+        $this->ignoreRegexPatterns = $ignoreRegexPatterns;
+    }
 
     /**
      * @throws \Exception
@@ -22,6 +33,7 @@ class Psr4Validator
                  [
                      'PSR-4 Errors:' => $this->psr4Errors,
                      'Parse Errors:' => $this->parseErrors,
+                     'Ignored Files:' => $this->ignoredFiles
                  ],
                  true
              );
@@ -63,7 +75,11 @@ class Psr4Validator
         $relativeDir  = \dirname($relativePath);
         $relativeNs   = '';
         if ($relativeDir !== '.') {
-            $relativeNs = \str_replace('/', '\\', $relativeDir);
+            $relativeNs = \str_replace(
+                '/',
+                '\\',
+                \ltrim($relativeDir, '/')
+            );
         }
 
         return rtrim($namespaceRoot.$relativeNs, '\\');
@@ -137,6 +153,12 @@ class Psr4Validator
                     foreach ($iterator as $fileInfo) {
                         if ('php' !== $fileInfo->getExtension()) {
                             continue;
+                        }
+                        foreach ($this->ignoreRegexPatterns as $pattern) {
+                            if (\preg_match($pattern, $fileInfo->getRealPath())) {
+                                $this->ignoredFiles[] = $fileInfo->getRealPath();
+                                continue 2;
+                            }
                         }
                         yield [
                             $absPathRoot,

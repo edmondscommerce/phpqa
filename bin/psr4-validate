@@ -20,6 +20,9 @@ if (!$autoloadFileFound) {
         'php composer.phar install'.PHP_EOL;
     die(1);
 }
-(new \EdmondsCommerce\PHPQA\Psr4Validator())->main();
+
+$ignoredRegexPatterns = array_slice($argv, 1);
+
+(new \EdmondsCommerce\PHPQA\Psr4Validator($ignoredRegexPatterns))->main();
 
 echo "\nNo errors found\n";

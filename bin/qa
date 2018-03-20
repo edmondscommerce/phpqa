@@ -65,6 +65,12 @@ cacheDir="$projectRoot/cache/qa";
 # the path in this library for default config
 defaultConfigPath="$(readlink -f ./../configDefaults/)"
 
+# configPath function can only be used after this point
+
+# PSR4 validation
+psr4IgnoreListPath="$(configPath psr4-validate-ignore-list.txt)"
+readarray psr4IgnoreList < "$psr4IgnoreListPath"
+
 # PHPStan configs
 phpstanConfigPath="$(configPath phpstan.neon)"
 
@@ -141,7 +147,7 @@ echo "
 Validating PSR-4 Roots
 ------------------------
 "
-phpNoXdebug -f ./bin/psr4-validate
+phpNoXdebug -f ./bin/psr4-validate ${psr4IgnoreList[*]}
 set +x
 
 echo "

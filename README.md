@@ -120,7 +120,19 @@ exit 1;
 ```
 
 In Bash - an exit code of greater than 0 indicates an error. You can pick any number you want, but 1 is the standard for "general error".
- 
+
+### PSR4 Validator
+This enforces that PSR4 guidlines are being adhered to correctly.
+
+#### Ignore List
+You can specify a number of files or directories to be ignored by the validator. This is a newline seperated
+list of valid regex including a valid regex delimiter. For example:
+
+```
+#tests/bootstrap\.php#
+#tests/phpstan-bootstrap\.php#
+```
+
 ### Composer Check For Issues
 Runs a diagnose on composer to make sure it's all good
 
