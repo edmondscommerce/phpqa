@@ -254,16 +254,16 @@ And this will then run with full tests
 
 #### Coverage
 
-By default, the PHPUnit command will generate both textual output and HTML coverage.
+If enabled, the PHPUnit command will generate both textual output and HTML coverage.
 
 The coverage report will go into the project root /var directory as configured in [./configDefaults/phpunit-with-coverage.xml](./configDefaults/phpunit-with-coverage.xml)
 
 If you want to override the coverage report location, you will need to override this config file as normal.
 
-You can disable the coverage report on the fly by doing:
+You can enable the coverage report on the fly by doing:
 
 ```bash
-phpUnitCoverage=0 bin/qa 
+phpUnitCoverage=1 bin/qa 
 ```
 
 You might decide to do this if you are running these tests on travis, as you can see in [./travis.yml](./.travis.yml)
@@ -280,7 +280,7 @@ To have qa run as quickly as possible, you need to disable coverage
 To do this you can simply 
 
 ```bash
-export phpUnitCoverage=0
+export phpUnitQuickTests=1
 ```
 
 and then every time you run `./bin/qa` it will be as if you ran it like `phpUnitCoverage=0 ./bin/qa`
@@ -291,9 +291,27 @@ For the most comprehensive checking, you need coverage enabled and also quick te
 
 ```bash
 export phpUnitQuickTests=0
+export phpUnitCoverage=1
 ```
 
 and then every time you run `./bin/qa` it will be as if you ran it like `phpUnitQuickTests=0 ./bin/qa`
+
+#### Paratest
+
+You can run multiple sets of PHPUnit tests in parallel using [paratest](https://github.com/paratestphp/paratest)
+
+Currently this is experimental and will certainly not work in a variety of situations.
+
+To enable paratest, simply install it. If it is found, this QA process will use it.
+
+```bash
+composer require --dev brianium/paratest
+```
+
+##### Further Reading
+
+* https://github.com/brianium/paratest-selenium
+
 
 ### PHP Mess Detector
 
