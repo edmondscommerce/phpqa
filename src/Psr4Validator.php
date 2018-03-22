@@ -5,13 +5,14 @@ namespace EdmondsCommerce\PHPQA;
 class Psr4Validator
 {
 
-    private $parseErrors = [];
-    private $psr4Errors  = [];
+    private $parseErrors         = [];
+    private $psr4Errors          = [];
     private $ignoreRegexPatterns = [];
-    private $ignoredFiles = [];
+    private $ignoredFiles        = [];
 
     /**
      * Psr4Validator constructor.
+     *
      * @param array $ignoreRegexPatterns Set of regex patterns used to exclude files or directories
      */
     public function __construct(array $ignoreRegexPatterns)
@@ -28,15 +29,18 @@ class Psr4Validator
         if (empty($this->psr4Errors) && empty($this->parseErrors)) {
             return;
         }
+        $errors = [];
+        if (!empty($this->psr4Errors)) {
+            $errors['PSR-4 Errors:'] = $this->psr4Errors;
+        }
+        if (!empty($this->parseErrors)) {
+            $errors['Parse Errors:'] = $this->parseErrors;
+        }
+        if (!empty($this->ignoredFiles)) {
+            $errors['Ignored Files:'] = $this->ignoredFiles;
+        }
         echo "\nErrors found:\n"
-             .\print_r(
-                 [
-                     'PSR-4 Errors:' => $this->psr4Errors,
-                     'Parse Errors:' => $this->parseErrors,
-                     'Ignored Files:' => $this->ignoredFiles
-                 ],
-                 true
-             );
+             .\var_export($errors, true);
         throw new \RuntimeException(
             'Errors validating PSR4'
         );
@@ -62,7 +66,7 @@ class Psr4Validator
         if ($actualNamespace !== $expectedNamespace) {
             $this->psr4Errors[$namespaceRoot][] =
                 [
-                    'fileInfo'          => $fileInfo,
+                    'fileInfo'          => $fileInfo->getRealPath(),
                     'expectedNamespace' => $expectedNamespace,
                     'actualNamespace'   => $actualNamespace,
                 ];
@@ -90,7 +94,7 @@ class Psr4Validator
         $contents = \file_get_contents($fileInfo->getPathname());
         \preg_match('%namespace\s+?([^;]+)%', $contents, $matches);
         if (empty($matches) || !isset($matches[1])) {
-            $this->parseErrors[] = $fileInfo;
+            $this->parseErrors[] = $fileInfo->getRealPath();
 
             return '';
         }
