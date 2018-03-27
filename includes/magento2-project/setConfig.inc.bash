@@ -35,8 +35,12 @@ if [[ -f $projectRoot/dev/tests/unit/phpunit.xml ]]
 then
     # Project root phpunit.xml trumps everything else
     phpUnitConfigPath=$projectRoot/dev/tests/unit/phpunit.xml
-elif [[ -f $projectRoot/dev/tests/unit/phpunit.xml ]]
+elif [[ -f $projectRoot/dev/tests/unit/phpunit.xml.dist ]]
 then
     # Project root phpunit.xml trumps everything else
     phpUnitConfigPath=$projectRoot/dev/tests/unit/phpunit.xml.dist
+else
+    echo "No PHPUnit config was found at either:"
+    echo "- $projectRoot/dev/tests/unit/phpunit.xml"
+    echo "- $projectRoot/dev/tests/unit/phpunit.xml.dist"
 fi
