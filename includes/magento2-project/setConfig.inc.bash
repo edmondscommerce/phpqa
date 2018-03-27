@@ -321,4 +321,4 @@ pathsToIgnore+=("/vendor/jakub-onderka/php-parallel-lint")
 pathsToIgnore+=("/vendor/jakub-onderka/php-console-color")
 pathsToIgnore+=("/vendor/jakub-onderka/php-console-highlighter")
 pathsToIgnore+=("/vendor/phploc/phploc")
-pathsToIgnore+=("/vendor/johnkary/phpunit-speedtrap"
+pathsToIgnore+=("/vendor/johnkary/phpunit-speedtrap")
