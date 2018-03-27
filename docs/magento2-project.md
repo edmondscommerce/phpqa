@@ -6,7 +6,7 @@
 | phpStrictTypes   | N/A      |       |
 | phpLint          | 80%      | Could do with some tidying up of the ignores |
 | phpstan          | 100%     |       |
-| phpunit          | 70%      | Runs successfully, but takes ~3 minutes |
+| phpunit          | 70%      | Runs successfully, but takes ~3 minutes. Not using qaQuickTests parameter. |
 | messDetector     | 100%     |       |
 | markdownLinks    | 100%     |       |
 | uncommitedChanges| 100%     |       |
