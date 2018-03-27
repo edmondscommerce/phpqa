@@ -281,25 +281,30 @@ then
     phpunitPath=bin/paratest
     paratestConfig=(--phpunit bin/phpunit)
 fi
-set -x
-phpUnitQuickTests="$phpUnitQuickTests" $phpCmd -f $phpunitPath \
-    -- \
-    ${paratestConfig[*]} \
-    -c ${phpUnitConfigPath} \
-    "$testsDir"
+phpunitExitCode=99
+set +e
+while (( phpunitExitCode > 0 ))
+do
+    set -x
+    phpUnitQuickTests="$phpUnitQuickTests" $phpCmd -f $phpunitPath \
+        -- \
+        ${paratestConfig[*]} \
+        -c ${phpUnitConfigPath} \
+        "$testsDir"
 
-phpunitExitCode=$?
-set +x
-if (( $phpunitExitCode > 0 ))
-then
-    if (( $phpunitExitCode > 2 ))
+    phpunitExitCode=$?
+    set +x
+    if (( $phpunitExitCode > 0 ))
     then
-        printf "\n\n\nPHPUnit Crashed\n\nRunning again with Debug mode...\n\n\n"
-        qaQuickTests="$phpUnitQuickTests" phpNoXdebug -f bin/phpunit -- "$testsDir" --debug
-        set +x
+        if (( $phpunitExitCode > 2 ))
+        then
+            printf "\n\n\nPHPUnit Crashed\n\nRunning again with Debug mode...\n\n\n"
+            qaQuickTests="$phpUnitQuickTests" phpNoXdebug -f bin/phpunit -- "$testsDir" --debug
+            set +x
+        fi
+        tryAgainOrAbort "PHPUnit Tests"
     fi
-    exit $phpunitExitCode
-fi
+done
 set -e
 
 echo "

@@ -347,7 +347,7 @@ And then to use it, just:
 phpmdRule public methods under
 ```
 
-Whatever ruel is returned by phpmdRule call, supress it in PHP using dock block.
+Whatever rule is returned by phpmdRule call, supress it in PHP using dock block.
 
 
 ```php
@@ -371,7 +371,35 @@ At this point, the pipeline checks for uncommited changes in your repo.
 
 If there are uncommited changes then the process stops. This is because beyond the point, tools are used that will actively update the code. You need to be able to `git reset --hard HEAD` etc.
 
-### PHP Code Beautifier and Fixer
+### Coding Standards
+
+We use the PHP_CodeSniffer package to handle coding standards, including automatically fixing where possible.
+
+The coding standard is defaulted to PSR2 but can be easily overridden by creating a folder (or symlink) in your project `qaConfig` folder called `codingStandards`
+
+This allows you to use your own custom coding standard, a third party standard or one of the built in CodeSniffer standards.
+
+For example, to use Zend you could run:
+
+```bash
+cd $projectRoot
+mkdir -p qaConfig
+cd qaConfig
+ln -s ../vendor/squizlabs/php_codesniffer/src/Standards/Zend codingStandards
+```
+
+If you wanted to use the Symfony coding standard, you can do:
+
+```bash
+cd $projectRoot
+composer require escapestudios/symfony2-coding-standard
+mkdir -p qaConfig
+cd qaConfig
+ln -s ../vendor/escapestudios/symfony2-coding-standard/Symfony codingStandards
+```
+
+
+#### PHP Code Beautifier and Fixer
 
 Part of the PHP_CodeSniffer package
 
@@ -379,17 +407,13 @@ This will also fix any issues found
 
 https://github.com/squizlabs/PHP_CodeSniffer/wiki/Fixing-Errors-Automatically
 
-### PHP Code Sniffer
+#### PHP Code Sniffer
 
 Now we run the code sniffer to check for any remaining coding standards issues that have not been automatically fixed.
 
-The coding standard used defaults to PSR2
-
-You can specify any standard you want thouhg.
-
 https://github.com/squizlabs/PHP_CodeSniffer
 
-#### Ignoring Parts of a File
+##### Ignoring Parts of a File
 
 You can mark specific chunks of code to be not analyzed by PHPCS having the following comments:
 
@@ -404,13 +428,6 @@ $xmlPackage->send();
 ```
 
 https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#ignoring-parts-of-a-file
-
-
-#### _TODO_ Include more coding standards and perform platform detection
-
-Implement other coding standards. Ideally figure out some automation to select the correct coding standard based on the application code, for example 
-* [magento/marketplace-eqp](https://github.com/magento/marketplace-eqp)
-* [WordPress-Coding-Standards/WordPress-Coding-Standards](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards)
 
 
 
