@@ -312,6 +312,11 @@ composer require --dev brianium/paratest
 
 * https://github.com/brianium/paratest-selenium
 
+#### PHPUnit and PHPStan
+
+We also include [https://github.com/phpstan/phpstan-phpunit](phpstan/phpstan-phpunit) which allows you to properly use mocks with PHPUnit tests and keep PHPStan happy.
+
+see [https://github.com/phpstan/phpstan-phpunit#how-to-document-mock-objects-in-phpdocs](https://github.com/phpstan/phpstan-phpunit#how-to-document-mock-objects-in-phpdocs) for full instructions on how to document mock objects in your tests.
 
 ### PHP Mess Detector
 
