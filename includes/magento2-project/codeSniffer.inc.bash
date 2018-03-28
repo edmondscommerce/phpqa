@@ -1,17 +1,4 @@
-pathsToCheck=""
-
-if [[ -d "$projectRoot/app/code" ]]
-then
-    pathsToCheck="$pathsToCheck $projectRoot/app/code"
-fi
-if [[ -d "$projectRoot/app/design" ]]
-then
-    pathsToCheck="$pathsToCheck $projectRoot/app/design"
-fi
-if [[ -d "$projectRoot/vendor" ]]
-then
-    pathsToCheck="$pathsToCheck $projectRoot/vendor"
-fi
+pathsString=$(IFS=" " eval 'echo "${pathsToCheck[*]}"')
 
 
 # Check if MEQP is composer installed
@@ -42,7 +29,7 @@ do
         -s \
         --report-full \
         --report-summary \
-        $pathsToCheck
+        $pathsString
     phpcsExitCode=$?
     set +x
     if (( phpcsExitCode > 0 ))
