@@ -18,13 +18,13 @@ class Psr4Validator
             return;
         }
         echo "\nErrors found:\n"
-             .\print_r(
-                 [
+            .\print_r(
+                [
                      'PSR-4 Errors:' => $this->psr4Errors,
                      'Parse Errors:' => $this->parseErrors,
                  ],
-                 true
-             );
+                true
+            );
         throw new \RuntimeException(
             'Errors validating PSR4'
         );
