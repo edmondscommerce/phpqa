@@ -120,7 +120,19 @@ exit 1;
 ```
 
 In Bash - an exit code of greater than 0 indicates an error. You can pick any number you want, but 1 is the standard for "general error".
- 
+
+### PSR4 Validator
+This enforces that PSR4 guidlines are being adhered to correctly.
+
+#### Ignore List
+You can specify a number of files or directories to be ignored by the validator. This is a newline seperated
+list of valid regex including a valid regex delimiter. For example:
+
+```
+#tests/bootstrap\.php#
+#tests/phpstan-bootstrap\.php#
+```
+
 ### Composer Check For Issues
 Runs a diagnose on composer to make sure it's all good
 
@@ -242,16 +254,16 @@ And this will then run with full tests
 
 #### Coverage
 
-By default, the PHPUnit command will generate both textual output and HTML coverage.
+If enabled, the PHPUnit command will generate both textual output and HTML coverage.
 
 The coverage report will go into the project root /var directory as configured in [./configDefaults/phpunit-with-coverage.xml](./configDefaults/phpunit-with-coverage.xml)
 
 If you want to override the coverage report location, you will need to override this config file as normal.
 
-You can disable the coverage report on the fly by doing:
+You can enable the coverage report on the fly by doing:
 
 ```bash
-phpUnitCoverage=0 bin/qa 
+phpUnitCoverage=1 bin/qa 
 ```
 
 You might decide to do this if you are running these tests on travis, as you can see in [./travis.yml](./.travis.yml)
@@ -268,7 +280,7 @@ To have qa run as quickly as possible, you need to disable coverage
 To do this you can simply 
 
 ```bash
-export phpUnitCoverage=0
+export phpUnitQuickTests=1
 ```
 
 and then every time you run `./bin/qa` it will be as if you ran it like `phpUnitCoverage=0 ./bin/qa`
@@ -279,9 +291,32 @@ For the most comprehensive checking, you need coverage enabled and also quick te
 
 ```bash
 export phpUnitQuickTests=0
+export phpUnitCoverage=1
 ```
 
 and then every time you run `./bin/qa` it will be as if you ran it like `phpUnitQuickTests=0 ./bin/qa`
+
+#### Paratest
+
+You can run multiple sets of PHPUnit tests in parallel using [paratest](https://github.com/paratestphp/paratest)
+
+Currently this is experimental and will certainly not work in a variety of situations.
+
+To enable paratest, simply install it. If it is found, this QA process will use it.
+
+```bash
+composer require --dev brianium/paratest
+```
+
+##### Further Reading
+
+* https://github.com/brianium/paratest-selenium
+
+#### PHPUnit and PHPStan
+
+We also include [https://github.com/phpstan/phpstan-phpunit](phpstan/phpstan-phpunit) which allows you to properly use mocks with PHPUnit tests and keep PHPStan happy.
+
+see [https://github.com/phpstan/phpstan-phpunit#how-to-document-mock-objects-in-phpdocs](https://github.com/phpstan/phpstan-phpunit#how-to-document-mock-objects-in-phpdocs) for full instructions on how to document mock objects in your tests.
 
 ### PHP Mess Detector
 
@@ -317,7 +352,7 @@ And then to use it, just:
 phpmdRule public methods under
 ```
 
-Whatever ruel is returned by phpmdRule call, supress it in PHP using dock block.
+Whatever rule is returned by phpmdRule call, supress it in PHP using dock block.
 
 
 ```php
@@ -341,7 +376,35 @@ At this point, the pipeline checks for uncommited changes in your repo.
 
 If there are uncommited changes then the process stops. This is because beyond the point, tools are used that will actively update the code. You need to be able to `git reset --hard HEAD` etc.
 
-### PHP Code Beautifier and Fixer
+### Coding Standards
+
+We use the PHP_CodeSniffer package to handle coding standards, including automatically fixing where possible.
+
+The coding standard is defaulted to PSR2 but can be easily overridden by creating a folder (or symlink) in your project `qaConfig` folder called `codingStandards`
+
+This allows you to use your own custom coding standard, a third party standard or one of the built in CodeSniffer standards.
+
+For example, to use Zend you could run:
+
+```bash
+cd $projectRoot
+mkdir -p qaConfig
+cd qaConfig
+ln -s ../vendor/squizlabs/php_codesniffer/src/Standards/Zend codingStandards
+```
+
+If you wanted to use the Symfony coding standard, you can do:
+
+```bash
+cd $projectRoot
+composer require escapestudios/symfony2-coding-standard
+mkdir -p qaConfig
+cd qaConfig
+ln -s ../vendor/escapestudios/symfony2-coding-standard/Symfony codingStandards
+```
+
+
+#### PHP Code Beautifier and Fixer
 
 Part of the PHP_CodeSniffer package
 
@@ -349,17 +412,13 @@ This will also fix any issues found
 
 https://github.com/squizlabs/PHP_CodeSniffer/wiki/Fixing-Errors-Automatically
 
-### PHP Code Sniffer
+#### PHP Code Sniffer
 
 Now we run the code sniffer to check for any remaining coding standards issues that have not been automatically fixed.
 
-The coding standard used defaults to PSR2
-
-You can specify any standard you want thouhg.
-
 https://github.com/squizlabs/PHP_CodeSniffer
 
-#### Ignoring Parts of a File
+##### Ignoring Parts of a File
 
 You can mark specific chunks of code to be not analyzed by PHPCS having the following comments:
 
@@ -374,13 +433,6 @@ $xmlPackage->send();
 ```
 
 https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#ignoring-parts-of-a-file
-
-
-#### _TODO_ Include more coding standards and perform platform detection
-
-Implement other coding standards. Ideally figure out some automation to select the correct coding standard based on the application code, for example 
-* [magento/marketplace-eqp](https://github.com/magento/marketplace-eqp)
-* [WordPress-Coding-Standards/WordPress-Coding-Standards](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards)
 
 
 

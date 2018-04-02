@@ -5,8 +5,20 @@ namespace EdmondsCommerce\PHPQA;
 class Psr4Validator
 {
 
-    private $parseErrors = [];
-    private $psr4Errors  = [];
+    private $parseErrors         = [];
+    private $psr4Errors          = [];
+    private $ignoreRegexPatterns = [];
+    private $ignoredFiles        = [];
+
+    /**
+     * Psr4Validator constructor.
+     *
+     * @param array $ignoreRegexPatterns Set of regex patterns used to exclude files or directories
+     */
+    public function __construct(array $ignoreRegexPatterns)
+    {
+        $this->ignoreRegexPatterns = $ignoreRegexPatterns;
+    }
 
     /**
      * @throws \Exception
@@ -17,7 +29,18 @@ class Psr4Validator
         if (empty($this->psr4Errors) && empty($this->parseErrors)) {
             return;
         }
+        $errors = [];
+        if (!empty($this->psr4Errors)) {
+            $errors['PSR-4 Errors:'] = $this->psr4Errors;
+        }
+        if (!empty($this->parseErrors)) {
+            $errors['Parse Errors:'] = $this->parseErrors;
+        }
+        if (!empty($this->ignoredFiles)) {
+            $errors['Ignored Files:'] = $this->ignoredFiles;
+        }
         echo "\nErrors found:\n"
+<<<<<<< HEAD
             .\print_r(
                 [
                      'PSR-4 Errors:' => $this->psr4Errors,
@@ -25,6 +48,9 @@ class Psr4Validator
                  ],
                 true
             );
+=======
+             .\var_export($errors, true);
+>>>>>>> 39d8d1b0f8b79df9dd6020989cfa296fed4e0fd7
         throw new \RuntimeException(
             'Errors validating PSR4'
         );
@@ -50,7 +76,7 @@ class Psr4Validator
         if ($actualNamespace !== $expectedNamespace) {
             $this->psr4Errors[$namespaceRoot][] =
                 [
-                    'fileInfo'          => $fileInfo,
+                    'fileInfo'          => $fileInfo->getRealPath(),
                     'expectedNamespace' => $expectedNamespace,
                     'actualNamespace'   => $actualNamespace,
                 ];
@@ -63,7 +89,11 @@ class Psr4Validator
         $relativeDir  = \dirname($relativePath);
         $relativeNs   = '';
         if ($relativeDir !== '.') {
-            $relativeNs = \str_replace('/', '\\', $relativeDir);
+            $relativeNs = \str_replace(
+                '/',
+                '\\',
+                \ltrim($relativeDir, '/')
+            );
         }
 
         return rtrim($namespaceRoot.$relativeNs, '\\');
@@ -74,7 +104,7 @@ class Psr4Validator
         $contents = \file_get_contents($fileInfo->getPathname());
         \preg_match('%namespace\s+?([^;]+)%', $contents, $matches);
         if (empty($matches) || !isset($matches[1])) {
-            $this->parseErrors[] = $fileInfo;
+            $this->parseErrors[] = $fileInfo->getRealPath();
 
             return '';
         }
@@ -137,6 +167,12 @@ class Psr4Validator
                     foreach ($iterator as $fileInfo) {
                         if ('php' !== $fileInfo->getExtension()) {
                             continue;
+                        }
+                        foreach ($this->ignoreRegexPatterns as $pattern) {
+                            if (\preg_match($pattern, $fileInfo->getRealPath())) {
+                                $this->ignoredFiles[] = $fileInfo->getRealPath();
+                                continue 2;
+                            }
                         }
                         yield [
                             $absPathRoot,

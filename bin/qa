@@ -65,6 +65,12 @@ cacheDir="$projectRoot/cache/qa";
 # the path in this library for default config
 defaultConfigPath="$(readlink -f ./../configDefaults/)"
 
+# configPath function can only be used after this point
+
+# PSR4 validation
+psr4IgnoreListPath="$(configPath psr4-validate-ignore-list.txt)"
+readarray psr4IgnoreList < "$psr4IgnoreListPath"
+
 # PHPStan configs
 phpstanConfigPath="$(configPath phpstan.neon)"
 
@@ -86,8 +92,9 @@ phpcsFailOnWarning=0
 # PHPUnit Quick Tests - optional skip slow tests
 phpUnitQuickTests=${phpUnitQuickTests:-1}
 
-# PHPUnit Coverage - if enabled, tests will run with Xdebug and generate coverage
-phpUnitCoverage=${phpUnitCoverage:-1}
+# PHPUnit Coverage - default disabled
+# if enabled, tests will run with Xdebug and generate coverage (which is a lot slower)
+phpUnitCoverage=${phpUnitCoverage:-0}
 
 if [[ -f $projectRoot/phpunit.xml ]]
 then
@@ -141,8 +148,18 @@ echo "
 Validating PSR-4 Roots
 ------------------------
 "
-phpNoXdebug -f ./bin/psr4-validate
-set +x
+set +e
+psr4ExitCode=99
+while (( psr4ExitCode > 0 ))
+do
+    phpNoXdebug -f ./bin/psr4-validate ${psr4IgnoreList[*]}
+    psr4ExitCode=$?
+    set +x
+    if (( psr4ExitCode > 0 ))
+    then
+        tryAgainOrAbort "PSR-4 Validation"
+    fi
+done
 
 echo "
 
@@ -198,15 +215,25 @@ echo "
 Running PHP Lint
 ----------------
 "
-phpNoXdebug -f bin/parallel-lint -- $srcDir $testsDir $binDir
-set +x
+phpLintExitCode=99
+set +e
+while (( phpLintExitCode > 0 ))
+do
+    phpNoXdebug -f bin/parallel-lint -- $srcDir $testsDir $binDir
+    phpLintExitCode=$?
+    set +x
+    if (( phpLintExitCode > 0 ))
+    then
+        tryAgainOrAbort "PHP Lint"
+    fi
+done
+set -e
 
 echo "
 
 Running PHPStan
 ---------------------
 "
-set +e
 set +e
 phpStanExitCode=99
 while (( phpStanExitCode > 0 ))
@@ -246,30 +273,38 @@ then
     phpCmd=\php
 fi
 phpunitPath=bin/phpunit
+paratestConfig=
 echo "Checking for paratest"
 if [[ -f bin/paratest ]]
 then
     echo "Found paratest, using this instead of standard bin/phpunit"
     phpunitPath=bin/paratest
+    paratestConfig=(--phpunit bin/phpunit)
 fi
-set -x
-phpUnitQuickTests="$phpUnitQuickTests" $phpCmd -f $phpunitPath \
-    -- \
-    -c $phpUnitConfigPath \
-    "$testsDir"
+phpunitExitCode=99
+set +e
+while (( phpunitExitCode > 0 ))
+do
+    set -x
+    phpUnitQuickTests="$phpUnitQuickTests" $phpCmd -f $phpunitPath \
+        -- \
+        ${paratestConfig[*]} \
+        -c ${phpUnitConfigPath} \
+        "$testsDir"
 
-phpunitExitCode=$?
-set +x
-if (( $phpunitExitCode > 0 ))
-then
-    if (( $phpunitExitCode > 2 ))
+    phpunitExitCode=$?
+    set +x
+    if (( $phpunitExitCode > 0 ))
     then
-        printf "\n\n\nPHPUnit Crashed\n\nRunning again with Debug mode...\n\n\n"
-        qaQuickTests="$phpUnitQuickTests" phpNoXdebug -f bin/phpunit -- "$testsDir" --debug
-        set +x
+        if (( $phpunitExitCode > 2 ))
+        then
+            printf "\n\n\nPHPUnit Crashed\n\nRunning again with Debug mode...\n\n\n"
+            qaQuickTests="$phpUnitQuickTests" phpNoXdebug -f bin/phpunit -- "$testsDir" --debug
+            set +x
+        fi
+        tryAgainOrAbort "PHPUnit Tests"
     fi
-    exit $phpunitExitCode
-fi
+done
 set -e
 
 echo "
@@ -306,8 +341,19 @@ echo "
 Running Markdown Links Checker
 ------------------------------
 "
-phpNoXdebug -f bin/mdlinks
-set +x
+linksExitCode=99
+while (( linksExitCode > 0 ))
+do
+    set +e
+    phpNoXdebug -f bin/mdlinks
+    linksExitCode=$?
+    set +x
+    set -e
+    if (( linksExitCode > 0 ))
+    then
+        tryAgainOrAbort "Markdown Links Checker"
+    fi
+done
 
 echo "
 
