@@ -5,10 +5,10 @@ namespace EdmondsCommerce\PHPQA;
 class Psr4Validator
 {
 
-    private $parseErrors         = [];
-    private $psr4Errors          = [];
-    private $ignoreRegexPatterns = [];
-    private $ignoredFiles        = [];
+    private $parseErrors  = [];
+    private $psr4Errors   = [];
+    private $ignoreRegexPatterns;
+    private $ignoredFiles = [];
 
     /**
      * Psr4Validator constructor.
@@ -23,7 +23,7 @@ class Psr4Validator
     /**
      * @throws \Exception
      */
-    public function main(): void
+    public function main()
     {
         $this->loop();
         if (empty($this->psr4Errors) && empty($this->parseErrors)) {
@@ -40,17 +40,7 @@ class Psr4Validator
             $errors['Ignored Files:'] = $this->ignoredFiles;
         }
         echo "\nErrors found:\n"
-<<<<<<< HEAD
-            .\print_r(
-                [
-                     'PSR-4 Errors:' => $this->psr4Errors,
-                     'Parse Errors:' => $this->parseErrors,
-                 ],
-                true
-            );
-=======
              .\var_export($errors, true);
->>>>>>> 39d8d1b0f8b79df9dd6020989cfa296fed4e0fd7
         throw new \RuntimeException(
             'Errors validating PSR4'
         );
@@ -59,14 +49,14 @@ class Psr4Validator
     /**
      * @throws \Exception
      */
-    private function loop(): void
+    private function loop()
     {
         foreach ($this->yieldPhpFilesToCheck() as [$absPathRoot, $namespaceRoot, $fileInfo]) {
             $this->check($absPathRoot, $namespaceRoot, $fileInfo);
         }
     }
 
-    private function check(string $absPathRoot, string $namespaceRoot, \SplFileInfo $fileInfo): void
+    private function check(string $absPathRoot, string $namespaceRoot, \SplFileInfo $fileInfo)
     {
         $actualNamespace = $this->getActualNamespace($fileInfo);
         if ('' === $actualNamespace) {
