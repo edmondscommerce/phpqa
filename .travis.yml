@@ -8,7 +8,6 @@ php:
 - hhvm
 matrix:
   allow_failures:
-  - php: 7.0
   - php: hhvm
 before_script: bash -x .travis.bash
 script: phpUnitQuickTests=0 phpUnitCoverage=0 bin/qa
