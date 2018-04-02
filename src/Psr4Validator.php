@@ -123,6 +123,7 @@ class Psr4Validator
 
     /**
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private function getComposerJson(): array
     {
@@ -138,6 +139,8 @@ class Psr4Validator
     /**
      * @return \Generator
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function yieldPhpFilesToCheck(): \Generator
     {
