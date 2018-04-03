@@ -160,6 +160,15 @@ To override the configuration you need to copy it to `{project-root}/qaConfig/ph
 
 For specifying paths, just know the root of the project is `%rootDir%/../../../`
 
+##### Extending Default Config
+
+You can use the standard config as a base by using a template like:
+
+```neon
+includes:
+    - ../vendor/edmondscommerce/phpqa/configDefault/phpstan.neon
+```
+
 ##### Boostrap
 
 In the configuration you might want to specify a [php bootstrap file](https://github.com/phpstan/phpstan#bootstrap-file) to initialise your code

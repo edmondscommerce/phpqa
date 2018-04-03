@@ -108,6 +108,8 @@ function tryAgainOrAbort(){
 
         would you like to try again? (y/n)
 
+        (note: if you change config files, you might have to run from the top for it to take effect...)
+
     ==================================================
 
     "

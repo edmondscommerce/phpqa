@@ -239,6 +239,7 @@ set +e
 phpStanExitCode=99
 while (( phpStanExitCode > 0 ))
 do
+    set -x
     phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath"
     phpStanExitCode=$?
     set +x
