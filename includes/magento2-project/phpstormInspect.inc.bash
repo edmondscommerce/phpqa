@@ -17,20 +17,32 @@ for i in "${vendorFolders[@]}"; do
     [[ -n $skip ]] || nonstandardVendorPaths+=("$i")
 done
 
-for i in "${nonstandardVendorPaths[@]}"
+scanPaths=()
+for p in "${pathsToCheck[@]}"
 do
-    echo $i
+    if [[ "$p" != *vendor ]]
+    then
+        scanPaths+=("$p")
+    fi
 done
 
-/tmp/host/PhpStorm/bin/inspect.sh\
+for i in "${nonstandardVendorPaths[@]}"
+do
+    scanPaths+=("$i")
+done
+
+for scanPath in "${scanPaths[@]}"
+do
+    echo "Running inspection against $scanPath"
+    /opt/PhpStorm/bin/inspect.sh\
  $projectRoot\
  $phpstormInspectionProfileConfigPath\
  /tmp/test\
  -v2\
- -d /var/lib/lxc/workshop-badgemaster/rootfs/var/www/vhosts/www.badgemaster.workshop.developmagento.co.uk/app/code \
- -d /var/lib/lxc/workshop-badgemaster/rootfs/var/www/vhosts/www.badgemaster.workshop.developmagento.co.uk/app/design \
- -d /var/lib/lxc/workshop-badgemaster/rootfs/var/www/vhosts/www.badgemaster.workshop.developmagento.co.uk/vendor
+ -d $scanPath
+done
 
-set +x
+
+
 
 exit 1

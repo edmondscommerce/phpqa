@@ -13,6 +13,9 @@ defaultConfigPath="$(readlink -f $DIR/../configDefaults/)"
 # PHPStan configs
 phpstanConfigPath="$(configPath phpstan.neon)"
 
+#PHPStorm configs
+phpstormInspectionProfileConfigPath="$(configPath phpstormInspectionProfile.xml)"
+
 #PHP Mess Detector Configs
 phpmdConfigPath="$projectRoot/dev/tests/static/testsuite/Magento/Test/Php/_files/phpmd/ruleset.xml"
 
