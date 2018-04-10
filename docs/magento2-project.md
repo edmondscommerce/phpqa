@@ -11,7 +11,7 @@
 | markdownLinks    | 100%     |       |
 | uncommitedChanges| 100%     |       |
 | beautifierFixer  | N/A      | Not modifying core/3rd party code |
-| codeSniffer      | 50%      | Resolved dependency problems, now runs but need to work out the excludes |
+| codeSniffer      | 100%      |  |
 
 ## Notes
 
