@@ -1,4 +1,9 @@
 #set -x
+
+echo "This file exists as an alternative to phpstan"
+echo "It was intended to run more quickly, but because of the overhead of PHPStorm this ended up not being the case"
+echo "If there are a lot of paths to scan, this will not run quickly"
+
 set +e
 
 vendorFolders=()
