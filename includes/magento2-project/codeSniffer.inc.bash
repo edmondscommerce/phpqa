@@ -1,5 +1,5 @@
 pathsString=$(IFS=" " eval 'echo "${pathsToCheck[*]}"')
-
+ignoreString=$(IFS="," eval 'echo "${pathsToIgnore[*]}"')
 
 # Check if MEQP is composer installed
 
@@ -44,13 +44,17 @@ phpNoXdebug -f bin/phpcs -- \
 set +x
 set +e
 phpcsExitCode=99
+
 while (( phpcsExitCode > 0 ))
 do
-    set -x
+    set +x
+    echo "Setting PHPCS Config"
     eval phpNoXdebug -f bin/phpcs -- \
         --config-set installed_paths "$projectRoot/vendor/magento/marketplace-eqp/" \
         --config-set m2-path $projectRoot
 
+    set +x
+    echo "Running PHPCS..."
     eval phpNoXdebug -f bin/phpcs -- \
         --standard="MEQP2" \
         --colors \
@@ -58,6 +62,7 @@ do
         -s \
         --report-full \
         --report-summary \
+        --ignore=$ignoreString \
         $pathsString
     phpcsExitCode=$?
     set +x
