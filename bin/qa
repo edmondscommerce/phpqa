@@ -31,6 +31,8 @@ $(hostname) $0 $@
 "
 
 phpBinPath=$(which php)
+mode=${1:-'all-tests'};
+
 
 #### FUNCTIONS #################################################
 source ./../includes/functions.inc.bash
@@ -124,17 +126,24 @@ echo "
 Running PHPStan
 ---------------------
 "
-runTool phpstan
+if [[ $mode = "quick-tests" ]]
+then
+    echo "Skipping PHPstan because quick-tests was specified"
+else
+    runTool phpstan
+fi
 
 echo "
 
 Running PHPUnit Tests
 ---------------------
 "
-# Note the qaQuickTests=1
-# this sets a config variable of quickTests which you can then use
-# to allow tests to run less thoroughly but more quickly
-runTool phpunit
+if [[ $mode = "quick-tests" ]]
+then
+    echo "Skipping PHP Unit because quick-tests was specified"
+else
+    runTool phpunit
+fi
 
 echo "
 
