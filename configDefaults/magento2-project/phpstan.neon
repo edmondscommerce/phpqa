@@ -256,6 +256,21 @@ parameters:
         - */phpmd/phpmd/*
         - */ircmaxell/password-compat/*
         - */friendsofphp/php-cs-fixer/*
+        - */composer/*
+        - */zendframework/zend-filter/*
+        - */zendframework/zend-log/*
+        - */zendframework/zend-i18n/*
+        - */zendframework/zend-db/*
+        - */symfony/polyfill-php54/*
+        - */symfony/polyfill-php70/*
+        - */symfony/dependency-injection/*
+        - */jakub-onderka/php-parallel-lint/*
+        - */magento/data-migration-tool/*
+        - */magento/marketplace-eqp/*
+        - */jakub-onderka/php-console-highlighter/*
+        - */jakub-onderka/php-console-color/*
+        - */phploc/phploc/*
+        - */johnkary/phpunit-speedtrap/*
     ignoreErrors:
         # Magento lies about what will be returned by methods, so we need to cast which is an "error". Ignore those
         - "#Casting to [^ ]* something that's already [^ ]*.*#"
