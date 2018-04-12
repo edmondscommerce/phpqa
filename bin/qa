@@ -36,10 +36,20 @@ readonly scanScope_platform="platform-scan"
 readonly scanScope_path="path-scan"
 
 
+function usage {
+    echo "Usage:"
+    echo "bin/qa [quick-tests|all-tests] [subfolder/to/scan]"
+    echo ""
+    exit 1
+}
 phpBinPath=$(which php)
 mode=${1:-$runMode_all};
-scanPath=${2:-$scanScope_path};
+if [[ $mode != $runMode_all && $mode != $runMode_quick ]]
+then
+    usage
+fi
 
+scanPath=${2:-""};
 
 #### FUNCTIONS #################################################
 source ./../includes/functions.inc.bash
@@ -65,6 +75,7 @@ projectConfigPath="$projectRoot/qaConfig/"
 
 # Which platform is the code to be tested
 platform="$(detectPlatform)"
+
 
 if [[ $platform == $platformMagento2Project && $scanPath != $scanScope_path ]]
 then

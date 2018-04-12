@@ -5,15 +5,16 @@ readonly platformMagento2Module="magento2-module"
 readonly platformGeneric="generic"
 
 function detectPlatform(){
-    if [[ -f $projectRoot/bin/magento ]]
+
+    if [[ -f $projectRoot/$scanPath/etc/module.xml && -f $projectRoot/$scanPath/registration.php ]]
     then
-        echo $platformMagento2Project
+        echo $platformMagento2Module
         return 0
     fi
 
-    if [[ -f $projectRoot/etc/module.xml && -f $projectRoot/registration.php ]]
+    if [[ -f $projectRoot/$scanPath/bin/magento ]]
     then
-        echo $platformMagento2Module
+        echo $platformMagento2Project
         return 0
     fi
 
