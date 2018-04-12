@@ -26,10 +26,12 @@ function runTool(){
     local pathToTool="$DIR/../includes/$platform/$tool.inc.bash"
     if [[ -f $pathToTool ]]
     then
+        echo "Running $platform $tool"
         source $pathToTool
         return 0
     fi
     pwd
+        echo "Running generic $tool"
     source "$DIR/../includes/generic/$tool.inc.bash"
 }
 

@@ -4,7 +4,6 @@ set +e
 phpStanExitCode=99
 while (( phpStanExitCode > 0 ))
 do
-    set -x
     eval phpNoXdebug -f bin/phpstan.phar -- analyse $pathsStringArray -l7 -c "$phpstanConfigPath"
     phpStanExitCode=$?
     set +x

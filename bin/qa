@@ -75,14 +75,8 @@ projectConfigPath="$projectRoot/qaConfig/"
 
 # Which platform is the code to be tested
 platform="$(detectPlatform)"
+echo "$platform platform detected"
 
-
-if [[ $platform == $platformMagento2Project && $scanPath != $scanScope_path ]]
-then
-    platform=$platformMagento2Module
-fi
-
-set -x
 runTool setConfig
 
 #### PROCESS #################################################
@@ -174,7 +168,7 @@ echo "
 Running PHP Mess Detector
 -------------------------
 "
-runTool messDetector
+#runTool messDetector
 echo "
 
 Running Markdown Links Checker

@@ -4,7 +4,6 @@ if [[ "1" == "$phpUnitCoverage" ]]
 then
     phpCmd=\php
 fi
-set -x
 qaQuickTests="$phpUnitQuickTests" $phpCmd -f bin/phpunit \
     -- \
     -c $phpUnitConfigPath
