@@ -30,8 +30,15 @@ $(hostname) $0 $@
 ===========================================
 "
 
+readonly runMode_all="all-tests"
+readonly runMode_quick="quick-tests"
+readonly scanScope_platform="platform-scan"
+readonly scanScope_path="path-scan"
+
+
 phpBinPath=$(which php)
-mode=${1:-'all-tests'};
+mode=${1:-$runMode_all};
+scanPath=${2:-$scanScope_path};
 
 
 #### FUNCTIONS #################################################
@@ -59,6 +66,12 @@ projectConfigPath="$projectRoot/qaConfig/"
 # Which platform is the code to be tested
 platform="$(detectPlatform)"
 
+if [[ $platform == $platformMagento2Project && $scanPath != $scanScope_path ]]
+then
+    platform=$platformMagento2Module
+fi
+
+set -x
 runTool setConfig
 
 #### PROCESS #################################################

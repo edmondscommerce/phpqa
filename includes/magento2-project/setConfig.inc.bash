@@ -65,7 +65,6 @@ fi
 
 
 
-
 pathsToIgnore=();
 
 # To renew this list, navigate to a Magento2 that only has phpqa installed, cd to the vendor folder and run:
