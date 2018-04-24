@@ -18,7 +18,15 @@ class PHPUnitRerunCommandGeneratorTest extends TestCase
     /**
      * This is only used for manually testing the process
      */
-    public function alwaysFail()
+    public function testAlwaysFail()
+    {
+        $this->assertTrue(false);
+    }
+
+    /**
+     * This is only used for manually testing the process
+     */
+    public function testAlsoAlwaysFail()
     {
         $this->assertTrue(false);
     }

@@ -284,16 +284,22 @@ then
     paratestConfig=(--phpunit bin/phpunit)
 fi
 phpunitExitCode=99
-set +e
 while (( phpunitExitCode > 0 ))
 do
+    declare -a rerunFilter
+    rerunFilter=(" ")
+    if phpunitReRunFailedOrFull
+    then
+        rerunFilter+=( --filter $IFS $(phpNoXdebug bin/phpunit-runfailed-filter))
+    fi
+    set +e
     set -x
-    r
     phpUnitQuickTests="$phpUnitQuickTests" $phpCmd -f $phpunitPath \
         -- \
-        ${paratestConfig[*]} \
+        ${paratestConfig[@]} \
         -c ${phpUnitConfigPath} \
         --log-junit $varDir/phpunit.junit.log.xml \
+        ${rerunFilter[@]} \
         "$testsDir"
 
     phpunitExitCode=$?

@@ -29,20 +29,22 @@ class PHPUnitRerunCommandGenerator
             '//testsuite/testcase[error] | //testsuite/testcase[failure]'
         );
         foreach ($failureNodes as $testCaseNode) {
-            $attributes                                  = $testCaseNode->attributes();
-            $this->toRerun[(string)$attributes->class][] = (string)$attributes->name;
+            $attributes              = $testCaseNode->attributes();
+            $class                   = str_replace('\\', '\\\\', (string)$attributes->class);
+            $this->toRerun[$class][] = (string)$attributes->name;
         }
         if ($this->toRerun === []) {
-            return '';
+            #no failed tests so just include all
+            return '/.*/';
         }
-        $command = ' --filter "(';
+        $command = '/(';
         foreach ($this->toRerun as $class => $testNames) {
             foreach ($testNames as $testName) {
                 $command .= "$class::$testName|";
             }
         }
         $command = rtrim($command, '|');
-        $command .= ')"';
+        $command .= ')/';
 
         return $command;
     }
