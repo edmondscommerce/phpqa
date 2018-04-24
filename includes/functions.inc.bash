@@ -87,7 +87,7 @@ function checkForUncommittedChanges {
 
 function phpunitReRunFailedOrFull(){
     local rerunFailed
-    local rerunLogFile="$(find $varDir -type f -name 'phpunit.junit.log.xml' -mtime -5)";
+    local rerunLogFile="$(find $varDir -type f -name 'phpunit.junit.log.xml' -mmin -5)";
     if [[ "" == "$rerunLogFile" ]]
     then
         echo "";
