@@ -2,44 +2,60 @@
 
 namespace EdmondsCommerce\PHPQA;
 
-use Symfony\Component\DomCrawler\Crawler;
-
 class PHPUnitRerunCommandGenerator
 {
+    /**
+     * @var string
+     */
     private $logPath;
 
-    private $log;
     /**
-     * @var Crawler
+     * @var \SimpleXMLElement
      */
-    private $crawler;
+    private $simpleXml;
 
-    private $failedTests = [];
+    private $toRerun = [];
 
-    public function __construct(Crawler $crawler)
+    public function __construct()
     {
-        $this->crawler = $crawler;
     }
 
-    public function getRerunCommandFromFile(?string $junitLogPath = null)
+    public function getRerunCommandFromFile(string $junitLogPath = null)
     {
+        $this->toRerun = [];
         $this->logPath = $junitLogPath ?? $this->getDefaultFilePath();
         $this->load();
-        $this->crawler->filterXPath(
-            '/testsuite/testcase[error] | /testsuite/testcase[error]'
-        )->each(
-            function (Crawler $subCrawler) {
-                $subCrawler;
-            }
+        $failureNodes = $this->simpleXml->xpath(
+            '//testsuite/testcase[error] | //testsuite/testcase[failure]'
         );
+        foreach ($failureNodes as $testCaseNode) {
+            $attributes                          = $testCaseNode->attributes();
+            $this->toRerun[(string)$attributes->class][] = (string)$attributes->name;
+        }
+        $command = ' --filter "(';
+        foreach ($this->toRerun as $class => $testNames) {
+            foreach ($testNames as $testName) {
+                $command .= "$class::$testName|";
+            }
+        }
+        $command = rtrim($command, '|');
+        $command .= ")";
+
+        return $command;
+
     }
 
 
     protected function load()
     {
-        $this->crawler->addXmlContent(file_get_contents($this->logPath));
+        $this->simpleXml = simplexml_load_string(file_get_contents($this->logPath));
     }
 
+    /**
+     * @return string
+     * @throws \Exception
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     protected function getDefaultFilePath(): string
     {
         return Config::getProjectRootDirectory().'/var/qa/phpunit.junit.log.xml';
