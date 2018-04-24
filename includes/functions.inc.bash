@@ -85,6 +85,18 @@ function checkForUncommittedChanges {
     fi
 }
 
+function phpunitRunFailed(){
+    local rerunLogFile="$(find $varDir -type f -name 'phpunit.junit.log.xml' -mtime -5)";
+    if [[ "" == "$rerunLogFile" ]]
+    then
+        echo "";
+        return 0;
+    fi
+    echo phpNoXdebug bin/
+
+}
+
+
 function tryAgainOrAbort(){
     toolname="$1"
     if [[ "false" != "${CI:-'false'}" ]]

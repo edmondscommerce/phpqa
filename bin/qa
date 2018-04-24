@@ -288,6 +288,7 @@ set +e
 while (( phpunitExitCode > 0 ))
 do
     set -x
+    r
     phpUnitQuickTests="$phpUnitQuickTests" $phpCmd -f $phpunitPath \
         -- \
         ${paratestConfig[*]} \

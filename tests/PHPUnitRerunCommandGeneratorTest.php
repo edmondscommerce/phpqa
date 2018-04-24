@@ -11,7 +11,15 @@ class PHPUnitRerunCommandGeneratorTest extends TestCase
     public function testCanParseFailuresAndErrors()
     {
         $generator = new PHPUnitRerunCommandGenerator();
-        $command   = $generator->getRerunCommandFromFile(__DIR__.'/assets/phpunit.junit.log.xml');
+        $command   = $generator->main(__DIR__.'/assets/phpunit.junit.log.xml');
         $this->assertNotEmpty($command);
+    }
+
+    /**
+     * This is only used for manually testing the process
+     */
+    public function alwaysFail()
+    {
+        $this->assertTrue(false);
     }
 }

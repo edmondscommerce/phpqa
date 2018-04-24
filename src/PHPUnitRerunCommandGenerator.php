@@ -20,7 +20,7 @@ class PHPUnitRerunCommandGenerator
     {
     }
 
-    public function getRerunCommandFromFile(string $junitLogPath = null)
+    public function main(string $junitLogPath = null)
     {
         $this->toRerun = [];
         $this->logPath = $junitLogPath ?? $this->getDefaultFilePath();
@@ -29,8 +29,11 @@ class PHPUnitRerunCommandGenerator
             '//testsuite/testcase[error] | //testsuite/testcase[failure]'
         );
         foreach ($failureNodes as $testCaseNode) {
-            $attributes                          = $testCaseNode->attributes();
+            $attributes                                  = $testCaseNode->attributes();
             $this->toRerun[(string)$attributes->class][] = (string)$attributes->name;
+        }
+        if ($this->toRerun === []) {
+            return '';
         }
         $command = ' --filter "(';
         foreach ($this->toRerun as $class => $testNames) {
@@ -39,10 +42,9 @@ class PHPUnitRerunCommandGenerator
             }
         }
         $command = rtrim($command, '|');
-        $command .= ")";
+        $command .= ')"';
 
         return $command;
-
     }
 
 
@@ -59,7 +61,5 @@ class PHPUnitRerunCommandGenerator
     protected function getDefaultFilePath(): string
     {
         return Config::getProjectRootDirectory().'/var/qa/phpunit.junit.log.xml';
-
     }
-
 }
