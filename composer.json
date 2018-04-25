@@ -28,7 +28,8 @@
   "bin": [
     "bin/qa",
     "bin/mdlinks",
-    "bin/psr4-validate"
+    "bin/psr4-validate",
+    "/bin/phpunit-runfailed-filter"
   ],
   "require-dev": {
   },
