@@ -85,6 +85,36 @@ function checkForUncommittedChanges {
     fi
 }
 
+function phpunitReRunFailedOrFull(){
+    local rerunFailed
+    local rerunLogFile="$(find $varDir -type f -name 'phpunit.junit.log.xml' -mmin -5)";
+    if [[ "" == "$rerunLogFile" ]]
+    then
+        echo "";
+        return 1;
+    fi
+    echo "
+
+    ==================================================
+
+        PHPUnit Run detected from less than 5 mins ago
+
+        Would you like to just rerun failed tests?
+
+    ==================================================
+
+        "
+    read -n 1 rerunFailed
+    if [[ "y" != "$rerunFailed" ]]
+    then
+        printf "\n\nRunning Full...\n\n"
+        return 1
+    fi
+    printf "\n\nRerunning Failed Only\n\n"
+    return 0;
+}
+
+
 function tryAgainOrAbort(){
     toolname="$1"
     if [[ "false" != "${CI:-'false'}" ]]
