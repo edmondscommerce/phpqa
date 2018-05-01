@@ -45,7 +45,7 @@ function phpNoXdebug {
 # Usage:
 # checkForUncommitedChanges
 function checkForUncommittedChanges {
-    if [[ "true" == "$CI" ]]
+    if [[ "false" != "${CI:-'false'}" ]]
     then
         echo "Skipping uncommited changes check in CI"
         return 0;
@@ -86,6 +86,10 @@ function checkForUncommittedChanges {
 }
 
 function phpunitReRunFailedOrFull(){
+    if [[ "false" != "${CI:-'false'}" ]]
+    then
+        return 0;
+    fi
     local rerunFailed
     local reunLogFileTimeLimit=${phpunitRerunTimeoutMins:-5}
     local rerunLogFile="$(find $varDir -type f -name 'phpunit.junit.log.xml' -mmin -$reunLogFileTimeLimit)";

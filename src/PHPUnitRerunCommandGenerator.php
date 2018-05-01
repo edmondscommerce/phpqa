@@ -26,7 +26,8 @@ class PHPUnitRerunCommandGenerator
         $this->logPath = $junitLogPath ?? $this->getDefaultFilePath();
         $this->load();
         $failureNodes = $this->simpleXml->xpath(
-            '//testsuite/testcase[error] | //testsuite/testcase[failure]'
+            '//testsuite/testcase[error] | //testsuite/testcase[failure] '
+            .'| //testsuite/testcase[skipped] | //testsuite/testcase[incomplete]'
         );
         foreach ($failureNodes as $testCaseNode) {
             $attributes              = $testCaseNode->attributes();
