@@ -343,6 +343,18 @@ You can also use this in isolation if you want, eg:
 ./bin/phpunit -c qaConfig/phpunit.xml --filter "$(bin/phpunit-runfailed-filter)" tests/
 ```
 
+##### Rerun Failed Timeout
+
+There is a configured timeout of 5 minutes. If you retry failed within this timeframe then the retry failed option will appear. After this timeout, then only the full tests will be run.
+
+You can configure this temporarily by setting an environment variable:
+
+```bash
+export phpunitRerunTimeoutMins=20
+```
+
+or you can override the configuration as normal and specify your desired timeout limit.
+
 ### PHP Mess Detector
 
 https://phpmd.org/

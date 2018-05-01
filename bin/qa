@@ -96,6 +96,9 @@ phpUnitQuickTests=${phpUnitQuickTests:-1}
 # if enabled, tests will run with Xdebug and generate coverage (which is a lot slower)
 phpUnitCoverage=${phpUnitCoverage:-0}
 
+# How many minutes after a failed PHPUnit run you can retry failed only
+phpunitRerunTimeoutMins=${phpunitRerunTimeoutMins:-5}
+
 if [[ -f $projectRoot/phpunit.xml ]]
 then
     # Project root phpunit.xml trumps everything else
