@@ -181,7 +181,7 @@ echo "
 Checking if Uncommitted Changes
 ------------------------------
 "
-checkForUncommittedChanges
+checkForUncommittedChanges $scanPath
 
 echo "
 

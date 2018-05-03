@@ -84,6 +84,18 @@ function phpNoXdebug {
 # Usage:
 # checkForUncommitedChanges
 function checkForUncommittedChanges {
+
+    targetDir=${1:-$(pwd)}
+    originalDir=$(pwd)
+
+    if [[ ! -d $targetDir/.git/ ]]
+    then
+        echo "$targetDir is not a git repo"
+        return
+    fi
+
+    cd $targetDir
+
     if [[ "true" == "$CI" ]]
     then
         echo "Skipping uncommited changes check in CI"
@@ -122,6 +134,8 @@ function checkForUncommittedChanges {
             git commit
         fi
     fi
+
+    cd $originalDir
 }
 
 function tryAgainOrAbort(){
