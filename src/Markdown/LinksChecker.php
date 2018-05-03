@@ -103,8 +103,7 @@ class LinksChecker
         string $file,
         array &$errors,
         int &$return
-    )
-    {
+    ) {
         $path = $link[2];
         if (preg_match('/^(http|#)/', $path)) {
             return;
