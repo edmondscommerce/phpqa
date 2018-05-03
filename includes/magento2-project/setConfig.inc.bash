@@ -336,3 +336,9 @@ pathsToIgnore+=("vendor/symfony/dependency-injection")
 pathsToIgnore+=("vendor/jakub-onderka/php-parallel-lint")
 pathsToIgnore+=("vendor/magento/data-migration-tool")
 pathsToIgnore+=("vendor/magento/marketplace-eqp")
+
+# Get any from the project
+if [[ -f $projectRoot/qaConfig/configIncludes.bash ]]
+then
+    source $projectRoot/qaConfig/configIncludes.bash
+fi
