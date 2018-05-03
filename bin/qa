@@ -183,12 +183,6 @@ Checking if Uncommitted Changes
 "
 checkForUncommittedChanges $scanPath
 
-echo "
-
-Running Beautifier and Fixer on src and tests
----------------------------------------------
-"
-runTool beautifierFixer
 
 echo "
 
@@ -220,10 +214,6 @@ echo '
 
 '
 
-echo "
-Statistics:
-"
-phpNoXdebug -f bin/phploc "$srcDir" "$testsDir"
 set +x
 
 if [[ -f $projectConfigPath/hookPost.bash ]]
