@@ -20,10 +20,26 @@ class PHPUnitRerunCommandGenerator
     {
     }
 
-    public function main(string $junitLogPath = null)
+    /**
+     * no failed tests so just include all
+     * however, this can confuse bash - try using `set -f` to disable globbing
+     */
+    protected function noFilter(): string
+    {
+        return '/.*/';
+    }
+
+    public function main(string $junitLogPath = null): string
     {
         $this->toRerun = [];
         $this->logPath = $junitLogPath ?? $this->getDefaultFilePath();
+        if (!file_exists($this->logPath)) {
+            return $this->noFilter();
+        }
+        $contents = file_get_contents($this->logPath);
+        if ('' === $contents) {
+            return $this->noFilter();
+        }
         $this->load();
         $failureNodes = $this->simpleXml->xpath(
             '//testsuite/testcase[error] | //testsuite/testcase[failure] '
@@ -35,8 +51,7 @@ class PHPUnitRerunCommandGenerator
             $this->toRerun[$class][] = (string)$attributes->name;
         }
         if ($this->toRerun === []) {
-            #no failed tests so just include all
-            return '/.*/';
+            return $this->noFilter();
         }
         $command = '/(';
         foreach ($this->toRerun as $class => $testNames) {
@@ -53,7 +68,16 @@ class PHPUnitRerunCommandGenerator
 
     protected function load()
     {
-        $this->simpleXml = simplexml_load_string(file_get_contents($this->logPath));
+
+        libxml_use_internal_errors(true);
+        $this->simpleXml = simplexml_load_string();
+        if (false === $this->simpleXml) {
+            $message = "Failed loading XML\n";
+            foreach (libxml_get_errors() as $error) {
+                $message .= "\n\t".$error->message;
+            }
+            throw new \RuntimeException($message);
+        }
     }
 
     /**

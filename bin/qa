@@ -271,7 +271,6 @@ Running PHPUnit Tests
 # to allow tests to run less thoroughly but more quickly
 # @see https://github.com/edmondscommerce/phpqa#quick-tests
 
-set +e
 phpCmd=phpNoXdebug
 if [[ "1" == "$phpUnitCoverage" ]]
 then
@@ -293,7 +292,13 @@ do
     rerunFilter=(" ")
     if phpunitReRunFailedOrFull
     then
-        rerunFilter+=( --filter $IFS $(phpNoXdebug bin/phpunit-runfailed-filter))
+        #set no glob
+        set -f
+        rerunFilterPattern=$(phpNoXdebug bin/phpunit-runfailed-filter)
+        if [[ "$rerunFilterPattern" != '/.*/' ]]
+        then
+            rerunFilter+=( --filter $IFS $rerunFilterPattern)
+        fi
     fi
     set +e
     set -x
@@ -306,7 +311,9 @@ do
         "$testsDir"
 
     phpunitExitCode=$?
+    set -e
     set +x
+    set +f
     if (( $phpunitExitCode > 0 ))
     then
         if (( $phpunitExitCode > 2 ))
