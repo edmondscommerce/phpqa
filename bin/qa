@@ -168,7 +168,7 @@ echo "
 Running PHP Mess Detector
 -------------------------
 "
-#runTool messDetector
+runTool messDetector
 echo "
 
 Running Markdown Links Checker
