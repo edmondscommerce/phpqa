@@ -40,7 +40,7 @@ class PHPUnitRerunCommandGenerator
         if ('' === $contents) {
             return $this->noFilter();
         }
-        $this->load();
+        $this->load($contents);
         $failureNodes = $this->simpleXml->xpath(
             '//testsuite/testcase[error] | //testsuite/testcase[failure] '
             .'| //testsuite/testcase[skipped] | //testsuite/testcase[incomplete]'
@@ -66,11 +66,11 @@ class PHPUnitRerunCommandGenerator
     }
 
 
-    protected function load()
+    protected function load(string $contents)
     {
 
         libxml_use_internal_errors(true);
-        $this->simpleXml = simplexml_load_string();
+        $this->simpleXml = simplexml_load_string($contents);
         if (false === $this->simpleXml) {
             $message = "Failed loading XML\n";
             foreach (libxml_get_errors() as $error) {
