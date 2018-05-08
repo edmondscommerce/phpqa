@@ -1,7 +1,4 @@
-for d in "
-$srcDir
-$testsDir
-"
+for d in "${pathsToCheck[@]}"
 do
     for f in $(
                 find $d \

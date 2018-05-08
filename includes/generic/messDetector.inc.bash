@@ -1,12 +1,16 @@
+pathsString=$(IFS="," eval 'echo "${pathsToCheck[*]}"')
+ignoreString=$(IFS="," eval 'echo "${pathsToIgnore[*]}"')
+
 set +e
 phpMdExitCode=99
 while (( phpMdExitCode > 0 ))
 do
     phpNoXdebug -f bin/phpmd -- \
-        "$srcDir","$testsDir","$binDir" \
+        $pathsString \
         text \
         "$phpmdConfigPath" \
         --suffixes php,phtml \
+        --exclude $ignoreString \
         | sort -u \
         | sed G \
         | sed -e 's#p:#p\nLine: #' \
