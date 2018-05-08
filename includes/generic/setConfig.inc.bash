@@ -1,6 +1,9 @@
 # Skip long running tests if globally set to 1
 phpqaQuickTests=${phpqaQuickTests:-0}
 
+# Allow uncommitted changes check by default
+skipUncommittedChangesCheck=${skipUncommittedChangesCheck:-0}
+
 # the path in the project to check for config
 projectConfigPath="$projectRoot/qaConfig/"
 
@@ -45,10 +48,7 @@ phpmdConfigPath="$(configPath phpmd/ruleset.xml)"
 
 # coding Standard for checking
 # checks for a folder called 'condingStandards' in the $projectConfigPath, falls back to the PSR2 standards
-phpcsCodingStandardsPath=$(configPath \
-    codingStandards \
-    $projectRoot/vendor/squizlabs/php_codesniffer/src/Standards/PSR2
-)
+phpcsCodingStandardsPath="PSR2"
 
 # should coding standards warnings be a fail?
 phpcsFailOnWarning=0

@@ -281,6 +281,8 @@ At this point, the pipeline checks for uncommited changes in your repo.
 
 If there are uncommited changes then the process stops. This is because beyond the point, tools are used that will actively update the code. You need to be able to `git reset --hard HEAD` etc.
 
+You can skip this step using `export skipUncommittedChangesCheck=1`
+
 ### PHP Code Beautifier and Fixer
 
 Part of the PHP_CodeSniffer package

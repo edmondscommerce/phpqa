@@ -16,7 +16,7 @@ do
         --report-full \
         --report-summary \
         --ignore=$ignoreString \
-        $pathsString
+        ${pathsToCheck[@]}
     phpcsExitCode=$?
     set +x
     if (( phpcsExitCode > 0 ))

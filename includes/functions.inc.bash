@@ -84,6 +84,12 @@ function phpNoXdebug {
 # checkForUncommitedChanges
 function checkForUncommittedChanges {
 
+    if [[ "$skipUncommittedChangesCheck" == "1" ]]
+    then
+        echo "Skipping uncommitted changes check. export skipUncommittedChangesCheck=0 to reinstate"
+        return 0
+    fi
+
     targetDir=${1:-$(pwd)}
     originalDir=$(pwd)
 
@@ -119,6 +125,8 @@ function checkForUncommittedChanges {
         Would you like to commit (c) or abort (a)
 
         (git commit will be 'git add -A; git commit')
+
+        or export skipUncommittedChangesCheck=1 to ignore
 
     ==================================================
 
