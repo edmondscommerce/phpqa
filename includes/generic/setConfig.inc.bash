@@ -7,25 +7,6 @@ skipUncommittedChangesCheck=${skipUncommittedChangesCheck:-0}
 # the path in the project to check for config
 projectConfigPath="$projectRoot/qaConfig/"
 
-# project tests folder
-testsDir="$(findTestsDir)"
-
-# project src folder
-srcDir="$(findSrcDir)"
-
-# project bin dir
-binDir="$(findBinDir)"
-
-# An array of paths that are to be checked
-pathsToCheck=()
-pathsToCheck+=($testsDir)
-pathsToCheck+=($srcDir)
-pathsToCheck+=($binDir)
-
-# An array of paths that are to be ignored
-pathsToIgnore=()
-pathsToIgnore+=("placeholder-ignore-item")
-
 # project var dir, sub directory for qa cache files and output files
 varDir="$projectRoot/var/qa";
 

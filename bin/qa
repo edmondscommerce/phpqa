@@ -67,6 +67,18 @@ projectConfigPath="$projectRoot/qaConfig/"
 platform="$(detectPlatform)"
 echo "$platform platform detected"
 
+echo "
+
+Setting Project Paths
+---------------------
+"
+runTool setPaths
+
+echo "
+
+Setting phpqa Config
+--------------------
+"
 runTool setConfig
 
 if [[ "$specifiedPath" != "" ]]
