@@ -4,6 +4,8 @@
 /bin/*
 !/bin/qa
 !/bin/mdlinks
+!/bin/psr4-validate
+!/bin/phpunit-runfailed-filter
 /cache/
 # Don't commit the overwritten config
 qaConfig/qaConfig.inc.bash
