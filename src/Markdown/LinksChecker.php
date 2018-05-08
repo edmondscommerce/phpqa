@@ -7,26 +7,27 @@ use EdmondsCommerce\PHPQA\Config;
 class LinksChecker
 {
     /**
+     * @param string $projectRootDirectory
+     *
      * @return array
-     * @throws \Exception
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    private static function getFiles(): array
+    private static function getFiles(string $projectRootDirectory): array
     {
-        $files   = self::getDocsFiles();
-        $files[] = self::getMainReadme();
+        $files   = self::getDocsFiles($projectRootDirectory);
+        $files[] = self::getMainReadme($projectRootDirectory);
 
         return $files;
     }
 
     /**
+     * @param string $projectRootDirectory
      * @return string
-     * @throws \Exception
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    private static function getMainReadme(): string
+    private static function getMainReadme(string $projectRootDirectory): string
     {
-        $path = Config::getProjectRootDirectory().'/README.md';
+        $path = $projectRootDirectory.'/README.md';
         if (!is_file($path)) {
             throw new \RuntimeException(
                 "\n\nYou have no README.md file in your project"
@@ -38,14 +39,14 @@ class LinksChecker
     }
 
     /**
+     * @param string $projectRootDirectory
      * @return array
-     * @throws \Exception
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    private static function getDocsFiles(): array
+    private static function getDocsFiles(string $projectRootDirectory): array
     {
         $files = [];
-        $dir   = Config::getProjectRootDirectory().'/docs';
+        $dir   = $projectRootDirectory.'/docs';
         if (!is_dir($dir)) {
             return $files;
         }
@@ -88,26 +89,31 @@ class LinksChecker
     }
 
     /**
+     * @param string $projectRootDirectory
      * @param array  $link
      * @param string $file
      * @param array  $errors
      * @param int    $return
      *
-     * @throws \Exception
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    private static function checkLink(array $link, string $file, array &$errors, int &$return)
-    {
+    private static function checkLink(
+        string $projectRootDirectory,
+        array $link,
+        string $file,
+        array &$errors,
+        int &$return
+    ) {
         $path = $link[2];
         if (preg_match('/^(http|#)/', $path)) {
             return;
         }
 
         $path  = current(explode('#', $path, 2));
-        $start = rtrim(Config::getProjectRootDirectory(), '/');
+        $start = rtrim($projectRootDirectory, '/');
         if ($path[0] !== '/' || 0 === strpos($path, './')) {
             $relativeSubdirs = preg_replace(
-                '%^'.Config::getProjectRootDirectory().'%',
+                '%^'.$projectRootDirectory.'%',
                 '',
                 dirname($file)
             );
@@ -122,16 +128,19 @@ class LinksChecker
 
 
     /**
+     * @param string|null $projectRootDirectory
+     *
      * @return int
      * @throws \Exception
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public static function main()
+    public static function main(string $projectRootDirectory = null): int
     {
-        $return = 0;
-        $files  = static::getFiles();
+        $return               = 0;
+        $projectRootDirectory = $projectRootDirectory ?? Config::getProjectRootDirectory();
+        $files                = static::getFiles($projectRootDirectory);
         foreach ($files as $file) {
-            $relativeFile = str_replace(Config::getProjectRootDirectory(), '', $file);
+            $relativeFile = str_replace($projectRootDirectory, '', $file);
             $title        = "\n$relativeFile\n".str_repeat('-', strlen($relativeFile))."\n";
             if (!file_exists($file)) {
                 echo "$title\nError - file $file does not exist\n";
@@ -141,7 +150,7 @@ class LinksChecker
             $errors = [];
             $links  = static::getLinks($file);
             foreach ($links as $link) {
-                static::checkLink($link, $file, $errors, $return);
+                static::checkLink($projectRootDirectory, $link, $file, $errors, $return);
             }
             if (!empty($errors)) {
                 echo $title.implode('', $errors);

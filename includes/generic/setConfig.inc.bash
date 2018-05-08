@@ -1,3 +1,9 @@
+# Skip long running tests if globally set to 1
+phpqaQuickTests=${phpqaQuickTests:-0}
+
+# the path in the project to check for config
+projectConfigPath="$projectRoot/qaConfig/"
+
 # project tests folder
 testsDir="$(findTestsDir)"
 
@@ -7,13 +13,24 @@ srcDir="$(findSrcDir)"
 # project bin dir
 binDir="$(findBinDir)"
 
+pathsToCheck=()
+pathsToCheck+=($testsDir)
+pathsToCheck+=($srcDir)
+pathsToCheck+=($binDir)
+
 # project var dir, sub directory for qa cache files and output files
 varDir="$projectRoot/var/qa";
 
 cacheDir="$projectRoot/cache/qa";
 
 # the path in this library for default config
-defaultConfigPath="$(readlink -f $DIR/../configDefaults/)"
+defaultConfigPath="$(readlink -f ./../configDefaults/)"
+
+# configPath function can only be used after this point
+
+# PSR4 validation
+psr4IgnoreListPath="$(configPath psr4-validate-ignore-list.txt)"
+readarray psr4IgnoreList < "$psr4IgnoreListPath"
 
 # PHPStan configs
 phpstanConfigPath="$(configPath phpstan.neon)"
@@ -34,10 +51,14 @@ phpcsFailOnWarning=0
 ##PHPUnit Configs
 
 # PHPUnit Quick Tests - optional skip slow tests
-phpUnitQuickTests=${phpUnitQuickTests:-1}
+phpUnitQuickTests=${phpUnitQuickTests:-0}
 
-# PHPUnit Coverage - if enabled, tests will run with Xdebug and generate coverage
-phpUnitCoverage=${phpUnitCoverage:-1}
+# PHPUnit Coverage - default disabled
+# if enabled, tests will run with Xdebug and generate coverage (which is a lot slower)
+phpUnitCoverage=${phpUnitCoverage:-0}
+
+# How many minutes after a failed PHPUnit run you can retry failed only
+phpunitRerunTimeoutMins=${phpunitRerunTimeoutMins:-5}
 
 if [[ -f $projectRoot/phpunit.xml ]]
 then
@@ -51,3 +72,8 @@ else
         phpUnitConfigPath=$(configPath phpunit.xml)
     fi
 fi
+
+# If a CI variable is set, we use that, otherwise default to false.
+# Travis-CI sets a CI variable. You can easily set this in any other CI system
+# The value should the the string 'true' if this is CI
+CI=${CI:-'false'}

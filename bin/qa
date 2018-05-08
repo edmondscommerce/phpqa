@@ -30,26 +30,16 @@ $(hostname) $0 $@
 ===========================================
 "
 
-readonly runMode_all="all-tests"
-readonly runMode_quick="quick-tests"
-readonly scanScope_platform="platform-scan"
-readonly scanScope_path="path-scan"
-
-
 function usage {
     echo "Usage:"
-    echo "bin/qa [quick-tests|all-tests] [subfolder/to/scan]"
+    echo "bin/qa (subfolder/to/scan)"
+    echo "Defaults to scanning whole project based on platform, set a parameter to specify a folder"
     echo ""
     exit 1
 }
 phpBinPath=$(which php)
-mode=${1:-$runMode_all};
-if [[ $mode != $runMode_all && $mode != $runMode_quick ]]
-then
-    usage
-fi
 
-scanPath=${2:-""};
+specifiedPath=${1:-""};
 
 #### FUNCTIONS #################################################
 source ./../includes/functions.inc.bash
@@ -79,6 +69,13 @@ echo "$platform platform detected"
 
 runTool setConfig
 
+if [[ "$specifiedPath" != "" ]]
+then
+    echo "Only scanning the specified path $specifiedPath"
+    pathsToCheck=()
+    pathsToCheck+=($projectRoot/$specifiedPath)
+fi
+
 #### PROCESS #################################################
 
 hasBeenRestarted="false"
@@ -106,24 +103,21 @@ Running Pre Hook $projectConfigPath/hookPre.bash
     source $projectConfigPath/hookPre.bash
 fi
 
+echo "
+
+Validating PSR-4 Roots
+------------------------
+"
+
+runTool psr4Validate
 
 echo "
 
 Checking for Composer Issues
 ----------------------------
 "
-set +e
-phpNoXdebug -f $(which composer) -- diagnose
-set +x
-set -e
 
-echo "
-
-Refreshing Composer Autoloader
------------------------------
-"
-phpNoXdebug -f $(which composer) -- dump-autoload
-set +x
+runTool composerChecks
 
 echo "
 Setting Strict Types If It's Missing
@@ -144,9 +138,9 @@ echo "
 Running PHPStan
 ---------------------
 "
-if [[ $mode = "quick-tests" ]]
+if [[ "$phpqaQuickTests" == "1" ]]
 then
-    echo "Skipping PHPstan because quick-tests was specified"
+    echo "Skipping PHPstan because \$phpqaQuickTests=1"
 else
     runTool phpstan
 fi
@@ -156,9 +150,9 @@ echo "
 Running PHPUnit Tests
 ---------------------
 "
-if [[ $mode = "quick-tests" ]]
+if [[ "$phpqaQuickTests" == "1" ]]
 then
-    echo "Skipping PHP Unit because quick-tests was specified"
+    echo "Skipping PHP Unit because \$phpqaQuickTests=1"
 else
     runTool phpunit
 fi
@@ -181,13 +175,21 @@ echo "
 Checking if Uncommitted Changes
 ------------------------------
 "
-checkForUncommittedChanges $scanPath
+checkForUncommittedChanges $specifiedPath
 
 
 echo "
 
-Running Code Sniffer on src and tests
--------------------------------------
+Running Beautifier and Fixer
+----------------------------
+"
+
+runTool beautifierFixer
+
+echo "
+
+Running Code Sniffer
+--------------------
 "
 
 runTool codeSniffer
@@ -213,7 +215,10 @@ echo '
 
 
 '
-
+echo "
+Statistics:
+"
+runTool phploc
 set +x
 
 if [[ -f $projectConfigPath/hookPost.bash ]]

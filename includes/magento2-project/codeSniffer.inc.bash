@@ -68,16 +68,6 @@ do
     set +x
     if (( phpcsExitCode > 0 ))
     then
-
-    echo
-    echo "PHPCBF can automatically fix some violations"
-    echo -n "Do you want to run PHPCBF on $scanPath? (y/n) "
-    read runBeautifier
-    if [[ $runBeautifier == "y" ]]
-    then
-        runTool beautifierFixer
-    fi
-
         tryAgainOrAbort "Code Sniffer"
     fi
 

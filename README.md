@@ -26,15 +26,15 @@ Your project's `composer.json` needs to specify a bin folder. If it's not alread
 ./bin/qa
 ```
 
-If you want to run all PHPUnit tests, you need to do this:
+If you want to run only fast PHPQA tests, you need to do this:
 
 ```bash
-phpUnitQuickTests=0 ./bin/qa
+phpqaQuickTests=1 ./bin/qa
 ```
 
 ## Configuration
 
-Standard configuration is in the directory [./configDefaults](./configDefaults). If you have no need to override or extend these then you don't need to do anything.
+Standard configuration is in the directory [./configDefaults/generic](./configDefaults/generic). If you have no need to override or extend these then you don't need to do anything.
 
 If your project needs to have custom configuration, you'll need to copy the relevant config files into a new `qaConfig` folder in the root of your project.
 
@@ -87,7 +87,7 @@ https://github.com/phpstan/phpstan
 
 #### Configuration 
 
-Default configuration is in [./configDefaults/phpstan.neon](./configDefaults/phpstan.neon)
+Default configuration is in [./configDefaults/generic/phpstan.neon](./configDefaults/generic/phpstan.neon)
 
 To override the configuration you need to copy it to `{project-root}/qaConfig/phpstan.neon`
 
@@ -184,7 +184,7 @@ And this will then run with full tests
 
 By default, the PHPUnit command will generate both textual output and HTML coverage.
 
-The coverage report will go into the project root /var directory as configured in [./configDefaults/phpunit-with-coverage.xml](./configDefaults/phpunit-with-coverage.xml)
+The coverage report will go into the project root /var directory as configured in [./configDefaults/generic/phpunit-with-coverage.xml](./configDefaults/generic/phpunit-with-coverage.xml)
 
 If you want to override the coverage report location, you will need to override this config file as normal.
 

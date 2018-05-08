@@ -31,7 +31,7 @@ As an example, when running phpstan on a Magento 2 codebase, PHPQA will check fo
 To create your own override, you can:
 
 1. Make a directory in your project root called `qaConfig`
-2. Copy the configuration from [./configDefaults](./configDefaults) into your project `qaConfig` folder.
+2. Copy the configuration from [/configDefaults](/configDefaults) into your project `qaConfig` folder.
 3. Customise the copied config as you see fit
 
 For example, for PHPStan, we would do this:

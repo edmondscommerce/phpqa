@@ -1,20 +1,19 @@
 #!/usr/bin/env bash
 
-readonly platformMagento2Project="magento2-project"
-readonly platformMagento2Module="magento2-module"
+readonly platformMagento2="magento2"
 readonly platformGeneric="generic"
 
 function detectPlatform(){
 
-    if [[ -f $projectRoot/$scanPath/etc/module.xml && -f $projectRoot/$scanPath/registration.php ]]
+    if [[ -f $projectRoot/$specifiedPath/etc/module.xml && -f $projectRoot/$specifiedPath/registration.php ]]
     then
-        echo $platformMagento2Module
+        echo $platformMagento2
         return 0
     fi
 
-    if [[ -f $projectRoot/$scanPath/bin/magento ]]
+    if [[ -f $projectRoot/bin/magento ]]
     then
-        echo $platformMagento2Project
+        echo $platformMagento2
         return 0
     fi
 

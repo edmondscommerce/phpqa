@@ -1,3 +1,6 @@
+pathsString=$(IFS=" " eval 'echo "${pathsToCheck[*]}"')
+ignoreString=$(IFS="," eval 'echo "${pathsToIgnore[*]}"')
+
 phpNoXdebug -f bin/phpcs -- \
     --config-set ignore_warnings_on_exit "$phpcsFailOnWarning"
 set +x
@@ -12,7 +15,8 @@ do
         -s \
         --report-full \
         --report-summary \
-        "$srcDir" "$testsDir" "$binDir"
+        --ignore=$ignoreString \
+        $pathsString
     phpcsExitCode=$?
     set +x
     if (( phpcsExitCode > 0 ))

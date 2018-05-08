@@ -22,7 +22,9 @@
   },
   "bin": [
     "bin/qa",
-    "bin/mdlinks"
+    "bin/mdlinks",
+    "bin/psr4-validate",
+    "bin/phpunit-runfailed-filter"
   ],
   "require-dev": {
   },
