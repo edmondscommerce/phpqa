@@ -4,17 +4,17 @@ QA runs a suite of standard tools, and are contained in the `includes/generic` f
 
 At the moment this suite consists of:
 
-- [PHP Code Beautifier and Fixer](../includes/generic/beautifierFixer.inc.bash)
-- [PHP CodeSniffer](../includes/generic/codeSniffer.inc.bash)
-- [Composer validation](../includes/generic/composerChecks.inc.bash)
-- [Markdown link checker](../includes/generic/markdownLinks.inc.bash)
-- [PHP Mess Detector](../includes/generic/messDetector.inc.bash)
-- [PHP Lint](../includes/generic/phpLint.inc.bash)
-- [PHP Lines of Code](../includes/generic/phploc.inc.bash)
-- [PHPStan](../includes/generic/phpstan.inc.bash)
-- [PHP7 Strict Types check](../includes/generic/phpStrictTypes.inc.bash)
-- [PHPUnit](../includes/generic/phpunit.inc.bash)
-- [PSR-4 validation](../includes/generic/psr4Validate.inc.bash)
+- [PHP Code Beautifier and Fixer](../includes/generic/beautifierFixer.inc.bash): Automagically reformats PHP code according to defined coding standards
+- [PHP CodeSniffer](../includes/generic/codeSniffer.inc.bash): Checks PHP code according to defined coding standards
+- [Composer validation](../includes/generic/composerChecks.inc.bash): Runs a diagnose on composer to make sure it's all good
+- [Markdown link checker](../includes/generic/markdownLinks.inc.bash): Starts at a root README.md file, and follows links looking for missing link destinations
+- [PHP Mess Detector](../includes/generic/messDetector.inc.bash): Looks for messy code, such as unused variables, long functions and nest function calls. [PHPMD homepage](https://phpmd.org/)
+- [PHP Lint](../includes/generic/phpLint.inc.bash): Very fast PHP linting process. Checks for syntax errors in your PHP files. [PHP Parallel Lint project page](https://github.com/JakubOnderka/PHP-Parallel-Lint)
+- [PHP Lines of Code](../includes/generic/phploc.inc.bash): Statistics on lines of code
+- [PHPStan](../includes/generic/phpstan.inc.bash): Static Analysis of your PHP code. [PHPStan project page](https://github.com/phpstan/phpstan)
+- [PHP7 Strict Types check](../includes/generic/phpStrictTypes.inc.bash): Checks for files that do not have strict types defined and allows you to fix them
+- [PHPUnit](../includes/generic/phpunit.inc.bash): PHP Unit testing. [Project page](https://github.com/phpstan/phpstan)
+- [PSR-4 validation](../includes/generic/psr4Validate.inc.bash): Checks for code whose namespaces don't comply with the PSR-4 standard
 
 There are also a few tools for the use of setting up PHPQA:
 
