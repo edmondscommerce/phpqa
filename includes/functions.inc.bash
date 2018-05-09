@@ -65,7 +65,7 @@ function configPath(){
 # `phpNoXdebug path/to/php/file.php -- -arg1 -arg2`
 function phpNoXdebug {
     set +x
-    local temporaryPath="$(mktemp -t php.XXXX).ini"
+    local temporaryPath="$(mktemp -t php.XXXX)"
     # Using awk to ensure that files ending without newlines do not lead to configuration error
     $phpBinPath -i | grep "\.ini" | grep -o -e '\(/[a-z0-9._-]\+\)\+\.ini' | grep -v xdebug | xargs awk 'FNR==1{print ""}1' > "$temporaryPath"
     $phpBinPath -n -c "$temporaryPath" "$@"
@@ -83,7 +83,11 @@ function phpNoXdebug {
 # Usage:
 # checkForUncommitedChanges
 function checkForUncommittedChanges {
-
+    if [[ "false" != "${CI:-'false'}" ]]
+    then
+        echo "Skipping uncommited changes check in CI"
+        return 0;
+    fi
     if [[ "$skipUncommittedChangesCheck" == "1" ]]
     then
         echo "Skipping uncommitted changes check. export skipUncommittedChangesCheck=0 to reinstate"
@@ -101,11 +105,6 @@ function checkForUncommittedChanges {
 
     cd $targetDir
 
-    if [[ "true" == "$CI" ]]
-    then
-        echo "Skipping uncommited changes check in CI"
-        return 0;
-    fi
     set +e
     inGitRepo="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
     if [[ "" != "$inGitRepo" ]]
@@ -145,8 +144,56 @@ function checkForUncommittedChanges {
     cd $originalDir
 }
 
+function phpunitReRunFailedOrFull(){
+    if [[ "false" != "${CI:-'false'}" ]]
+    then
+        return 0;
+    fi
+    local rerunFailed
+    local reunLogFileTimeLimit=${phpunitRerunTimeoutMins:-5}
+    local rerunLogFile="$(find $varDir -type f -name 'phpunit.junit.log.xml' -mmin -$reunLogFileTimeLimit)";
+    if [[ "" == "$rerunLogFile" ]]
+    then
+        echo "";
+        return 1;
+    fi
+    echo "
+
+    ==================================================
+
+        PHPUnit Run detected from less than $reunLogFileTimeLimit mins ago
+
+        Would you like to just rerun failed tests?
+
+    ==================================================
+
+        "
+    read -n 1 rerunFailed
+    if [[ "y" != "$rerunFailed" ]]
+    then
+        printf "\n\nRunning Full...\n\n"
+        return 1
+    fi
+    printf "\n\nRerunning Failed Only\n\n"
+    return 0;
+}
+
+
 function tryAgainOrAbort(){
     toolname="$1"
+    if [[ "false" != "${CI:-'false'}" ]]
+    then
+        echo "
+
+    ==================================================
+
+        $toolname Failed...
+
+    ==================================================
+
+        "
+        exit 1
+    fi
     echo "
 
     ==================================================
@@ -154,6 +201,8 @@ function tryAgainOrAbort(){
         $toolname Failed...
 
         would you like to try again? (y/n)
+
+        (note: if you change config files, you might have to run from the top for it to take effect...)
 
     ==================================================
 
