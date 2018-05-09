@@ -207,12 +207,19 @@ function tryAgainOrAbort(){
     ==================================================
 
     "
-    read -n 1 tryAgainOrAbort
-    if [[ "y" != "$tryAgainOrAbort" ]]
-    then
-        printf "\n\nAborting...\n\n"
-        exit 1
-    fi
+    while read -n 1 tryAgainOrAbort
+    do
+        if [[ "n" == "$tryAgainOrAbort" ]]
+        then
+            printf "\n\nAborting...\n\n"
+            exit 1
+        fi
+        if [[ "y" == "$tryAgainOrAbort" ]]
+        then
+            break;
+        fi
+        printf "\n\ninvalid choice: $tryAgainOrAbort - should be y or n \n\n        would you like to try again? (y/n)"
+    done
     printf "\n\nTrying again, good luck!\n\n"
     hasBeenRestarted="true"
 }
