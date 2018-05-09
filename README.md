@@ -23,15 +23,21 @@ Your project's `composer.json` needs to specify a bin folder. If it's not alread
 ## Running
 
 ```bash
-./bin/qa
+./bin/qa (optional/path/to/scan)
 ```
 
-If you want to run only fast PHPQA tests, you need to do this:
+By default, PHPQA will run against the entire project root.
 
-```bash
-phpqaQuickTests=1 ./bin/qa
-```
+Adding a second parameter ensures that the tools scan only that folder.
 
+### Environment Variables
+
+These should be set in your terminal before running `bin/qa`, or can be set on a per-run basis with `(variableName)=(value) ./bin/qa`
+
+- **Quick tests only** `phpqaQuickTests`: If you want to run only fast PHPQA tests
+- **CI Mode**: `CI`: performs actions headlessly without user prompts
+- **Skip uncommitted check** `skipUncommittedChangesCheck`: don't check for uncommitted changes when running
+ 
 ## Configuration
 
 Standard configuration is in the directory [./configDefaults/generic](./configDefaults/generic). If you have no need to override or extend these then you don't need to do anything.
@@ -93,7 +99,7 @@ To override the configuration you need to copy it to `{project-root}/qaConfig/ph
 
 For specifying paths, just know the root of the project is `%rootDir%/../../../`
 
-##### Boostrap
+##### Bootstrap
 
 In the configuration you might want to specify a [php bootstrap file](https://github.com/phpstan/phpstan#bootstrap-file) to initialise your code
 
