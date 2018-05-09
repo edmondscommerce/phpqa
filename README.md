@@ -32,7 +32,11 @@ Adding a second parameter ensures that the tools scan only that folder.
 
 ### Environment Variables
 
-These should be set in your terminal before running `bin/qa`, or can be set on a per-run basis with `(variableName)=(value) ./bin/qa`
+These should be set in your terminal before running `bin/qa`, or can be set on a per-run basis with
+
+```
+(variableName)=(value) ./bin/qa
+```
 
 - **Quick tests only** `phpqaQuickTests`: If you want to run only fast PHPQA tests
 - **CI Mode**: `CI`: performs actions headlessly without user prompts
