@@ -30,92 +30,63 @@ $(hostname) $0 $@
 ===========================================
 "
 
+function usage {
+    echo "Usage:"
+    echo "bin/qa (subfolder/to/scan)"
+    echo "Defaults to scanning whole project based on platform, set a parameter to specify a folder"
+    echo ""
+    exit 1
+}
 phpBinPath=$(which php)
+
+specifiedPath=${1:-""};
 
 #### FUNCTIONS #################################################
 source ./../includes/functions.inc.bash
 
+
 #### CONFIG ##################################################
+
+# If a CI variable is set, we use that, otherwise default to false.
+# Travis-CI sets a CI variable. You can eaisly set this in any other CI system
+# The value should the the string 'true' if this is CI
+CI=${CI:-'false'}
 
 # project root directory
 if [[ -d $DIR/../vendor ]]
 then
-    projectRoot="$(readlink -f ./../)"
+    projectRoot="$(readlink -f $DIR/../)"
 else
-    projectRoot="$(readlink -f ./../../../../)"
+    projectRoot="$(readlink -f $DIR/../../../../)"
 fi
 
 # the path in the project to check for config
 projectConfigPath="$projectRoot/qaConfig/"
 
-# project tests folder
-testsDir="$(findTestsDir)"
+# Which platform is the code to be tested
+platform="$(detectPlatform)"
+echo "$platform platform detected"
 
-# project src folder
-srcDir="$(findSrcDir)"
+echo "
 
-# project bin dir
-binDir="$(findBinDir)"
+Setting Project Paths
+---------------------
+"
+runTool setPaths
 
-# project var dir, sub directory for qa cache files and output files
-varDir="$projectRoot/var/qa";
+echo "
 
-cacheDir="$projectRoot/cache/qa";
+Setting phpqa Config
+--------------------
+"
+runTool setConfig
 
-# the path in this library for default config
-defaultConfigPath="$(readlink -f ./../configDefaults/)"
-
-# configPath function can only be used after this point
-
-# PSR4 validation
-psr4IgnoreListPath="$(configPath psr4-validate-ignore-list.txt)"
-readarray psr4IgnoreList < "$psr4IgnoreListPath"
-
-# PHPStan configs
-phpstanConfigPath="$(configPath phpstan.neon)"
-
-#PHP Mess Detector Configs
-phpmdConfigPath="$(configPath phpmd/ruleset.xml)"
-
-# coding Standard for checking
-# checks for a folder called 'condingStandards' in the $projectConfigPath, falls back to the PSR2 standards
-phpcsCodingStandardsPath=$(configPath \
-    codingStandards \
-    $projectRoot/vendor/squizlabs/php_codesniffer/src/Standards/PSR2
-)
-
-# should coding standards warnings be a fail?
-phpcsFailOnWarning=0
-
-##PHPUnit Configs
-
-# PHPUnit Quick Tests - optional skip slow tests
-phpUnitQuickTests=${phpUnitQuickTests:-1}
-
-# PHPUnit Coverage - default disabled
-# if enabled, tests will run with Xdebug and generate coverage (which is a lot slower)
-phpUnitCoverage=${phpUnitCoverage:-0}
-
-# How many minutes after a failed PHPUnit run you can retry failed only
-phpunitRerunTimeoutMins=${phpunitRerunTimeoutMins:-5}
-
-if [[ -f $projectRoot/phpunit.xml ]]
+if [[ "$specifiedPath" != "" ]]
 then
-    # Project root phpunit.xml trumps everything else
-    phpUnitConfigPath=$projectRoot/phpunit.xml
-else
-    if [[ "1" == "$phpUnitCoverage" ]]
-    then
-        phpUnitConfigPath=$(configPath phpunit-with-coverage.xml)
-    else
-        phpUnitConfigPath=$(configPath phpunit.xml)
-    fi
+    echo "Only scanning the specified path $specifiedPath"
+    pathsToCheck=()
+    pathsToCheck+=($projectRoot/$specifiedPath)
 fi
-
-# If a CI variable is set, we use that, otherwise default to false.
-# Travis-CI sets a CI variable. You can easily set this in any other CI system
-# The value should the the string 'true' if this is CI
-CI=${CI:-'false'}
 
 #### PROCESS #################################################
 
@@ -132,9 +103,7 @@ fi
 
 cd "$projectRoot";
 
-mkdir -p "$varDir";
-
-mkdir -p "$cacheDir";
+runTool prepareDirectories
 
 if [[ -f $projectConfigPath/hookPre.bash ]]
 then
@@ -151,280 +120,91 @@ echo "
 Validating PSR-4 Roots
 ------------------------
 "
-set +e
-psr4ExitCode=99
-while (( psr4ExitCode > 0 ))
-do
-    set -x
-    phpNoXdebug -f ./bin/psr4-validate ${psr4IgnoreList[*]}
-    psr4ExitCode=$?
-    set +x
-    if (( psr4ExitCode > 0 ))
-    then
-        tryAgainOrAbort "PSR-4 Validation"
-    fi
-done
+
+runTool psr4Validate
 
 echo "
 
 Checking for Composer Issues
 ----------------------------
 "
-set +e
-phpNoXdebug -f $(which composer) -- diagnose
-set +x
-set -e
 
-echo "
-
-Refreshing Composer Autoloader
------------------------------
-"
-phpNoXdebug -f $(which composer) -- dump-autoload
-set +x
+runTool composerChecks
 
 echo "
 Setting Strict Types If It's Missing
 -------------------------------------
 "
-for d in "
-$srcDir
-$testsDir
-"
-do
-    for f in $(
-                find $d \
-                    -name '*.php' \
-                    -o -name '*.phtml' \
-                    -exec grep -L 'strict_types' {} \;
-              );
-    do
-        echo "Found file with no strict types:"
-        echo $f;
-        echo
-        read -p "Would you like to fix? " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]
-        then
-            sed -i 's/<?php/<\?php declare(strict_types=1);/g' $f;
-            echo "fixed $f"
-        else
-            echo "skipped $f"
-        fi
-    done
-done
+
+runTool phpStrictTypes
 
 echo "
 
 Running PHP Lint
 ----------------
 "
-phpLintExitCode=99
-set +e
-while (( phpLintExitCode > 0 ))
-do
-    phpNoXdebug -f bin/parallel-lint -- $srcDir $testsDir $binDir
-    phpLintExitCode=$?
-    set +x
-    if (( phpLintExitCode > 0 ))
-    then
-        tryAgainOrAbort "PHP Lint"
-    fi
-done
-set -e
+runTool phpLint
 
 echo "
 
 Running PHPStan
 ---------------------
 "
-set +e
-phpStanExitCode=99
-while (( phpStanExitCode > 0 ))
-do
-    set -x
-    phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath"
-    phpStanExitCode=$?
-    set +x
-    #exit code 0 = fine, 1 = ran fine but found errors, else it means it crashed
-    if (( phpStanExitCode > 1 ))
-    then
-        printf "\n\n\nPHPStan Crashed....\n\nrunning again with debug mode:\n\n\n"
-        phpNoXdebug -f bin/phpstan  -- analyse "$srcDir" "$testsDir" "$binDir" -l7 -c "$phpstanConfigPath" --debug
-        exit 1
-    fi
-    if (( phpStanExitCode > 0 ))
-    then
-        tryAgainOrAbort "PHPStan"
-    fi
-done
-set -e
-
+if [[ "$phpqaQuickTests" == "1" ]]
+then
+    echo "Skipping PHPStan because \$phpqaQuickTests=1"
+else
+    runTool phpstan
+fi
 
 echo "
 
 Running PHPUnit Tests
 ---------------------
 "
-# Note the phpUnitQuickTests=$phpUnitQuickTests
-# this sets a config variable which you can then use
-# to allow tests to run less thoroughly but more quickly
-# @see https://github.com/edmondscommerce/phpqa#quick-tests
-
-phpCmd=phpNoXdebug
-if [[ "1" == "$phpUnitCoverage" ]]
+if [[ "$phpqaQuickTests" == "1" ]]
 then
-    phpCmd=\php
+    echo "Skipping PHP Unit because \$phpqaQuickTests=1"
+else
+    runTool phpunit
 fi
-phpunitPath=bin/phpunit
-paratestConfig=
-echo "Checking for paratest"
-if [[ -f bin/paratest ]]
-then
-    echo "Found paratest, using this instead of standard bin/phpunit"
-    phpunitPath=bin/paratest
-    paratestConfig=(--phpunit bin/phpunit)
-fi
-phpunitExitCode=99
-while (( phpunitExitCode > 0 ))
-do
-    declare -a rerunFilter
-    rerunFilter=(" ")
-    if phpunitReRunFailedOrFull
-    then
-        #set no glob
-        set -f
-        rerunFilterPattern=$(phpNoXdebug bin/phpunit-runfailed-filter)
-        if [[ "$rerunFilterPattern" != '/.*/' ]]
-        then
-            rerunFilter+=( --filter $IFS $rerunFilterPattern)
-        fi
-    fi
-    set +e
-    set -x
-    phpUnitQuickTests="$phpUnitQuickTests" $phpCmd -f $phpunitPath \
-        -- \
-        ${paratestConfig[@]} \
-        -c ${phpUnitConfigPath} \
-        --log-junit $varDir/phpunit.junit.log.xml \
-        ${rerunFilter[@]} \
-        "$testsDir"
-
-    phpunitExitCode=$?
-    set -e
-    set +x
-    set +f
-    if (( $phpunitExitCode > 0 ))
-    then
-        if (( $phpunitExitCode > 2 ))
-        then
-            printf "\n\n\nPHPUnit Crashed\n\nRunning again with Debug mode...\n\n\n"
-            qaQuickTests="$phpUnitQuickTests" phpNoXdebug -f bin/phpunit -- "$testsDir" --debug
-            set +x
-        fi
-        tryAgainOrAbort "PHPUnit Tests"
-    fi
-done
-set -e
 
 echo "
 
 Running PHP Mess Detector
 -------------------------
 "
-set +e
-phpMdExitCode=99
-while (( phpMdExitCode > 0 ))
-do
-    phpNoXdebug -f bin/phpmd -- \
-        "$srcDir","$testsDir","$binDir" \
-        text \
-        "$phpmdConfigPath" \
-        --suffixes php,phtml \
-        | sort -u \
-        | sed G \
-        | sed -e 's#p:#p\nLine: #' \
-        | sed -e 's#\t\{1,\}#\nMessage: #' \
-        | sed -e 's#\. #\.\n#'
-    phpMdExitCode=$?
-    set +x
-    if (( phpMdExitCode > 0 ))
-    then
-        tryAgainOrAbort "PHP Mess Detector"
-    fi
-done
-set +x
-set -e
-
+runTool messDetector
 echo "
 
 Running Markdown Links Checker
 ------------------------------
 "
-linksExitCode=99
-while (( linksExitCode > 0 ))
-do
-    set +e
-    phpNoXdebug -f bin/mdlinks
-    linksExitCode=$?
-    set +x
-    set -e
-    if (( linksExitCode > 0 ))
-    then
-        tryAgainOrAbort "Markdown Links Checker"
-    fi
-done
+runTool markdownLinks
 
 echo "
 
 Checking if Uncommitted Changes
 ------------------------------
 "
-checkForUncommittedChanges
+checkForUncommittedChanges $specifiedPath
+
 
 echo "
 
-Running Beautifier and Fixer on src and tests
----------------------------------------------
+Running Beautifier and Fixer
+----------------------------
 "
-set +e
-phpNoXdebug -f bin/phpcbf -- \
-    --standard="$phpcsCodingStandardsPath" \
-    --colors \
-    --cache="$cacheDir"/phpcbf.cache \
-    "$srcDir" "$testsDir" "$binDir"
-set +x
-set -e
+
+runTool beautifierFixer
 
 echo "
 
-Running Code Sniffer on src and tests
--------------------------------------
+Running Code Sniffer
+--------------------
 "
 
-phpNoXdebug -f bin/phpcs -- \
-    --config-set ignore_warnings_on_exit "$phpcsFailOnWarning"
-set +x
-set +e
-phpcsExitCode=99
-while (( phpcsExitCode > 0 ))
-do
-    phpNoXdebug -f bin/phpcs -- \
-        --standard="$phpcsCodingStandardsPath" \
-        --colors \
-        --cache="$cacheDir"/phpcs.cache \
-        -s \
-        --report-full \
-        --report-summary \
-        "$srcDir" "$testsDir" "$binDir"
-    phpcsExitCode=$?
-    set +x
-    if (( phpcsExitCode > 0 ))
-    then
-        tryAgainOrAbort "Code Sniffer"
-    fi
-
-done
+runTool codeSniffer
 
 echo '
 
@@ -447,11 +227,10 @@ echo '
 
 
 '
-
 echo "
 Statistics:
 "
-phpNoXdebug -f bin/phploc "$srcDir" "$testsDir"
+runTool phploc
 set +x
 
 if [[ -f $projectConfigPath/hookPost.bash ]]

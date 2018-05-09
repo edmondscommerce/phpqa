@@ -1,23 +1,61 @@
 #!/usr/bin/env bash
+
+readonly platformMagento2="magento2"
+readonly platformGeneric="generic"
+
+function detectPlatform(){
+
+    if [[ -f $projectRoot/$specifiedPath/etc/module.xml && -f $projectRoot/$specifiedPath/registration.php ]]
+    then
+        echo $platformMagento2
+        return 0
+    fi
+
+    if [[ -f $projectRoot/bin/magento ]]
+    then
+        echo $platformMagento2
+        return 0
+    fi
+
+    echo $platformGeneric
+}
+
+function runTool(){
+    local tool="$1"
+    local pathToTool="$DIR/../includes/$platform/$tool.inc.bash"
+    if [[ -f $pathToTool ]]
+    then
+        echo "Running $platform $tool"
+        source $pathToTool
+        return 0
+    fi
+    pwd
+        echo "Running generic $tool"
+    source "$DIR/../includes/generic/$tool.inc.bash"
+}
+
 ################################################################
 # Get the path for a config file
-# Defaults to project level and falls back to this library
+# Config file will be search for in:
+#   A qaConfig folder in the project root
+#   The phpqa library's configDefaults/{platform}
+#   The phpqa library's configDefaults/generic
 #
 # Usage:
 #
-# - relative path, falling back to the standard default config path
-# `configPath "relative/path/to/file/or/folder"`
-#
-# - relative path, falling back to a specified default
-# `configPath "relative/path/to/file/or/folder" "specified/default/path"
+# `configPath "relative/path/to/file/or/folder"
 function configPath(){
     local relativePath="$1"
-    local defaultPath="${2:-"$defaultConfigPath/$relativePath"}"
+    local platformPath="$defaultConfigPath/$platform/$relativePath"
+    local genericPath="$defaultConfigPath/generic/$relativePath"
     if [[ -f $projectConfigPath/$relativePath ]]
     then
         echo $projectConfigPath/$relativePath
+    elif [[ -f $platformPath ]]
+    then
+        echo $platformPath
     else
-        echo $defaultPath
+        echo $genericPath
     fi
 }
 
@@ -27,7 +65,7 @@ function configPath(){
 # `phpNoXdebug path/to/php/file.php -- -arg1 -arg2`
 function phpNoXdebug {
     set +x
-    local temporaryPath="$(mktemp -t php.XXXX).ini"
+    local temporaryPath="$(mktemp -t php.XXXX)"
     # Using awk to ensure that files ending without newlines do not lead to configuration error
     $phpBinPath -i | grep "\.ini" | grep -o -e '\(/[a-z0-9._-]\+\)\+\.ini' | grep -v xdebug | xargs awk 'FNR==1{print ""}1' > "$temporaryPath"
     $phpBinPath -n -c "$temporaryPath" "$@"
@@ -50,6 +88,23 @@ function checkForUncommittedChanges {
         echo "Skipping uncommited changes check in CI"
         return 0;
     fi
+    if [[ "$skipUncommittedChangesCheck" == "1" ]]
+    then
+        echo "Skipping uncommitted changes check. export skipUncommittedChangesCheck=0 to reinstate"
+        return 0
+    fi
+
+    targetDir=${1:-$(pwd)}
+    originalDir=$(pwd)
+
+    if [[ ! -d $targetDir/.git/ ]]
+    then
+        echo "$targetDir is not a git repo"
+        return
+    fi
+
+    cd $targetDir
+
     set +e
     inGitRepo="$(git rev-parse --is-inside-work-tree 2>/dev/null)"
     if [[ "" != "$inGitRepo" ]]
@@ -70,6 +125,8 @@ function checkForUncommittedChanges {
 
         (git commit will be 'git add -A; git commit')
 
+        or export skipUncommittedChangesCheck=1 to ignore
+
     ==================================================
 
             "
@@ -83,6 +140,8 @@ function checkForUncommittedChanges {
             git commit
         fi
     fi
+
+    cd $originalDir
 }
 
 function phpunitReRunFailedOrFull(){
@@ -148,12 +207,19 @@ function tryAgainOrAbort(){
     ==================================================
 
     "
-    read -n 1 tryAgainOrAbort
-    if [[ "y" != "$tryAgainOrAbort" ]]
-    then
-        printf "\n\nAborting...\n\n"
-        exit 1
-    fi
+    while read -n 1 tryAgainOrAbort
+    do
+        if [[ "n" == "$tryAgainOrAbort" ]]
+        then
+            printf "\n\nAborting...\n\n"
+            exit 1
+        fi
+        if [[ "y" == "$tryAgainOrAbort" ]]
+        then
+            break;
+        fi
+        printf "\n\ninvalid choice: $tryAgainOrAbort - should be y or n \n\n        would you like to try again? (y/n)"
+    done
     printf "\n\nTrying again, good luck!\n\n"
     hasBeenRestarted="true"
 }

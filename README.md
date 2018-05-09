@@ -10,9 +10,15 @@ Simple PHP QA pipeline and scripts. Largely just a collection of dependencies wi
 composer require edmondscommerce/phpqa --dev
 ```
 
-## Installing Extra Coding Standards
+Your project's `composer.json` needs to specify a bin folder. If it's not already present, add this:
 
-Have a look at [Dealerdirect/phpcodesniffer-composer-installer/](https://github.com/Dealerdirect/phpcodesniffer-composer-installer/) for a nice way to easily add extra coding standards to code sniffer
+```
+    ...
+    "config": {
+        "bin-dir": "bin"
+    }
+    ...
+``` 
 
 ## Running
 
@@ -20,80 +26,19 @@ Have a look at [Dealerdirect/phpcodesniffer-composer-installer/](https://github.
 ./bin/qa
 ```
 
-If you want to run all PHPUnit tests, you need to do this:
+If you want to run only fast PHPQA tests, you need to do this:
 
 ```bash
-phpUnitQuickTests=0 ./bin/qa
+phpqaQuickTests=1 ./bin/qa
 ```
 
 ## Configuration
 
-Standard configuration is in the directory [./configDefaults](./configDefaults)
+Standard configuration is in the directory [./configDefaults/generic](./configDefaults/generic). If you have no need to override or extend these then you don't need to do anything.
 
-If your project needs to have custom configuration, you have 2 ways of doing this:
+If your project needs to have custom configuration, you'll need to copy the relevant config files into a new `qaConfig` folder in the root of your project.
 
-### Single Tool Configuration Override
-
-For each tool, you can override the configuration by:
-
-1. Make a directory in your project root called `qaConfig`
-2. Copy the configuration from ./configDefaults](./configDefaults) into your project `qaConfig` folder.
-3. Customise the copied config as you see fit
-
-For example, for PHPStan, we would do this:
-
-```bash
-#Enter your project root
-cd /my/project/root
-
-#Make your config override directory
-mkdir -p qaConfig
-
-#Copy in the default config
-cp vendor/edmondscommerce/phpqa/configDefaults/phpstan.neon qaConfig
-
-#Edit the config
-vim qaConfig/phpstan.neon
-```
-
-For PHP Mess Detector, we would do this:
-
-```bash
-#Enter your project root
-cd /my/project/root
-
-#Make your config override directory
-mkdir -p qaConfig
-
-#Copy the phpmd folder as a whole
-cp vendor/edmondscommerce/phpqa/configDefaults/phpmd/ qaConfig/ -r
-
-
-```
-
-### Global Configuration Override
-
-If you want to make more wholesale tweaks to `qa` customisation, you can do this:
-
-```bash
-
-#Enter your project root
-cd /my/project/root
-
-#Make your config override directory
-mkdir -p qaConfig
-
-#Copy in the default config
-awk '/#### CONFIG /,/#### PROCESS /' bin/qa > qaConfig/qaConfig.inc.bash
-
-#Edit the config
-vim qaConfig/qaConfig.inc.bash
-
-```
-
-When you run `qa`, it checks for a file located in `"$projectConfigPath/qaConfig.inc.bash"` and will include it if found. 
-
-Using this you can override as much of the standard configuration as you see fit.
+See the [Configuration docs](./docs/configuration.md) for more details. 
 
 ## The Pipeline
 
@@ -120,19 +65,7 @@ exit 1;
 ```
 
 In Bash - an exit code of greater than 0 indicates an error. You can pick any number you want, but 1 is the standard for "general error".
-
-### PSR4 Validator
-This enforces that PSR4 guidlines are being adhered to correctly.
-
-#### Ignore List
-You can specify a number of files or directories to be ignored by the validator. This is a newline seperated
-list of valid regex including a valid regex delimiter. For example:
-
-```
-#tests/bootstrap\.php#
-#tests/phpstan-bootstrap\.php#
-```
-
+ 
 ### Composer Check For Issues
 Runs a diagnose on composer to make sure it's all good
 
@@ -154,20 +87,11 @@ https://github.com/phpstan/phpstan
 
 #### Configuration 
 
-Default configuration is in [./configDefaults/phpstan.neon](./configDefaults/phpstan.neon)
+Default configuration is in [./configDefaults/generic/phpstan.neon](./configDefaults/generic/phpstan.neon)
 
 To override the configuration you need to copy it to `{project-root}/qaConfig/phpstan.neon`
 
 For specifying paths, just know the root of the project is `%rootDir%/../../../`
-
-##### Extending Default Config
-
-You can use the standard config as a base by using a template like:
-
-```neon
-includes:
-    - ../vendor/edmondscommerce/phpqa/configDefault/phpstan.neon
-```
 
 ##### Boostrap
 
@@ -196,16 +120,9 @@ includes:
 ```
 https://github.com/phpstan/phpstan-strict-rules
 
-#### Supressing Errors
-
-[Here](https://github.com/phpstan/phpstan#ignore-error-messages-with-regular-expressions) you can read more about, how to
-ignore errors by modifying `phpstan.neon` file.
-
 ### PHPUnit
 
 This step runs your PHPUnit tests
-
-This is probably the most complex and feature rich step
 
 #### Quick Tests
 
@@ -265,16 +182,16 @@ And this will then run with full tests
 
 #### Coverage
 
-If enabled, the PHPUnit command will generate both textual output and HTML coverage.
+By default, the PHPUnit command will generate both textual output and HTML coverage.
 
-The coverage report will go into the project root /var directory as configured in [./configDefaults/phpunit-with-coverage.xml](./configDefaults/phpunit-with-coverage.xml)
+The coverage report will go into the project root /var directory as configured in [./configDefaults/generic/phpunit-with-coverage.xml](./configDefaults/generic/phpunit-with-coverage.xml)
 
 If you want to override the coverage report location, you will need to override this config file as normal.
 
-You can enable the coverage report on the fly by doing:
+You can disable the coverage report on the fly by doing:
 
 ```bash
-phpUnitCoverage=1 bin/qa 
+phpUnitCoverage=0 bin/qa 
 ```
 
 You might decide to do this if you are running these tests on travis, as you can see in [./travis.yml](./.travis.yml)
@@ -291,7 +208,7 @@ To have qa run as quickly as possible, you need to disable coverage
 To do this you can simply 
 
 ```bash
-export phpUnitQuickTests=1
+export phpUnitCoverage=0
 ```
 
 and then every time you run `./bin/qa` it will be as if you ran it like `phpUnitCoverage=0 ./bin/qa`
@@ -302,58 +219,9 @@ For the most comprehensive checking, you need coverage enabled and also quick te
 
 ```bash
 export phpUnitQuickTests=0
-export phpUnitCoverage=1
 ```
 
 and then every time you run `./bin/qa` it will be as if you ran it like `phpUnitQuickTests=0 ./bin/qa`
-
-#### Paratest
-
-You can run multiple sets of PHPUnit tests in parallel using [paratest](https://github.com/paratestphp/paratest)
-
-Currently this is experimental and will certainly not work in a variety of situations.
-
-To enable paratest, simply install it. If it is found, this QA process will use it.
-
-```bash
-composer require --dev brianium/paratest
-```
-
-##### Further Reading
-
-* https://github.com/brianium/paratest-selenium
-
-#### PHPUnit and PHPStan
-
-We also include [https://github.com/phpstan/phpstan-phpunit](https://github.com/phpstan/phpstan-phpunit) which allows you to properly use mocks with PHPUnit tests and keep PHPStan happy.
-
-see [https://github.com/phpstan/phpstan-phpunit#how-to-document-mock-objects-in-phpdocs](https://github.com/phpstan/phpstan-phpunit#how-to-document-mock-objects-in-phpdocs) for full instructions on how to document mock objects in your tests.
-
-#### Rerun Failed Tests
-
-As with the other tools, there is an option to rerun this step if it fails.
-
-Where PHPUnit is different is that you also get the option to only rerun your failed tests.
-
-This uses another bin command [./bin/phpunit-runfailed-filter](./bin/phpunit-runfailed-filter) which generates the filter syntax to pull out the failed tests.
-
-You can also use this in isolation if you want, eg:
-
-```bash
-./bin/phpunit -c qaConfig/phpunit.xml --filter "$(bin/phpunit-runfailed-filter)" tests/
-```
-
-##### Rerun Failed Timeout
-
-There is a configured timeout of 5 minutes. If you retry failed within this timeframe then the retry failed option will appear. After this timeout, then only the full tests will be run.
-
-You can configure this temporarily by setting an environment variable:
-
-```bash
-export phpunitRerunTimeoutMins=20
-```
-
-or you can override the configuration as normal and specify your desired timeout limit.
 
 ### PHP Mess Detector
 
@@ -389,7 +257,7 @@ And then to use it, just:
 phpmdRule public methods under
 ```
 
-Whatever rule is returned by phpmdRule call, supress it in PHP using dock block.
+Whatever ruel is returned by phpmdRule call, supress it in PHP using dock block.
 
 
 ```php
@@ -413,35 +281,9 @@ At this point, the pipeline checks for uncommited changes in your repo.
 
 If there are uncommited changes then the process stops. This is because beyond the point, tools are used that will actively update the code. You need to be able to `git reset --hard HEAD` etc.
 
-### Coding Standards
+You can skip this step using `export skipUncommittedChangesCheck=1`
 
-We use the PHP_CodeSniffer package to handle coding standards, including automatically fixing where possible.
-
-The coding standard is defaulted to PSR2 but can be easily overridden by creating a folder (or symlink) in your project `qaConfig` folder called `codingStandards`
-
-This allows you to use your own custom coding standard, a third party standard or one of the built in CodeSniffer standards.
-
-For example, to use Zend you could run:
-
-```bash
-cd $projectRoot
-mkdir -p qaConfig
-cd qaConfig
-ln -s ../vendor/squizlabs/php_codesniffer/src/Standards/Zend codingStandards
-```
-
-If you wanted to use the Symfony coding standard, you can do:
-
-```bash
-cd $projectRoot
-composer require escapestudios/symfony2-coding-standard
-mkdir -p qaConfig
-cd qaConfig
-ln -s ../vendor/escapestudios/symfony2-coding-standard/Symfony codingStandards
-```
-
-
-#### PHP Code Beautifier and Fixer
+### PHP Code Beautifier and Fixer
 
 Part of the PHP_CodeSniffer package
 
@@ -449,13 +291,17 @@ This will also fix any issues found
 
 https://github.com/squizlabs/PHP_CodeSniffer/wiki/Fixing-Errors-Automatically
 
-#### PHP Code Sniffer
+### PHP Code Sniffer
 
 Now we run the code sniffer to check for any remaining coding standards issues that have not been automatically fixed.
 
+The coding standard used defaults to PSR2
+
+You can specify any standard you want thouhg.
+
 https://github.com/squizlabs/PHP_CodeSniffer
 
-##### Ignoring Parts of a File
+#### Ignoring Parts of a File
 
 You can mark specific chunks of code to be not analyzed by PHPCS having the following comments:
 
@@ -470,6 +316,13 @@ $xmlPackage->send();
 ```
 
 https://github.com/squizlabs/PHP_CodeSniffer/wiki/Advanced-Usage#ignoring-parts-of-a-file
+
+
+#### _TODO_ Include more coding standards and perform platform detection
+
+Implement other coding standards. Ideally figure out some automation to select the correct coding standard based on the application code, for example 
+* [magento/marketplace-eqp](https://github.com/magento/marketplace-eqp)
+* [WordPress-Coding-Standards/WordPress-Coding-Standards](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards)
 
 
 
