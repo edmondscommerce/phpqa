@@ -1,3 +1,5 @@
+#!/bin/bash
+
 set +e
 phpCmd=phpNoXdebug
 if [[ "1" == "$phpUnitCoverage" ]]
