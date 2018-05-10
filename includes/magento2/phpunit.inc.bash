@@ -13,9 +13,9 @@ qaQuickTests="$phpUnitQuickTests" $phpCmd -f bin/phpunit \
 
 phpunitExitCode=$?
 set +x
-if (( $phpunitExitCode > 0 ))
+if (( phpunitExitCode > 0 ))
 then
-    if (( $phpunitExitCode > 2 ))
+    if (( phpunitExitCode > 2 ))
     then
         printf "\n\n\nPHPUnit Crashed\n\nRunning again with Debug mode...\n\n\n"
         qaQuickTests="$phpUnitQuickTests" phpNoXdebug -f bin/phpunit -- --debug
