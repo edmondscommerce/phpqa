@@ -2,7 +2,6 @@
 
 readonly platformMagento2="magento2"
 readonly platformGeneric="generic"
-readonly platformLaravelLumen="laravellumen"
 
 function detectPlatform(){
 
@@ -16,12 +15,6 @@ function detectPlatform(){
     then
         echo $platformMagento2
         return 0
-    fi
-
-    if [[ -f $projectRoot/artisan ]]
-    then
-        echo $platformLaravelLumen;
-        return 0;
     fi
 
     echo $platformGeneric

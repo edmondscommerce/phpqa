@@ -152,7 +152,7 @@ Running PHPStan
 "
 if [[ "$phpqaQuickTests" == "1" ]]
 then
-    echo "Skipping PHPstan because \$phpqaQuickTests=1"
+    echo "Skipping PHPStan because \$phpqaQuickTests=1"
 else
     runTool phpstan
 fi

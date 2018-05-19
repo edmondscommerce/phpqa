@@ -103,14 +103,14 @@ class Psr4Validator
     }
 
     /**
-     * @param string $path
+     * @param string $realPath
      *
      * @return \RecursiveIteratorIterator|\SplFileInfo[]
      */
-    private function getDirectoryIterator(string $path): \RecursiveIteratorIterator
+    private function getDirectoryIterator(string $realPath): \RecursiveIteratorIterator
     {
         $directoryIterator = new \RecursiveDirectoryIterator(
-            \realpath($path),
+            $realPath,
             \RecursiveDirectoryIterator::SKIP_DOTS
         );
         $iterator          = new \RecursiveIteratorIterator(
@@ -155,8 +155,19 @@ class Psr4Validator
                     $paths = [$paths];
                 }
                 foreach ($paths as $path) {
-                    $absPathRoot = Config::getProjectRootDirectory().'/'.$path;
-                    $iterator    = $this->getDirectoryIterator($absPathRoot);
+                    $absPathRoot     = Config::getProjectRootDirectory().'/'.$path;
+                    $realAbsPathRoot = \realpath($absPathRoot);
+                    if (false === $realAbsPathRoot) {
+                        $invalidPathMessage = "Namespace root '$namespaceRoot'".
+                                              "\ncontains a path '$path''".
+                                              "\nwhich doesn't exist\n";
+                        if (strpos($absPathRoot, "Magento") !== false) {
+                            $invalidPathMessage .= 'Magento\'s composer includes this by default, '
+                                                   .'it should be removed from the psr-4 section';
+                        }
+                        throw new \RuntimeException($invalidPathMessage);
+                    }
+                    $iterator = $this->getDirectoryIterator($absPathRoot);
                     foreach ($iterator as $fileInfo) {
                         if ('php' !== $fileInfo->getExtension()) {
                             continue;

@@ -2,7 +2,7 @@ parameters:
     reportUnmatchedIgnoredErrors: false
     autoload_files:
         - %rootDir%/../../../../vendor/autoload.php
-        - %rootDir%/../../../../vendor/edmondscommerce/phpqa/configDefaults/magento2-project/phpstan-magento2-bootstrap.php
+        - %rootDir%/../../../../vendor/edmondscommerce/phpqa/configDefaults/magento2/phpstan-magento2-bootstrap.php
     excludes_analyse:
         - */Tests/*
         - */Test/*
