@@ -1,5 +1,6 @@
 includes:
-#	- ../../../../vendor/phpstan/phpstan-strict-rules/rules.neon
-#
-# Uncomment this if you composer install phpstan/phpstan-phpunit
+    #stricter checks
+    - ../../../../vendor/phpstan/phpstan-strict-rules/rules.neon
+
+    #phpunit specific checks
 #	- ../../../../vendor/phpstan/phpstan-phpunit/extension.neon
