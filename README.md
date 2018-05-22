@@ -41,6 +41,9 @@ These should be set in your terminal before running `bin/qa`, or can be set on a
 - **Quick tests only** `phpqaQuickTests`: If you want to run only fast PHPQA tests
 - **CI Mode**: `CI`: performs actions headlessly without user prompts
 - **Skip uncommitted check** `skipUncommittedChangesCheck`: don't check for uncommitted changes when running
+- **Use Infection** `useInfection`: Set this to 0 to have PHPUnit run the unit tests instead of infection
+- **Minimum MSI Percentage** `mutationScoreIndicator`: The minimum [MSI](https://infection.github.io/guide/#Mutation-Score-Indicator-MSI) required for PHPQA to pass
+- **Minimum Covered MSI Percentage** `coveredCodeMSI`: The minimum [covered MSI](https://infection.github.io/guide/#Covered-Code-Mutation-Score-Indicator) level required for PHPQA to pass
  
 ## Configuration
 
@@ -115,6 +118,40 @@ includes:
 
 ```
 https://github.com/phpstan/phpstan-strict-rules
+
+### Infection
+
+[Infection](https://infection.github.io/) is a Mutation Testing Framework, that runs PHPUnit tests and then makes small 
+modifications to the code and sees if these cause the unit tests to fail.
+
+As this requires the unit tests to be run, we use this as the default test runner for PHP QA.
+
+#### Configuration
+
+You may need to tell infection where the configuration directory for PHPUnit is. To do this, override the
+[./configDefaults/generic/infection.json](./configDefaults/generic/infection.json) file and add the following to it
+
+```json
+"phpUnit": {
+    "configDir": "path/to/directory/with/phpunit.xml"
+}
+```
+
+#### Minimum Mutation Score Indicators
+
+Infection has been configured to require both a minimum MSI and covered MSI to be achieved for the test to pass.
+
+Be default these are set to 60% for MSI, and 90% for covered MSI. These values can be overwritten by using environment 
+variables. To do this simply export the following before running qa
+
+ * `mutationScoreIndicator` to set the MSI level
+ * `coveredCodeMSI` to set the covered MSI level
+
+See the following page for more information on MSIs being used in CI [https://infection.github.io/guide/using-with-ci.html](https://infection.github.io/guide/using-with-ci.html)
+
+#### Disabling Infection
+
+If you would prefer to run PHPUnit instead of infection, export the `useInfection` variable as 0 to prevent it running
 
 ### PHPUnit
 
