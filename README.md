@@ -42,6 +42,8 @@ These should be set in your terminal before running `bin/qa`, or can be set on a
 - **CI Mode**: `CI`: performs actions headlessly without user prompts
 - **Skip uncommitted check** `skipUncommittedChangesCheck`: don't check for uncommitted changes when running
 - **Use Infection** `useInfection`: Set this to 0 to have PHPUnit run the unit tests instead of infection
+- **Minimum MSI Percentage** `mutationScoreIndicator`: The minimum MSI required for PHPQA to pass
+- **Minimum Covered MSI Percentage** `coveredCodeMSI`: The minimum covered MSI level required for PHPQA to pass
  
 ## Configuration
 
