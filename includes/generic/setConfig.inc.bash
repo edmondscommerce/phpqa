@@ -68,6 +68,6 @@ infectionConfig=$(configPath infection.json)
 numberOfCores=$(grep -c ^processor /proc/cpuinfo)
 # See here https://infection.github.io/guide/index.html#Mutation-Score-Indicator-MSI and here
 # for more details about this
-mutationScoreIndicator=60
+mutationScoreIndicator=${mutationScoreIndicator:-60}
 # See here https://infection.github.io/guide/index.html#Covered-Code-Mutation-Score-Indicator
-coveredCodeMSI=90
+coveredCodeMSI=${coveredCodeMSI:-90}
