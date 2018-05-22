@@ -135,6 +135,22 @@ You may need to tell infection where the configuration directory for PHPUnit is.
 }
 ```
 
+#### Minimum Mutation Score Indicators
+
+Infection has been configured to require both a minimum MSI and covered MSI to be achieved for the test to pass.
+
+Be default these are set to 60% for MSI, and 90% for covered MSI. These values can be overwritten by using environment 
+variables. To do this simply export the following before running qa
+
+ * `mutationScoreIndicator` to set the MSI level
+ * `coveredCodeMSI` to set the covered MSI level
+
+See the following page for more information on MSIs being used in CI [https://infection.github.io/guide/using-with-ci.html](https://infection.github.io/guide/using-with-ci.html)
+
+#### Disabling Infection
+
+If you would prefer to run PHPUnit instead of infection, export the `useInfection` variable as 0 to prevent it running
+
 ### PHPUnit
 
 This step runs your PHPUnit tests
