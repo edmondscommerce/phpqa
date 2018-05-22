@@ -46,18 +46,13 @@ phpUnitCoverage=${phpUnitCoverage:-0}
 # How many minutes after a failed PHPUnit run you can retry failed only
 phpunitRerunTimeoutMins=${phpunitRerunTimeoutMins:-5}
 
-if [[ -f $projectRoot/phpunit.xml ]]
+if [[ "1" == "$phpUnitCoverage" ]]
 then
-    # Project root phpunit.xml trumps everything else
-    phpUnitConfigPath=$projectRoot/phpunit.xml
+    phpUnitConfigPath=$(configPath phpunit-with-coverage.xml)
 else
-    if [[ "1" == "$phpUnitCoverage" ]]
-    then
-        phpUnitConfigPath=$(configPath phpunit-with-coverage.xml)
-    else
-        phpUnitConfigPath=$(configPath phpunit.xml)
-    fi
+    phpUnitConfigPath=$(configPath phpunit.xml)
 fi
+
 
 # If a CI variable is set, we use that, otherwise default to false.
 # Travis-CI sets a CI variable. You can easily set this in any other CI system
