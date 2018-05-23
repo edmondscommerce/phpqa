@@ -69,6 +69,21 @@ echo "$platform platform detected"
 
 echo "
 
+Checking for Xdebug
+-------------------
+"
+if [[ "" == "$($phpBinPath -i | grep xdebug)" ]]
+then
+    xdebugEnabled=0
+    echo "Xdebug is not enabled - infection and coverage not available"
+else
+    xdebugEnabled=1
+    echo "Xdebug is enabled"
+fi
+
+
+echo "
+
 Setting Project Paths
 ---------------------
 "
