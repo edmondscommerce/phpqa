@@ -7,8 +7,6 @@
 !/bin/psr4-validate
 !/bin/phpunit-runfailed-filter
 /cache/
-# Don't commit the overwritten config
-qaConfig/qaConfig.inc.bash
 qaConfig/phpstan.neon
 # If this is being installed as a standalone project then we can not include the lock file
 composer.lock
