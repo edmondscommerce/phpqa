@@ -2,6 +2,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/3.7/phpunit.xsd"
         cacheTokens="false"
+        bootstrap="../../../../../bootstrap/app.php"
         colors="true"
         verbose="true">
     <logging>
@@ -12,7 +13,7 @@
     </logging>
     <filter>
         <whitelist>
-            <directory suffix=".php">../../../../../src</directory>
+            <directory suffix=".php">../../../../../app</directory>
         </whitelist>
     </filter>
     <testsuites>
@@ -20,4 +21,9 @@
             <directory suffix="Test.php">../../../../../tests/</directory>
         </testsuite>
     </testsuites>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="QUEUE_DRIVER" value="sync"/>
+    </php>
 </phpunit>
