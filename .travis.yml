@@ -13,7 +13,7 @@ php:
   - hhvm
 
 env:
-  - phpUnitQuickTests=0 phpUnitCoverage=0 mutationScoreIndicator=26 coveredCodeMSI=52 
+  - phpUnitQuickTests=0 phpUnitCoverage=0
   
 matrix:
   allow_failures:

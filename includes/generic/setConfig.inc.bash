@@ -46,7 +46,7 @@ phpUnitCoverage=${phpUnitCoverage:-0}
 # How many minutes after a failed PHPUnit run you can retry failed only
 phpunitRerunTimeoutMins=${phpunitRerunTimeoutMins:-5}
 
-if [[ "1" == "$phpUnitCoverage" ]]
+if [[ "1" == "$phpUnitCoverage" && "1" == "$xdebugEnabled" ]]
 then
     phpUnitConfigPath=$(configPath phpunit-with-coverage.xml)
 else
@@ -60,7 +60,12 @@ CI=${CI:-'false'}
 
 ## Infection options
 # Let's use infection by default - set this to 0 to use phpunit instead
+# If no Xdebug though, we cant use it
 useInfection=${useInfection:-1}
+if [[ "0" == "$xdebugEnabled" ]]
+then
+    useInfection=0
+fi
 # This is the path to our configuration
 infectionConfig=$(configPath infection.json)
 # Speeds up the tests https://infection.github.io/guide/command-line-options.html#threads
