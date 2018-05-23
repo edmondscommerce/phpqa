@@ -158,7 +158,7 @@ function phpunitReRunFailedOrFull(){
     fi
     local rerunFailed
     local reunLogFileTimeLimit=${phpunitRerunTimeoutMins:-5}
-    local rerunLogFile="$(find $varDir -type f -name 'phpunit.junit.log.xml' -mmin -$reunLogFileTimeLimit)";
+    local rerunLogFile="$(find $varDir -type f -name 'phpunit.junit.xml' -mmin -$reunLogFileTimeLimit)";
     if [[ "" == "$rerunLogFile" ]]
     then
         echo "";

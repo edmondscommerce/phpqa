@@ -41,12 +41,19 @@ phpUnitQuickTests=${phpUnitQuickTests:-0}
 
 # PHPUnit Coverage - default disabled
 # if enabled, tests will run with Xdebug and generate coverage (which is a lot slower)
-phpUnitCoverage=${phpUnitCoverage:-0}
+phpUnitCoverage=${phpUnitCoverage:-1}
 
 # How many minutes after a failed PHPUnit run you can retry failed only
 phpunitRerunTimeoutMins=${phpunitRerunTimeoutMins:-5}
 
-if [[ "1" == "$phpUnitCoverage" && "1" == "$xdebugEnabled" ]]
+# Can only generate coverage if Xdebug is enabled
+if [[ "1" != "$xdebugEnabled" ]]
+then
+    phpUnitCoverage=0
+fi
+
+# Now check if we are generating coverage and configure the correct file to include
+if [[ "1" == "$phpUnitCoverage" ]]
 then
     phpUnitConfigPath=$(configPath phpunit-with-coverage.xml)
 else
@@ -59,10 +66,10 @@ fi
 CI=${CI:-'false'}
 
 ## Infection options
-# Let's use infection by default - set this to 0 to use phpunit instead
-# If no Xdebug though, we cant use it
+# Let's use infection by default
+# If no PHPUnit coverage though, we cant use it
 useInfection=${useInfection:-1}
-if [[ "0" == "$xdebugEnabled" ]]
+if [[ "0" == "$phpUnitCoverage" ]]
 then
     useInfection=0
 fi
