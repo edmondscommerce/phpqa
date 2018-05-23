@@ -105,6 +105,7 @@ cd "$projectRoot";
 
 runTool prepareDirectories
 
+
 if [[ -f $projectConfigPath/hookPre.bash ]]
 then
     echo "
@@ -166,7 +167,20 @@ if [[ "$phpqaQuickTests" == "1" ]]
 then
     echo "Skipping PHP Unit because \$phpqaQuickTests=1"
 else
-    runTool phpunit
+    if [[ "$useInfection" == "1" ]]
+    then
+        echo "
+Running tests using Infection
+-----------------------------
+"
+        runTool infection
+    else
+        echo "
+Running tests using PhpUnit
+---------------------------
+"
+        runTool phpunit
+    fi
 fi
 
 echo "
