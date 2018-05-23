@@ -38,7 +38,6 @@ do
         -- \
         ${paratestConfig[@]} \
         -c ${phpUnitConfigPath} \
-        --log-junit $varDir/phpunit.junit.log.xml \
         ${rerunFilter[@]} \
         "$testsDir"
 

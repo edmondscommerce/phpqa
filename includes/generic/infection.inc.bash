@@ -2,12 +2,13 @@
 infectionExitCode=99
 while (( infectionExitCode > 0 ))
 do
+    set -x
     phpNoXdebug ./bin/infection \
         --threads=${numberOfCores} \
         --configuration=${infectionConfig} \
         --min-msi=${mutationScoreIndicator} \
         --min-covered-msi=${coveredCodeMSI} \
-        --coverage=$varDir/phpunit.junit.log.xml \
+        --coverage=$varDir/phpunit_logs \
         --test-framework-options=" -c ${phpUnitConfigPath} "
 
     infectionExitCode=$?
