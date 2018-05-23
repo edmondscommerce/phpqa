@@ -21,7 +21,6 @@ do
     infectionExitCode=$?
     set -e
     set +x
-    set +f
     if (( $infectionExitCode > 0 ))
     then
         tryAgainOrAbort "Infection"
