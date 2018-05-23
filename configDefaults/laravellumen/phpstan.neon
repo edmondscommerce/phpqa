@@ -1,0 +1,5 @@
+parameters:
+    reportUnmatchedIgnoredErrors: false
+    autoload_files:
+        - %rootDir%/../../../../vendor/autoload.php
+        - %rootDir%/../../../../_ide_helper.php
