@@ -1,13 +1,15 @@
 {
-    "timeout": 10,
-    "source": {
-        "directories": [
-            "src"
-        ]
-    },
-    "logs": {
-        "text": "var/qa/infection-log.txt"
-    },
+  "timeout": 10,
+  "source": {
+    "directories": [
+      "src"
+    ]
+  },
+  "logs": {
+    "text": "var/qa/infection-log.txt",
+    "summary": "var/qa/infection-summary-log.txt",
+    "debug": "var/qa/infection-debug-log.txt"
+  },
   "phpUnit": {
     "configDir": "./"
   }
