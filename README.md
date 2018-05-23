@@ -137,6 +137,12 @@ You may need to tell infection where the configuration directory for PHPUnit is.
 }
 ```
 
+##### Setting Minimum Score Indicators
+
+The easiest way to override the default minimum score indicators permanently for your project is to include these in a `qaConfig.inc.bash` file in your projects `qaConfig` folder.
+
+You can see that this is being done in the phpqa project itself in it's own [qaConfig](./qaConfig) folder.
+
 #### Minimum Mutation Score Indicators
 
 Infection has been configured to require both a minimum MSI and covered MSI to be achieved for the test to pass.
