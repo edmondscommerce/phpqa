@@ -2,11 +2,19 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/3.7/phpunit.xsd"
         cacheTokens="false"
-        verbose="true"
-        colors="true">
+        colors="true"
+        verbose="true">
     <logging>
+        <log type="coverage-html" target="../../../../../var/qa/phpunit_coverage"/>
+        <log type="coverage-text" target="php://stdout"/>
+        <log type="coverage-xml" target="../../../../../var/qa/phpunit_logs/coverage-xml"/>
         <log type="junit" target="../../../../../var/qa/phpunit_logs/phpunit.junit.xml"/>
     </logging>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">../../../../../src</directory>
+        </whitelist>
+    </filter>
     <testsuites>
         <testsuite name="tests">
             <directory suffix="Test.php">../../../../../tests/</directory>

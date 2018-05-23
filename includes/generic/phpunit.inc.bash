@@ -32,6 +32,11 @@ do
             rerunFilter+=( --filter $IFS $rerunFilterPattern)
         fi
     fi
+    noCoverage=(" ")
+    if [[ "1" != "$phpUnitCoverage" ]]
+    then
+        noCoverage+=( --no-coverage )
+    fi
     set +e
     set -x
     phpUnitQuickTests="$phpUnitQuickTests" $phpCmd -f $phpunitPath \
@@ -39,6 +44,7 @@ do
         ${paratestConfig[@]} \
         -c ${phpUnitConfigPath} \
         ${rerunFilter[@]} \
+        ${noCoverage[@]} \
         "$testsDir"
 
     phpunitExitCode=$?

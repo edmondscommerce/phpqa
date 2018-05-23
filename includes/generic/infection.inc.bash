@@ -2,12 +2,19 @@
 infectionExitCode=99
 while (( infectionExitCode > 0 ))
 do
+    set +e
     set -x
+    onlyCovered=()
+    if [[ "1" == "$infectionOnlyCovered" ]]
+    then
+        onlyCovered+=( --only-covered )
+    fi
     phpNoXdebug ./bin/infection \
-        --threads=${numberOfCores} \
+        ${onlyCovered[@]} \
+        --threads=${infectionThreads} \
         --configuration=${infectionConfig} \
-        --min-msi=${mutationScoreIndicator} \
-        --min-covered-msi=${coveredCodeMSI} \
+        --min-msi=${infectionMutationScoreIndicator} \
+        --min-covered-msi=${infectionCoveredCodeMSI} \
         --coverage=$varDir/phpunit_logs \
         --test-framework-options=" -c ${phpUnitConfigPath} "
 
@@ -17,12 +24,6 @@ do
     set +f
     if (( $infectionExitCode > 0 ))
     then
-        if (( $infectionExitCode > 2 ))
-        then
-            printf "\n\n\nPHPUnit Crashed\n\nRunning again with Debug mode...\n\n\n"
-            qaQuickTests="$phpUnitQuickTests" phpNoXdebug -f bin/phpunit -- "$testsDir" --debug
-            set +x
-        fi
-        tryAgainOrAbort "PHPUnit Tests"
+        tryAgainOrAbort "Infection"
     fi
 done
