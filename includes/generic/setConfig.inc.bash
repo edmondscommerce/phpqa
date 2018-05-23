@@ -44,15 +44,30 @@ phpUnitQuickTests=${phpUnitQuickTests:-0}
 phpUnitCoverage=${phpUnitCoverage:-0}
 
 # How many minutes after a failed PHPUnit run you can retry failed only
-phpunitRerunTimeoutMins=${phpunitRerunTimeoutMins:-10}
-phpUnitConfigPath=$(configPath phpunit.xml)
+phpunitRerunTimeoutMins=${phpunitRerunTimeoutMins:-5}
+
 if [[ "1" == "$phpUnitCoverage" ]]
 then
     phpUnitConfigPath=$(configPath phpunit-with-coverage.xml)
+else
+    phpUnitConfigPath=$(configPath phpunit.xml)
 fi
-
 
 # If a CI variable is set, we use that, otherwise default to false.
 # Travis-CI sets a CI variable. You can easily set this in any other CI system
 # The value should the the string 'true' if this is CI
 CI=${CI:-'false'}
+
+## Infection options
+# Let's use infection by default - set this to 0 to use phpunit instead
+useInfection=${useInfection:-1}
+# This is the path to our configuration
+infectionConfig=$(configPath infection.json)
+# Speeds up the tests https://infection.github.io/guide/command-line-options.html#threads
+# Can cause issues if the test rely on the database
+numberOfCores=$(grep -c ^processor /proc/cpuinfo)
+# See here https://infection.github.io/guide/index.html#Mutation-Score-Indicator-MSI and here
+# for more details about this
+mutationScoreIndicator=${mutationScoreIndicator:-60}
+# See here https://infection.github.io/guide/index.html#Covered-Code-Mutation-Score-Indicator
+coveredCodeMSI=${coveredCodeMSI:-90}
