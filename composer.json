@@ -6,7 +6,13 @@
   "autoload": {
     "psr-4": {
       "EdmondsCommerce\\PHPQA\\": [
-        "src/",
+        "src/"
+      ]
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "EdmondsCommerce\\PHPQA\\": [
         "tests/"
       ]
     }

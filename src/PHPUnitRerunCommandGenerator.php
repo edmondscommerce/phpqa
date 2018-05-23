@@ -5,6 +5,12 @@ namespace EdmondsCommerce\PHPQA;
 class PHPUnitRerunCommandGenerator
 {
     /**
+     * no failed tests so just include all
+     * however, this can confuse bash - try using `set -f` to disable globbing
+     */
+    public const NO_FILTER = '/.*/';
+
+    /**
      * @var string
      */
     private $logPath;
@@ -16,29 +22,16 @@ class PHPUnitRerunCommandGenerator
 
     private $toRerun = [];
 
-    public function __construct()
-    {
-    }
-
-    /**
-     * no failed tests so just include all
-     * however, this can confuse bash - try using `set -f` to disable globbing
-     */
-    protected function noFilter(): string
-    {
-        return '/.*/';
-    }
-
     public function main(string $junitLogPath = null): string
     {
         $this->toRerun = [];
         $this->logPath = $junitLogPath ?? $this->getDefaultFilePath();
         if (!file_exists($this->logPath)) {
-            return $this->noFilter();
+            return self::NO_FILTER;
         }
         $contents = file_get_contents($this->logPath);
         if ('' === $contents) {
-            return $this->noFilter();
+            return self::NO_FILTER;
         }
         $this->load($contents);
         $failureNodes = $this->simpleXml->xpath(
@@ -51,7 +44,7 @@ class PHPUnitRerunCommandGenerator
             $this->toRerun[$class][] = (string)$attributes->name;
         }
         if ($this->toRerun === []) {
-            return $this->noFilter();
+            return self::NO_FILTER;
         }
         $command = '/(';
         foreach ($this->toRerun as $class => $testNames) {
