@@ -12,5 +12,6 @@
   },
   "phpUnit": {
     "configDir": "./"
-  }
+  },
+  "tmpDir": "var/qa/infection-tmp"
 }

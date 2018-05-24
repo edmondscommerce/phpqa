@@ -16,7 +16,7 @@ do
         --min-msi=${infectionMutationScoreIndicator} \
         --min-covered-msi=${infectionCoveredCodeMSI} \
         --coverage=$varDir/phpunit_logs \
-        --test-framework-options=" -c ${phpUnitConfigPath} "
+        --test-framework-options=" --no-coverage -c ${phpUnitConfigPath} "
 
     infectionExitCode=$?
     set -e
