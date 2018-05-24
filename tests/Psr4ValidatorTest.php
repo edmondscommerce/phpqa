@@ -56,8 +56,7 @@ class Psr4ValidatorTest extends TestCase
             Helper::getComposerJsonDecoded($projectRoot.'/composer.json')
         );
         $actual      = $validator->main();
-        //phpcs:disable
-        $expected = [
+        $expected    = [
             'PSR-4 Errors:'  =>
                 [
                     'In\\Valid\\' =>
@@ -97,7 +96,17 @@ which doesn\'t exist
 Magento\'s composer includes this by default, it should be removed from the psr-4 section',
                 ],
         ];
-        //phpcs:enable
-        $this->assertSame($expected, $actual);
+        $this->assertSame($this->recursiveKeySort($expected), $this->recursiveKeySort($actual));
+    }
+
+    private function recursiveKeySort(array &$array): bool
+    {
+        foreach ($array as &$value) {
+            if (\is_array($value)) {
+                $this->recursiveKeySort($value);
+            }
+        }
+
+        return ksort($array);
     }
 }
