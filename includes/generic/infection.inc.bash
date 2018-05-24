@@ -19,7 +19,7 @@ do
     set +e
     set -x
     rm -rf $varDir/infection/*
-    php -f ./bin/infection \
+    phpNoXdebug -f ./bin/infection \
         ${extraArgs[@]} \
         --threads=${infectionThreads} \
         --configuration=${infectionConfig} \
