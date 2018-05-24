@@ -119,6 +119,26 @@ includes:
 ```
 https://github.com/phpstan/phpstan-strict-rules
 
+### PHPStan
+
+
+#### Mock Objects
+
+PHPStan gets confused by mock objects:
+
+```text
+ ------ ------------------------------------------------------------------------------------------ 
+  Line   Path/To/Class.php                                          
+ ------ ------------------------------------------------------------------------------------------ 
+  20     Parameter #1 $logger of class Path\To\AnotherClass constructor expects  
+         Psr\Log\LoggerInterface, PHPUnit\Framework\MockObject\MockObject given.                   
+ ------ ------------------------------------------------------------------------------------------ 
+```
+
+To solve this you can use [`phpstan-phpunit`](https://github.com/phpstan/phpstan-phpunit).
+
+You can find clear instructions on how to use this here [projects Github page](https://github.com/phpstan/phpstan-phpunit#usage).
+
 ### Infection
 
 [Infection](https://infection.github.io/) is a Mutation Testing Framework, that runs PHPUnit tests and then makes small 
