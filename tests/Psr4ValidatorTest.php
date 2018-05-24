@@ -62,28 +62,28 @@ class Psr4ValidatorTest extends TestCase
                 [
                     'In\\Valid\\' =>
                         [
-                            0 =>
-                                [
-                                    'fileInfo'          => $projectRoot.'/src/Wrong.php',
-                                    'expectedNamespace' => 'In\\Valid',
-                                    'actualNamespace'   => 'Totally',
-                                ],
-                            1 =>
-                                [
-                                    'fileInfo'          => $projectRoot.'/src/Nested/Deep/Bad.php',
-                                    'expectedNamespace' => 'In\\Valid\\Nested\\Deep',
-                                    'actualNamespace'   => 'So',
-                                ],
+
+                            [
+                                'fileInfo'          => $projectRoot.'/src/Wrong.php',
+                                'expectedNamespace' => 'In\\Valid',
+                                'actualNamespace'   => 'Totally',
+                            ],
+
+                            [
+                                'fileInfo'          => $projectRoot.'/src/Nested/Deep/Bad.php',
+                                'expectedNamespace' => 'In\\Valid\\Nested\\Deep',
+                                'actualNamespace'   => 'So',
+                            ],
                         ],
                 ],
             'Parse Errors:'  =>
                 [
-                    0 => $projectRoot.'/tests/ParseError.php',
+                    $projectRoot.'/tests/ParseError.php',
                 ],
             'Ignored Files:' =>
                 [
-                    0 => $projectRoot.'/src/IgnoredStuff/Ignored.php',
-                    1 => $projectRoot.'/src/IgnoredStuff/InvalidIgnored.php',
+                    $projectRoot.'/src/IgnoredStuff/Ignored.php',
+                    $projectRoot.'/src/IgnoredStuff/InvalidIgnored.php',
                 ],
             'Missing Paths:' =>
                 [
