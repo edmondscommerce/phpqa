@@ -119,6 +119,45 @@ includes:
 ```
 https://github.com/phpstan/phpstan-strict-rules
 
+### PHPStan
+
+#### Mock Objects
+
+Default PHPStan gets confused by mock objects:
+
+```text
+ ------ ------------------------------------------------------------------------------------------ 
+  Line   Path/To/Class.php                                          
+ ------ ------------------------------------------------------------------------------------------ 
+  20     Parameter #1 $logger of class Path\To\AnotherClass constructor expects  
+         Psr\Log\LoggerInterface, PHPUnit\Framework\MockObject\MockObject given.                   
+ ------ ------------------------------------------------------------------------------------------ 
+```
+
+To solve this for PHPUnit mock objects you can use PHPStan's official PHPUnit extension
+[phpstan-phpunit](https://github.com/phpstan/phpstan-phpunit).
+
+You can find clear instructions on how to use this here [projects Github page](https://github.com/phpstan/phpstan-phpunit#usage).
+
+##### Installing
+
+NOTE: phpstan-phpunit will only work with PHP 7.1 and above.
+
+First you'll need to require phpstan-phpunit:
+
+```bash
+composer require --dev phpstan/phpstan-phpunit
+```
+
+Then you need to copy the default PHPStan config from
+`vendor/edmondscommerce/phpqa/configDefaults/generic/phpstan.neon`
+to `qaConfig/phpstan.neon` and uncomment the 2 PHPUnit specific lines:
+
+```bash
+    - ../vendor/phpstan/phpstan-phpunit/extension.neon
+    - ../vendor/phpstan/phpstan-phpunit/rules.neon
+```
+
 ### Infection
 
 [Infection](https://infection.github.io/) is a Mutation Testing Framework, that runs PHPUnit tests and then makes small 
