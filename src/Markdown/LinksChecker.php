@@ -165,8 +165,8 @@ class LinksChecker
         list(, $anchor, $link) = $link;
         $context = stream_context_create(['http' => ['method' => 'HEAD']]);
         try {
-            $fd      = fopen($link, 'rb', false, $context);
-            $result = stream_get_meta_data($fd);
+            $handle = fopen($link, 'rb', false, $context);
+            $result = stream_get_meta_data($handle);
             foreach ($result['wrapper_data'] as $header) {
                 if (false !== strpos($header, ' 200 ')) {
                     return;

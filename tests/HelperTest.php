@@ -4,6 +4,12 @@ namespace EdmondsCommerce\PHPQA;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class HelperTest
+ *
+ * @package EdmondsCommerce\PHPQA
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 class HelperTest extends TestCase
 {
     public function testItCanGetComposerJsonDecode()

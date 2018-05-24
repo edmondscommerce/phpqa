@@ -4,6 +4,12 @@ namespace EdmondsCommerce\PHPQA;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class Psr4ValidatorTest
+ *
+ * @package EdmondsCommerce\PHPQA
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 class Psr4ValidatorTest extends TestCase
 {
     /**

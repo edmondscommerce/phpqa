@@ -223,7 +223,7 @@ And this will then run with full tests
 
 By default, the PHPUnit command will generate both textual output and HTML coverage.
 
-The coverage report will go into the project root /var directory as configured in [./configDefaults/generic/phpunit-with-coverage.xml](./configDefaults/generic/phpunit-with-coverage.xml)
+The coverage report will go into the project root /var directory as configured in [./configDefaults/generic/phpunit.xml](./configDefaults/generic/phpunit.xml)
 
 If you want to override the coverage report location, you will need to override this config file as normal.
 

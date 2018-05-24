@@ -4,6 +4,12 @@ namespace EdmondsCommerce\PHPQA\Markdown;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class LinksCheckerTest
+ *
+ * @package EdmondsCommerce\PHPQA\Markdown
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 class LinksCheckerTest extends TestCase
 {
     /**

@@ -55,19 +55,15 @@ fi
 # Now check if we are generating coverage and configure the correct file to include
 phpUnitConfigPath=$(configPath phpunit.xml)
 
-# If a CI variable is set, we use that, otherwise default to false.
-# Travis-CI sets a CI variable. You can easily set this in any other CI system
-# The value should the the string 'true' if this is CI
-CI=${CI:-'false'}
-
 ## Infection options
 # Let's use infection by default
 # If no PHPUnit coverage though, we cant use it
 useInfection=${useInfection:-1}
-if [[ "0" == "$phpUnitCoverage" ]]
+if [[ "0" == "$xdebugEnabled" ]]
 then
     useInfection=0
 fi
+
 # This is the path to our configuration
 infectionConfig=$(configPath infection.json)
 # Speeds up the tests https://infection.github.io/guide/command-line-options.html#threads
@@ -77,6 +73,11 @@ infectionThreads=${infectionThreads:-$(grep -c ^processor /proc/cpuinfo)}
 # for more details about this
 infectionMutationScoreIndicator=${mutationScoreIndicator:-60}
 # See here https://infection.github.io/guide/index.html#Covered-Code-Mutation-Score-Indicator
-infectionCoveredCodeMSI=${coveredCodeMSI:-90}
+infectionCoveredCodeMSI=${coveredCodeMSI:-80}
 # Only Covered
-infectionOnlyCovered=${infectionOnlyCovered:-1}
+infectionOnlyCovered=${infectionOnlyCovered:-0}
+
+# If a CI variable is set, we use that, otherwise default to false.
+# Travis-CI sets a CI variable. You can easily set this in any other CI system
+# The value should the the string 'true' if this is CI
+CI=${CI:-'false'}

@@ -3,13 +3,13 @@ infectionExitCode=99
 while (( infectionExitCode > 0 ))
 do
     set +e
-    set -x
-    onlyCovered=()
+    onlyCovered=( -- )
     if [[ "1" == "$infectionOnlyCovered" ]]
     then
         onlyCovered+=( --only-covered )
     fi
-    phpNoXdebug ./bin/infection \
+    set -x
+    phpNoXdebug -f ./bin/infection \
         ${onlyCovered[@]} \
         --threads=${infectionThreads} \
         --configuration=${infectionConfig} \
