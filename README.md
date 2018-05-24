@@ -123,7 +123,7 @@ https://github.com/phpstan/phpstan-strict-rules
 
 #### Mock Objects
 
-PHPStan gets confused by mock objects:
+Default PHPStan gets confused by mock objects:
 
 ```text
  ------ ------------------------------------------------------------------------------------------ 
@@ -134,7 +134,8 @@ PHPStan gets confused by mock objects:
  ------ ------------------------------------------------------------------------------------------ 
 ```
 
-To solve this you can use [`phpstan-phpunit`](https://github.com/phpstan/phpstan-phpunit).
+To solve this for PHPUnit mock objects you can use PHPStan's official PHPUnit extension
+[`phpstan-phpunit`](https://github.com/phpstan/phpstan-phpunit).
 
 You can find clear instructions on how to use this here [projects Github page](https://github.com/phpstan/phpstan-phpunit#usage).
 
