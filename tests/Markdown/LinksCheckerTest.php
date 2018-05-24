@@ -61,6 +61,7 @@ Bad link for "incorrect link" to "./foo.md"
 ----------
 
 Bad link for "invalid link" to "http://no.no.no"
+result: NULL
 ';
         $this->assertResult($pathToProject, $expectedExitCode, $expectedOutput);
     }
@@ -70,7 +71,7 @@ Bad link for "invalid link" to "http://no.no.no"
         ob_start();
         $actualExitCode = LinksChecker::main($pathToProject);
         $actualOutput   = ob_get_clean();
-        $this->assertSame($expectedExitCode, $actualExitCode);
         $this->assertSame($expectedOutput, $actualOutput);
+        $this->assertSame($expectedExitCode, $actualExitCode);
     }
 }

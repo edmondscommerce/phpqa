@@ -164,6 +164,7 @@ class LinksChecker
     {
         list(, $anchor, $link) = $link;
         $context = stream_context_create(['http' => ['method' => 'HEAD']]);
+        $result  = null;
         try {
             $handle = fopen($link, 'rb', false, $context);
             $result = stream_get_meta_data($handle);
@@ -174,7 +175,10 @@ class LinksChecker
             }
         } catch (\Throwable $e) {
         }
-        $errors[] = \sprintf("\nBad link for \"%s\" to \"%s\"\n", $anchor, $link);
+        $errors[] = \sprintf(
+            "\nBad link for \"%s\" to \"%s\"\nresult: %s\n",
+            $anchor, $link, var_export($result, true)
+        );
         $return   = 1;
     }
 }
