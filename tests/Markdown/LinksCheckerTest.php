@@ -18,7 +18,9 @@ class LinksCheckerTest extends TestCase
      */
     public function testInvalidProject()
     {
-        $expected = '
+        $pathToProject    = __DIR__.'/../assets/linksChecker/projectWithBrokenLinks';
+        $expectedExitCode = 1;
+        $expectedOutput   = '
 /docs/linksCheckerTest.md
 -------------------------
 
@@ -29,10 +31,7 @@ Bad link for "incorrect link" to "./../nothere.md"
 
 Bad link for "incorrect link" to "./foo.md"
 ';
-        ob_start();
-        LinksChecker::main(__DIR__.'/../assets/linksChecker/projectWithBrokenLinks');
-        $actual = ob_get_clean();
-        $this->assertSame($expected, $actual);
+        $this->assertResult($pathToProject, $expectedExitCode, $expectedOutput);
     }
 
     /**
@@ -47,24 +46,31 @@ Bad link for "incorrect link" to "./foo.md"
 
     public function testValidNoDocsFolder()
     {
-        $expected = 0;
-        $actual   = LinksChecker::main(__DIR__.'/../assets/linksChecker/projectWithReadmeNoDocsFolder');
-        $this->assertSame($expected, $actual);
+        $pathToProject    = __DIR__.'/../assets/linksChecker/projectWithReadmeNoDocsFolder';
+        $expectedExitCode = 0;
+        $expectedOutput   = '';
+        $this->assertResult($pathToProject, $expectedExitCode, $expectedOutput);
     }
 
     public function testItHandlesNonFileLinks()
     {
-        $expected       = 1;
-        $expectedOutput = '
+        $pathToProject    = __DIR__.'/../assets/linksChecker/projectWithNonFileLinks';
+        $expectedExitCode = 1;
+        $expectedOutput   = '
 /README.md
 ----------
 
 Bad link for "invalid link" to "http://no.no.no"
 ';
+        $this->assertResult($pathToProject, $expectedExitCode, $expectedOutput);
+    }
+
+    protected function assertResult(string $pathToProject, int $expectedExitCode, string $expectedOutput)
+    {
         ob_start();
-        $actual       = LinksChecker::main(__DIR__.'/../assets/linksChecker/projectWithNonFileLinks');
-        $actualOutput = ob_get_clean();
-        $this->assertSame($expected, $actual);
+        $actualExitCode = LinksChecker::main($pathToProject);
+        $actualOutput   = ob_get_clean();
+        $this->assertSame($expectedExitCode, $actualExitCode);
         $this->assertSame($expectedOutput, $actualOutput);
     }
 }
