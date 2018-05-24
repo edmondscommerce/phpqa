@@ -26,7 +26,6 @@ do
         --min-msi=${infectionMutationScoreIndicator} \
         --min-covered-msi=${infectionCoveredCodeMSI}
 
-
     infectionExitCode=$?
     set -e
     set +x
