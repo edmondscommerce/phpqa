@@ -3,20 +3,26 @@ infectionExitCode=99
 while (( infectionExitCode > 0 ))
 do
     set +e
-    onlyCovered=( -- )
-    if [[ "1" == "$infectionOnlyCovered" && "0" == "${phpunitFailedOnlyFiltered:-0}" ]]
+    extraArgs=( -- )
+    if [[ "1" == "$infectionOnlyCovered" && "0" ]]
     then
-        onlyCovered+=( --only-covered )
+        extraArgs+=( --only-covered )
+    fi
+    if [[ "0" == "${phpunitFailedOnlyFiltered:-0}" ]]
+    then
+        extraArgs+=( --coverage=$varDir/phpunit_logs )
+        extraArgs+=( --test-framework-options=" --no-coverage -c ${phpUnitConfigPath} " )
+    else
+        extraArgs+=( --test-framework-options=" -c ${phpUnitConfigPath} " )
     fi
     set -x
     phpNoXdebug -f ./bin/infection \
-        ${onlyCovered[@]} \
+        ${extraArgs[@]} \
         --threads=${infectionThreads} \
         --configuration=${infectionConfig} \
         --min-msi=${infectionMutationScoreIndicator} \
         --min-covered-msi=${infectionCoveredCodeMSI} \
-        --coverage=$varDir/phpunit_logs \
-        --test-framework-options=" --no-coverage -c ${phpUnitConfigPath} "
+
 
     infectionExitCode=$?
     set -e
