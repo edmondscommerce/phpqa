@@ -1,14 +1,14 @@
 {
   "autoload": {
     "psr-4": {
-      "All\\Valid\\":
+      "Odd\\Composer\\":
         "src/"
 
     }
   },
   "autoload-dev": {
     "psr-69": {
-      "All\\Valid\\": [
+      "Odd\\Composer\\": [
         "tests/"
       ]
     }

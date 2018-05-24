@@ -1,10 +1,9 @@
-pathsStringArray=($(IFS=" " eval 'echo "${pathsToCheck[*]}"'))
-
 set +e
 phpStanExitCode=99
 while (( phpStanExitCode > 0 ))
 do
-    eval phpNoXdebug -f bin/phpstan.phar -- analyse $pathsStringArray -l7 -c "$phpstanConfigPath"
+    set -x
+    phpNoXdebug -f bin/phpstan.phar -- analyse ${pathsToCheck[@]} -l7 -c "$phpstanConfigPath"
     phpStanExitCode=$?
     set +x
     #exit code 0 = fine, 1 = ran fine but found errors, else it means it crashed

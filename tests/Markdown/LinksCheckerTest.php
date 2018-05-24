@@ -17,11 +17,16 @@ class LinksCheckerTest extends TestCase
 -------------------------
 
 Bad link for "incorrect link" to "./../nothere.md"
+
+/README.md
+----------
+
+Bad link for "incorrect link" to "./foo.md"
 ';
         ob_start();
         LinksChecker::main(__DIR__.'/../assets/linksChecker/projectWithBrokenLinks');
         $actual = ob_get_clean();
-        $this->assertsame($expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     /**
