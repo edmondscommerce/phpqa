@@ -59,7 +59,7 @@ phpUnitConfigPath=$(configPath phpunit.xml)
 # Let's use infection by default
 # If no PHPUnit coverage though, we cant use it
 useInfection=${useInfection:-1}
-if [[ "0" == "$xdebugEnabled" ]]
+if [[ "0" == "$xdebugEnabled" || "0" == "$phpUnitCoverage" ]]
 then
     useInfection=0
 fi
