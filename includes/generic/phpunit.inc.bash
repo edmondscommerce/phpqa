@@ -17,6 +17,7 @@ then
     phpunitPath=bin/paratest
     paratestConfig=(--phpunit bin/phpunit)
 fi
+phpunitFailedOnlyFiltered=0
 phpunitExitCode=99
 while (( phpunitExitCode > 0 ))
 do
@@ -30,6 +31,7 @@ do
         if [[ "$rerunFilterPattern" != '/.*/' ]]
         then
             rerunFilter+=( --filter $IFS $rerunFilterPattern)
+            phpunitFailedOnlyFiltered=1
         fi
     fi
     noCoverage=(" ")

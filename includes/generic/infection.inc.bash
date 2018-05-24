@@ -4,7 +4,7 @@ while (( infectionExitCode > 0 ))
 do
     set +e
     onlyCovered=( -- )
-    if [[ "1" == "$infectionOnlyCovered" ]]
+    if [[ "1" == "$infectionOnlyCovered" && "0" == "${phpunitFailedOnlyFiltered:-0}" ]]
     then
         onlyCovered+=( --only-covered )
     fi

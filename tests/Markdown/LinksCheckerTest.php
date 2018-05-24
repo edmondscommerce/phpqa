@@ -67,5 +67,4 @@ Bad link for "invalid link" to "http://no.no.no"
         $this->assertSame($expected, $actual);
         $this->assertSame($expectedOutput, $actualOutput);
     }
-
 }

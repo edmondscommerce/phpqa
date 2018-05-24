@@ -40,6 +40,5 @@ class PHPUnitRerunCommandGeneratorTest extends TestCase
         $generator = new PHPUnitRerunCommandGenerator();
         $this->expectException(\RuntimeException::class);
         $generator->main(__DIR__.'/assets/phpunitRerun/invalid.xml.phpunit.junit.log.xml');
-
     }
 }

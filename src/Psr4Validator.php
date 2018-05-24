@@ -13,11 +13,11 @@ class Psr4Validator
      * @var array
      */
     protected $decodedComposerJson;
-    private   $parseErrors  = [];
-    private   $psr4Errors   = [];
-    private   $ignoreRegexPatterns;
-    private   $ignoredFiles = [];
-    private   $missingPaths = [];
+    private $parseErrors  = [];
+    private $psr4Errors   = [];
+    private $ignoreRegexPatterns;
+    private $ignoredFiles = [];
+    private $missingPaths = [];
 
     /**
      * Psr4Validator constructor.
