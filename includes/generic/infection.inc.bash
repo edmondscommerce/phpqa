@@ -18,7 +18,8 @@ while (( infectionExitCode > 0 ))
 do
     set +e
     set -x
-    phpNoXdebug -f ./bin/infection \
+    rm -rf $varDir/infection/*
+    php -f ./bin/infection \
         ${extraArgs[@]} \
         --threads=${infectionThreads} \
         --configuration=${infectionConfig} \

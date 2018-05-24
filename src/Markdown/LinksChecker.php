@@ -177,7 +177,9 @@ class LinksChecker
         }
         $errors[] = \sprintf(
             "\nBad link for \"%s\" to \"%s\"\nresult: %s\n",
-            $anchor, $link, var_export($result, true)
+            $anchor,
+            $link,
+            var_export($result, true)
         );
         $return   = 1;
     }
