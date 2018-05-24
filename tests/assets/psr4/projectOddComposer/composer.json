@@ -1,0 +1,16 @@
+{
+  "autoload": {
+    "psr-4": {
+      "All\\Valid\\":
+        "src/"
+
+    }
+  },
+  "autoload-dev": {
+    "psr-69": {
+      "All\\Valid\\": [
+        "tests/"
+      ]
+    }
+  }
+}

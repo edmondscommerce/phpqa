@@ -1,0 +1,18 @@
+{
+  "autoload": {
+    "psr-4": {
+      "In\\Valid\\": [
+        "src/",
+        "missing/path",
+        "missing/magento/path"
+      ]
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "In\\Valid\\": [
+        "tests/"
+      ]
+    }
+  }
+}

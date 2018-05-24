@@ -1,5 +1,8 @@
 #!/usr/bin/env php
 <?php declare(strict_types=1);
+
+use EdmondsCommerce\PHPQA\Helper;
+
 $files = [
     __DIR__.'/../../../autoload.php',
     __DIR__.'/../vendor/autoload.php',
@@ -24,8 +27,19 @@ if (!$autoloadFileFound) {
 $ignoredRegexPatterns = array_slice($argv, 1);
 
 try {
-    (new \EdmondsCommerce\PHPQA\Psr4Validator($ignoredRegexPatterns))->main();
-} catch (\RuntimeException $e) {
+    $errors = (new \EdmondsCommerce\PHPQA\Psr4Validator(
+        $ignoredRegexPatterns,
+        Helper::getProjectRootDirectory(),
+        Helper::getComposerJsonDecoded()
+    ))->main();
+    if ([] !== $errors) {
+        echo "\nErrors found:\n"
+             .\var_export($errors, true);
+        throw new \RuntimeException(
+            'Errors validating PSR4'
+        );
+    }
+} catch (\Exception $e) {
     echo "\n".$e->getMessage()."\n";
     exit(1);
 }

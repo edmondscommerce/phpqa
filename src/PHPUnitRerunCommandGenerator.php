@@ -80,6 +80,6 @@ class PHPUnitRerunCommandGenerator
      */
     protected function getDefaultFilePath(): string
     {
-        return Config::getProjectRootDirectory().'/var/qa/phpunit.junit.log.xml';
+        return Helper::getProjectRootDirectory().'/var/qa/phpunit.junit.log.xml';
     }
 }

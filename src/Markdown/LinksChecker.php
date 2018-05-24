@@ -2,7 +2,7 @@
 
 namespace EdmondsCommerce\PHPQA\Markdown;
 
-use EdmondsCommerce\PHPQA\Config;
+use EdmondsCommerce\PHPQA\Helper;
 
 class LinksChecker
 {
@@ -137,7 +137,7 @@ class LinksChecker
     public static function main(string $projectRootDirectory = null): int
     {
         $return               = 0;
-        $projectRootDirectory = $projectRootDirectory ?? Config::getProjectRootDirectory();
+        $projectRootDirectory = $projectRootDirectory ?? Helper::getProjectRootDirectory();
         $files                = static::getFiles($projectRootDirectory);
         foreach ($files as $file) {
             $relativeFile = str_replace($projectRootDirectory, '', $file);
