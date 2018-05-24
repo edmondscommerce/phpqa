@@ -121,7 +121,6 @@ https://github.com/phpstan/phpstan-strict-rules
 
 ### PHPStan
 
-
 #### Mock Objects
 
 PHPStan gets confused by mock objects:
