@@ -22,6 +22,7 @@ class LinksChecker
 
     /**
      * @param string $projectRootDirectory
+     *
      * @return string
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
@@ -40,6 +41,7 @@ class LinksChecker
 
     /**
      * @param string $projectRootDirectory
+     *
      * @return array
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
@@ -104,24 +106,27 @@ class LinksChecker
         array &$errors,
         int &$return
     ) {
-        $path = $link[2];
-        if (preg_match('/^(http|#)/', $path)) {
+        $path = \trim($link[2]);
+        if (0 === \strpos($path, '#')) {
             return;
         }
+        if (\preg_match('%^(http|//)%', $path)) {
+            return self::validateHttpLink($link, $errors, $return);
+        }
 
-        $path  = current(explode('#', $path, 2));
-        $start = rtrim($projectRootDirectory, '/');
-        if ($path[0] !== '/' || 0 === strpos($path, './')) {
-            $relativeSubdirs = preg_replace(
+        $path  = \current(\explode('#', $path, 2));
+        $start = \rtrim($projectRootDirectory, '/');
+        if ($path[0] !== '/' || 0 === \strpos($path, './')) {
+            $relativeSubdirs = \preg_replace(
                 '%^'.$projectRootDirectory.'%',
                 '',
-                dirname($file)
+                \dirname($file)
             );
-            $start           .= '/'.rtrim($relativeSubdirs, '/');
+            $start           .= '/'.\rtrim($relativeSubdirs, '/');
         }
-        $realpath = realpath($start.'/'.$path);
-        if (empty($realpath) || (!file_exists($realpath) && !is_dir($realpath))) {
-            $errors[] = sprintf("\nBad link for \"%s\" to \"%s\"\n", $link[1], $link[2]);
+        $realpath = \realpath($start.'/'.$path);
+        if (empty($realpath) || (!\file_exists($realpath) && !\is_dir($realpath))) {
+            $errors[] = \sprintf("\nBad link for \"%s\" to \"%s\"\n", $link[1], $link[2]);
             $return   = 1;
         }
     }
@@ -142,13 +147,8 @@ class LinksChecker
         foreach ($files as $file) {
             $relativeFile = str_replace($projectRootDirectory, '', $file);
             $title        = "\n$relativeFile\n".str_repeat('-', strlen($relativeFile))."\n";
-            if (!file_exists($file)) {
-                echo "$title\nError - file $file does not exist\n";
-                $return = 1;
-                continue;
-            }
-            $errors = [];
-            $links  = static::getLinks($file);
+            $errors       = [];
+            $links        = static::getLinks($file);
             foreach ($links as $link) {
                 static::checkLink($projectRootDirectory, $link, $file, $errors, $return);
             }
@@ -158,5 +158,24 @@ class LinksChecker
         }
 
         return $return;
+    }
+
+    private static function validateHttpLink(array $link, array &$errors, int &$return)
+    {
+        list(, $anchor, $link) = $link;
+        $context = stream_context_create(['http' => ['method' => 'HEAD']]);
+        try {
+            $fd      = fopen($link, 'rb', false, $context);
+            $result = stream_get_meta_data($fd);
+            foreach ($result['wrapper_data'] as $header) {
+                if (false !== strpos($header, ' 200 ')) {
+                    return;
+                }
+            }
+        } catch (\Throwable $e) {
+        }
+        $errors[] = \sprintf("\nBad link for \"%s\" to \"%s\"\n", $anchor, $link);
+        $return   = 1;
+
     }
 }
