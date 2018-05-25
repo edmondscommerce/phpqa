@@ -19,7 +19,7 @@ cd ./../../../
 composer install
 git checkout HEAD composer.lock
 
-mkdir -p $DIR/cache/qa && chmod 777 $DIR/cache/qa
+mkdir -p $DIR/var/qa/cache && chmod 777 $DIR/var/qa/cache
 
 echo "
 ===========================================

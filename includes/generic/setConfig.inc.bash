@@ -10,7 +10,7 @@ projectConfigPath="$projectRoot/qaConfig/"
 # project var dir, sub directory for qa cache files and output files
 varDir="$projectRoot/var/qa";
 
-cacheDir="$projectRoot/cache/qa";
+cacheDir="$varDir/cache";
 
 # the path in this library for default config
 defaultConfigPath="$(readlink -f ./../configDefaults/)"
