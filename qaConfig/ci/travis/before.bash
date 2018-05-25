@@ -15,6 +15,7 @@ rm -f composer.lock
 gitBranch=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
 echo "gitBranch is $gitBranch"
 git checkout $gitBranch
+cd ./../../../
 composer install
 git checkout HEAD composer.lock
 
