@@ -417,7 +417,7 @@ If you got here you made it!
 
 You can use this pipeline on Travis-CI.
 
-To see an example of how to do this, you can look at the [.travis.yml](./.travis.yml) and [./.travis.bash](./.travis.bash) files in this repo.
+To see an example of how to do this, you can look at the [.travis.yml](./.travis.yml).
 
 You can also look at [Doctrine Static Meta](https://github.com/edmondscommerce/doctrine-static-meta) as a more complete example - on travis [here](https://travis-ci.org/edmondscommerce/doctrine-static-meta).
 
