@@ -8,7 +8,8 @@ function runInfection(){
     fi
     if [[ "0" == "${phpunitFailedOnlyFiltered:-0}" ]]
     then
-        phpNoXdebug -f ./bin/infection \
+        # Don't run infection without xdebug
+        ${phpBinPath} -f ./bin/infection \
             "${extraArgs[@]}" \
             --coverage=$varDir/phpunit_logs \
             --threads=${infectionThreads} \
@@ -17,7 +18,7 @@ function runInfection(){
             --min-covered-msi=${infectionCoveredCodeMSI} \
             --test-framework-options=" --verbose --debug"
     else
-        phpNoXdebug -f ./bin/infection \
+        ${phpBinPath} -f ./bin/infection \
             "${extraArgs[@]}" \
             --threads=${infectionThreads} \
             --configuration=${infectionConfig} \
