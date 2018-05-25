@@ -1,14 +1,22 @@
 {
-    "timeout": 10,
-    "source": {
-        "directories": [
-            "src"
-        ]
-    },
-    "logs": {
-        "text": "var/qa/infection-log.txt"
-    },
+  "timeout": 10,
+  "source": {
+    "directories": [
+      "src"
+    ]
+  },
+  "note:": [
+    "yes paths are handled inconsistently",
+    "the logs paths are from the project root",
+    "the tmp path is from the config file location"
+  ],
+  "logs": {
+    "text": "var/qa/infection/log.txt",
+    "summary": "var/qa/infection/summary-log.txt",
+    "debug": "var/qa/infection/debug-log.txt"
+  },
   "phpUnit": {
     "configDir": "./"
-  }
+  },
+  "tmpDir": "../var/qa/infection/tmp"
 }

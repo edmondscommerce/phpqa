@@ -1,25 +1,18 @@
 # see http://about.travis-ci.org/docs/user/languages/php/ for more hints
 language: php
 
-# We need to be able to reclone the repo so it can't be shallow
 git:
   depth: false
 
-
-php:
-  - 7.0
-  - 7.1
-  - 7.2
-  - hhvm
-
-env:
-  - phpUnitQuickTests=0 phpUnitCoverage=0
-  
 matrix:
-  allow_failures:
-    - php: 7.0
-    - php: hhvm
+  include:
+    - php: 7.1
+      env: phpunitCoverage="0"
+    - php: 7.2
+      env: phpunitCoverage="1"
 
-before_script: bash -x .travis.bash
+before_script: bash -x qaConfig/ci/travis/before.bash
 
-script: bin/qa
+script: bash -x ci.bash
+
+after_script: bash -x qaConfig/ci/travis/after.bash

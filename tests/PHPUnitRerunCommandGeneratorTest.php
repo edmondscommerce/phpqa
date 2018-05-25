@@ -6,28 +6,39 @@ use PHPUnit\Framework\TestCase;
 
 class PHPUnitRerunCommandGeneratorTest extends TestCase
 {
-
-
     public function testCanParseFailuresAndErrors()
     {
         $generator = new PHPUnitRerunCommandGenerator();
-        $command   = $generator->main(__DIR__.'/assets/phpunit.junit.log.xml');
-        $this->assertNotEmpty($command);
+        $filter    = $generator->main(__DIR__.'/assets/phpunitRerun/phpunit.junit.log.xml');
+        $this->assertNotEmpty($filter);
+        $this->assertNotEquals(PHPUnitRerunCommandGenerator::NO_FILTER, $filter);
     }
 
-//    /**
-//     * This is only used for manually testing the process
-//     */
-//    public function testAlwaysFail()
-//    {
-//        $this->assertTrue(false);
-//    }
-//
-//    /**
-//     * This is only used for manually testing the process
-//     */
-//    public function testAlsoAlwaysFail()
-//    {
-//        $this->assertTrue(false);
-//    }
+    public function testWillReturnNoFilterIfLogPathDoesNotExist()
+    {
+        $generator = new PHPUnitRerunCommandGenerator();
+        $filter    = $generator->main('/path/not/exists');
+        $this->assertEquals(PHPUnitRerunCommandGenerator::NO_FILTER, $filter);
+    }
+
+    public function testWillReturnNoFilterIfLogIsEmpty()
+    {
+        $generator = new PHPUnitRerunCommandGenerator();
+        $filter    = $generator->main(__DIR__.'/assets/phpunitRerun/empty.phpunit.junit.log.xml');
+        $this->assertEquals(PHPUnitRerunCommandGenerator::NO_FILTER, $filter);
+    }
+
+    public function testWillReturnNoFilterIfNoFailures()
+    {
+        $generator = new PHPUnitRerunCommandGenerator();
+        $filter    = $generator->main(__DIR__.'/assets/phpunitRerun/no.failures.phpunit.junit.log.xml');
+        $this->assertEquals(PHPUnitRerunCommandGenerator::NO_FILTER, $filter);
+    }
+
+    public function testItWillThrowExceptionIfXmlInvalid()
+    {
+        $generator = new PHPUnitRerunCommandGenerator();
+        $this->expectException(\RuntimeException::class);
+        $generator->main(__DIR__.'/assets/phpunitRerun/invalid.xml.phpunit.junit.log.xml');
+    }
 }

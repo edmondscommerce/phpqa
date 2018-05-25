@@ -262,7 +262,7 @@ And this will then run with full tests
 
 By default, the PHPUnit command will generate both textual output and HTML coverage.
 
-The coverage report will go into the project root /var directory as configured in [./configDefaults/generic/phpunit-with-coverage.xml](./configDefaults/generic/phpunit-with-coverage.xml)
+The coverage report will go into the project root /var directory as configured in [./configDefaults/generic/phpunit.xml](./configDefaults/generic/phpunit.xml)
 
 If you want to override the coverage report location, you will need to override this config file as normal.
 
@@ -417,7 +417,7 @@ If you got here you made it!
 
 You can use this pipeline on Travis-CI.
 
-To see an example of how to do this, you can look at the [.travis.yml](./.travis.yml) and [./.travis.bash](./.travis.bash) files in this repo.
+To see an example of how to do this, you can look at the [.travis.yml](./.travis.yml).
 
 You can also look at [Doctrine Static Meta](https://github.com/edmondscommerce/doctrine-static-meta) as a more complete example - on travis [here](https://travis-ci.org/edmondscommerce/doctrine-static-meta).
 

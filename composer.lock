@@ -2278,7 +2278,7 @@
         },
         {
             "name": "symfony/config",
-            "version": "v4.0.10",
+            "version": "v4.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
@@ -2341,7 +2341,7 @@
         },
         {
             "name": "symfony/console",
-            "version": "v4.0.10",
+            "version": "v4.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
@@ -2409,16 +2409,16 @@
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v4.0.10",
+            "version": "v4.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "c5d5cd9756d52b642a294c93a5c3a40a3bcc424b"
+                "reference": "4b272d65e9c0d2d40e2d23bab3c7a184ad4a3a18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/c5d5cd9756d52b642a294c93a5c3a40a3bcc424b",
-                "reference": "c5d5cd9756d52b642a294c93a5c3a40a3bcc424b",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/4b272d65e9c0d2d40e2d23bab3c7a184ad4a3a18",
+                "reference": "4b272d65e9c0d2d40e2d23bab3c7a184ad4a3a18",
                 "shasum": ""
             },
             "require": {
@@ -2476,11 +2476,11 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2018-05-21T10:09:47+00:00"
+            "time": "2018-05-25T11:57:52+00:00"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v4.0.10",
+            "version": "v4.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
@@ -2530,7 +2530,7 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v4.0.10",
+            "version": "v4.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
@@ -2693,7 +2693,7 @@
         },
         {
             "name": "symfony/process",
-            "version": "v4.0.10",
+            "version": "v4.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
@@ -2742,7 +2742,7 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v4.0.10",
+            "version": "v4.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",

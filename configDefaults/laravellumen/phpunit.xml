@@ -1,0 +1,21 @@
+<phpunit
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/3.7/phpunit.xsd"
+        cacheTokens="false"
+        bootstrap="../../../../../bootstrap/app.php"
+        verbose="true"
+        colors="true">
+    <logging>
+        <log type="junit" target="../../../../../var/qa/phpunit_logs/phpunit.junit.xml"/>
+    </logging>
+    <testsuites>
+        <testsuite name="tests">
+            <directory suffix="Test.php">../../../../../tests/</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="QUEUE_DRIVER" value="sync"/>
+    </php>
+</phpunit>

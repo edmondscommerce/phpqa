@@ -5,45 +5,60 @@ namespace EdmondsCommerce\PHPQA;
 class Psr4Validator
 {
 
+    /**
+     * @var string
+     */
+    protected $pathToProjectRoot;
+    /**
+     * @var array
+     */
+    protected $decodedComposerJson;
     private $parseErrors  = [];
     private $psr4Errors   = [];
     private $ignoreRegexPatterns;
     private $ignoredFiles = [];
+    private $missingPaths = [];
 
     /**
      * Psr4Validator constructor.
      *
-     * @param array $ignoreRegexPatterns Set of regex patterns used to exclude files or directories
+     * @param array  $ignoreRegexPatterns Set of regex patterns used to exclude files or directories
+     * @param string $pathToProjectRoot
+     * @param array  $decodedComposerJson
      */
-    public function __construct(array $ignoreRegexPatterns)
+    public function __construct(array $ignoreRegexPatterns, string $pathToProjectRoot, array $decodedComposerJson)
     {
         $this->ignoreRegexPatterns = $ignoreRegexPatterns;
+        $this->pathToProjectRoot   = $pathToProjectRoot;
+        $this->decodedComposerJson = $decodedComposerJson;
     }
 
     /**
      * @throws \Exception
      */
-    public function main()
+    public function main(): array
     {
         $this->loop();
-        if (empty($this->psr4Errors) && empty($this->parseErrors)) {
-            return;
-        }
         $errors = [];
+        //Actual Errors
         if (!empty($this->psr4Errors)) {
             $errors['PSR-4 Errors:'] = $this->psr4Errors;
         }
         if (!empty($this->parseErrors)) {
             $errors['Parse Errors:'] = $this->parseErrors;
         }
+        if (!empty($this->missingPaths)) {
+            $errors['Missing Paths:'] = $this->missingPaths;
+        }
+        if ([] === $errors) {
+            return $errors;
+        }
+        //Debug Info
         if (!empty($this->ignoredFiles)) {
             $errors['Ignored Files:'] = $this->ignoredFiles;
         }
-        echo "\nErrors found:\n"
-             .\var_export($errors, true);
-        throw new \RuntimeException(
-            'Errors validating PSR4'
-        );
+
+        return $errors;
     }
 
     /**
@@ -105,9 +120,9 @@ class Psr4Validator
     /**
      * @param string $realPath
      *
-     * @return \RecursiveIteratorIterator|\SplFileInfo[]
+     * @return \SplHeap|\SplFileInfo[]
      */
-    private function getDirectoryIterator(string $realPath): \RecursiveIteratorIterator
+    private function getDirectoryIterator(string $realPath)
     {
         $directoryIterator = new \RecursiveDirectoryIterator(
             $realPath,
@@ -118,22 +133,32 @@ class Psr4Validator
             \RecursiveIteratorIterator::SELF_FIRST
         );
 
-        return $iterator;
+        return new class($iterator) extends \SplHeap
+        {
+            public function __construct(\RecursiveIteratorIterator $iterator)
+            {
+                foreach ($iterator as $item) {
+                    $this->insert($item);
+                }
+            }
+
+            public function compare($item1, $item2)
+            {
+                return strcmp($item2->getRealpath(), $item1->getRealpath());
+            }
+        };
     }
 
-    /**
-     * @throws \Exception
-     * @SuppressWarnings(PHPMD.StaticAccess)
-     */
-    private function getComposerJson(): array
+    private function addMissingPathError(string $path, string $namespaceRoot, string $absPathRoot)
     {
-        $path    = Config::getProjectRootDirectory().'/composer.json';
-        $decoded = \json_decode(\file_get_contents($path), true);
-        if (JSON_ERROR_NONE !== \json_last_error()) {
-            throw new \RuntimeException('Failed loading composer.json: '.\json_last_error_msg());
+        $invalidPathMessage = "Namespace root '$namespaceRoot'".
+                              "\ncontains a path '$path''".
+                              "\nwhich doesn't exist\n";
+        if (stripos($absPathRoot, "Magento") !== false) {
+            $invalidPathMessage .= 'Magento\'s composer includes this by default, '
+                                   .'it should be removed from the psr-4 section';
         }
-
-        return $decoded;
+        $this->missingPaths[$path] = $invalidPathMessage;
     }
 
     /**
@@ -144,7 +169,7 @@ class Psr4Validator
      */
     private function yieldPhpFilesToCheck(): \Generator
     {
-        $json = $this->getComposerJson();
+        $json = $this->decodedComposerJson;
         foreach (['autoload', 'autoload-dev'] as $autoload) {
             if (!isset($json[$autoload]['psr-4'])) {
                 continue;
@@ -155,17 +180,11 @@ class Psr4Validator
                     $paths = [$paths];
                 }
                 foreach ($paths as $path) {
-                    $absPathRoot     = Config::getProjectRootDirectory().'/'.$path;
+                    $absPathRoot     = $this->pathToProjectRoot.'/'.$path;
                     $realAbsPathRoot = \realpath($absPathRoot);
                     if (false === $realAbsPathRoot) {
-                        $invalidPathMessage = "Namespace root '$namespaceRoot'".
-                                              "\ncontains a path '$path''".
-                                              "\nwhich doesn't exist\n";
-                        if (strpos($absPathRoot, "Magento") !== false) {
-                            $invalidPathMessage .= 'Magento\'s composer includes this by default, '
-                                                   .'it should be removed from the psr-4 section';
-                        }
-                        throw new \RuntimeException($invalidPathMessage);
+                        $this->addMissingPathError($path, $namespaceRoot, $absPathRoot);
+                        continue;
                     }
                     $iterator = $this->getDirectoryIterator($absPathRoot);
                     foreach ($iterator as $fileInfo) {

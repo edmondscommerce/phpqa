@@ -10,7 +10,7 @@ projectConfigPath="$projectRoot/qaConfig/"
 # project var dir, sub directory for qa cache files and output files
 varDir="$projectRoot/var/qa";
 
-cacheDir="$projectRoot/cache/qa";
+cacheDir="$varDir/cache";
 
 # the path in this library for default config
 defaultConfigPath="$(readlink -f ./../configDefaults/)"
@@ -41,38 +41,43 @@ phpUnitQuickTests=${phpUnitQuickTests:-0}
 
 # PHPUnit Coverage - default disabled
 # if enabled, tests will run with Xdebug and generate coverage (which is a lot slower)
-phpUnitCoverage=${phpUnitCoverage:-0}
+phpUnitCoverage=${phpUnitCoverage:-1}
 
 # How many minutes after a failed PHPUnit run you can retry failed only
 phpunitRerunTimeoutMins=${phpunitRerunTimeoutMins:-5}
 
-if [[ "1" == "$phpUnitCoverage" && "1" == "$xdebugEnabled" ]]
+# Can only generate coverage if Xdebug is enabled
+if [[ "1" != "$xdebugEnabled" ]]
 then
-    phpUnitConfigPath=$(configPath phpunit-with-coverage.xml)
-else
-    phpUnitConfigPath=$(configPath phpunit.xml)
+    phpUnitCoverage=0
 fi
+
+# Now check if we are generating coverage and configure the correct file to include
+phpUnitConfigPath=$(configPath phpunit.xml)
+
+## Infection options
+# Let's use infection by default
+# If no PHPUnit coverage though, we cant use it
+useInfection=${useInfection:-1}
+if [[ "0" == "$xdebugEnabled" || "0" == "$phpUnitCoverage" ]]
+then
+    useInfection=0
+fi
+
+# This is the path to our configuration
+infectionConfig=$(configPath infection.json)
+# Speeds up the tests https://infection.github.io/guide/command-line-options.html#threads
+# Can cause issues if the test rely on the database
+infectionThreads=${infectionThreads:-$(grep -c ^processor /proc/cpuinfo)}
+# See here https://infection.github.io/guide/index.html#Mutation-Score-Indicator-MSI and here
+# for more details about this
+infectionMutationScoreIndicator=${mutationScoreIndicator:-60}
+# See here https://infection.github.io/guide/index.html#Covered-Code-Mutation-Score-Indicator
+infectionCoveredCodeMSI=${coveredCodeMSI:-80}
+# Only Covered
+infectionOnlyCovered=${infectionOnlyCovered:-0}
 
 # If a CI variable is set, we use that, otherwise default to false.
 # Travis-CI sets a CI variable. You can easily set this in any other CI system
 # The value should the the string 'true' if this is CI
 CI=${CI:-'false'}
-
-## Infection options
-# Let's use infection by default - set this to 0 to use phpunit instead
-# If no Xdebug though, we cant use it
-useInfection=${useInfection:-1}
-if [[ "0" == "$xdebugEnabled" ]]
-then
-    useInfection=0
-fi
-# This is the path to our configuration
-infectionConfig=$(configPath infection.json)
-# Speeds up the tests https://infection.github.io/guide/command-line-options.html#threads
-# Can cause issues if the test rely on the database
-numberOfCores=$(grep -c ^processor /proc/cpuinfo)
-# See here https://infection.github.io/guide/index.html#Mutation-Score-Indicator-MSI and here
-# for more details about this
-mutationScoreIndicator=${mutationScoreIndicator:-60}
-# See here https://infection.github.io/guide/index.html#Covered-Code-Mutation-Score-Indicator
-coveredCodeMSI=${coveredCodeMSI:-90}

@@ -180,8 +180,14 @@ Running PHPUnit Tests
 "
 if [[ "$phpqaQuickTests" == "1" ]]
 then
-    echo "Skipping PHP Unit because \$phpqaQuickTests=1"
+    echo "Skipping PHP Unit & Infection because \$phpqaQuickTests=1"
 else
+    echo "
+Running tests using PhpUnit
+---------------------------
+"
+    runTool phpunit
+
     if [[ "$useInfection" == "1" ]]
     then
         echo "
@@ -189,12 +195,6 @@ Running tests using Infection
 -----------------------------
 "
         runTool infection
-    else
-        echo "
-Running tests using PhpUnit
----------------------------
-"
-        runTool phpunit
     fi
 fi
 

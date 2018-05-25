@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="/var/www/vhosts/phpqa/tests" tests="4" assertions="3" errors="1" failures="0" skipped="0" time="0.007717">
+    <testsuite name="EdmondsCommerce\PHPQA\Markdown\LinksCheckerTest" file="/var/www/vhosts/phpqa/tests/Markdown/LinksCheckerTest.php" tests="3" assertions="3" errors="0" failures="0" skipped="0" time="0.007327">
+      <testcase name="testMain" class="EdmondsCommerce\PHPQA\Markdown\LinksCheckerTest" classname="EdmondsCommerce.PHPQA.Markdown.LinksCheckerTest" file="/var/www/vhosts/phpqa/tests/Markdown/LinksCheckerTest.php" line="38" assertions="1" time="0.005744"/>
+      <testcase name="testMainNoDocsFolder" class="EdmondsCommerce\PHPQA\Markdown\LinksCheckerTest" classname="EdmondsCommerce.PHPQA.Markdown.LinksCheckerTest" file="/var/www/vhosts/phpqa/tests/Markdown/LinksCheckerTest.php" line="65" assertions="1" time="0.000634"/>
+      <testcase name="testMainNoReadmeFile" class="EdmondsCommerce\PHPQA\Markdown\LinksCheckerTest" classname="EdmondsCommerce.PHPQA.Markdown.LinksCheckerTest" file="/var/www/vhosts/phpqa/tests/Markdown/LinksCheckerTest.php" line="85" assertions="1" time="0.000949"/>
+    </testsuite>
+  </testsuite>
+</testsuites
