@@ -15,7 +15,6 @@ export phpUnitQuickTests=0
 export phpUnitCoverage=${phpunitCoverage:-0}
 
 # run the QA pipeline, echo tee to stdout and also to log file
-
 bin/qa |& tee > var/qa/ci.log
 
 echo "
