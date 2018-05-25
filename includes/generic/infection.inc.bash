@@ -1,27 +1,29 @@
 #!/usr/bin/env bash
 
 function runInfection(){
-#    local extraArgs=( -- )
-#    if [[ "1" == "$infectionOnlyCovered" && "0" ]]
-#    then
-#        extraArgs+=( --only-covered )
-#    fi
+    local extraArgs=( -- )
+    if [[ "1" == "$infectionOnlyCovered" && "0" ]]
+    then
+        extraArgs+=( --only-covered )
+    fi
     if [[ "0" == "${phpunitFailedOnlyFiltered:-0}" ]]
     then
-        phpNoXdebug ./bin/infection \
+        phpNoXdebug -f ./bin/infection \
+            "${extraArgs[@]}" \
             --coverage=$varDir/phpunit_logs \
             --threads=${infectionThreads} \
             --configuration=${infectionConfig} \
             --min-msi=${infectionMutationScoreIndicator} \
             --min-covered-msi=${infectionCoveredCodeMSI} \
-            --test-framework-options=" --no-coverage -c ${phpUnitConfigPath}"
+            --test-framework-options=" --verbose --debug"
     else
-        phpNoXdebug ./bin/infection \
+        phpNoXdebug -f ./bin/infection \
+            "${extraArgs[@]}" \
             --threads=${infectionThreads} \
             --configuration=${infectionConfig} \
             --min-msi=${infectionMutationScoreIndicator} \
             --min-covered-msi=${infectionCoveredCodeMSI} \
-            --test-framework-options=" -c ${phpUnitConfigPath}"
+            --test-framework-options=" --verbose  --debug"
     fi
 }
 

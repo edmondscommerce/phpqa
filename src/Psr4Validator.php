@@ -13,11 +13,11 @@ class Psr4Validator
      * @var array
      */
     protected $decodedComposerJson;
-    private $parseErrors  = [];
-    private $psr4Errors   = [];
-    private $ignoreRegexPatterns;
-    private $ignoredFiles = [];
-    private $missingPaths = [];
+    private   $parseErrors  = [];
+    private   $psr4Errors   = [];
+    private   $ignoreRegexPatterns;
+    private   $ignoredFiles = [];
+    private   $missingPaths = [];
 
     /**
      * Psr4Validator constructor.
@@ -39,21 +39,23 @@ class Psr4Validator
     public function main(): array
     {
         $this->loop();
-        if (empty($this->psr4Errors) && empty($this->parseErrors)) {
-            return [];
-        }
         $errors = [];
+        //Actual Errors
         if (!empty($this->psr4Errors)) {
             $errors['PSR-4 Errors:'] = $this->psr4Errors;
         }
         if (!empty($this->parseErrors)) {
             $errors['Parse Errors:'] = $this->parseErrors;
         }
-        if (!empty($this->ignoredFiles)) {
-            $errors['Ignored Files:'] = $this->ignoredFiles;
-        }
         if (!empty($this->missingPaths)) {
             $errors['Missing Paths:'] = $this->missingPaths;
+        }
+        if ([] === $errors) {
+            return $errors;
+        }
+        //Debug Info
+        if (!empty($this->ignoredFiles)) {
+            $errors['Ignored Files:'] = $this->ignoredFiles;
         }
 
         return $errors;

@@ -96,7 +96,9 @@ which doesn\'t exist
 Magento\'s composer includes this by default, it should be removed from the psr-4 section',
                 ],
         ];
-        $this->assertSame($this->recursiveKeySort($expected), $this->recursiveKeySort($actual));
+        $this->recursiveKeySort($expected);
+        $this->recursiveKeySort($actual);
+        $this->assertSame($expected, $actual);
     }
 
     private function recursiveKeySort(array &$array): bool
