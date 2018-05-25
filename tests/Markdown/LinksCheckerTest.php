@@ -60,7 +60,7 @@ Bad link for "incorrect link" to "./foo.md"
 /README.md
 ----------
 
-Bad link for "invalid link" to "http://no.no.no"
+Bad link for "invalid link" to "https://httpstat.us/404"
 result: NULL
 ';
         $this->assertResult($pathToProject, $expectedExitCode, $expectedOutput);
