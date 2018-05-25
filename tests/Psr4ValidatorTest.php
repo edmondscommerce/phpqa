@@ -99,5 +99,4 @@ Magento\'s composer includes this by default, it should be removed from the psr-
 
         $this->assertEquals($expected, $actual);
     }
-
 }
