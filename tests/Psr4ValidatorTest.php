@@ -61,28 +61,23 @@ class Psr4ValidatorTest extends TestCase
                 [
                     'In\\Valid\\' =>
                         [
-
-                            [
-                                'fileInfo'          => $projectRoot.'/src/Wrong.php',
-                                'expectedNamespace' => 'In\\Valid',
-                                'actualNamespace'   => 'Totally',
-                            ],
-
-                            [
-                                'fileInfo'          => $projectRoot.'/src/Nested/Deep/Bad.php',
-                                'expectedNamespace' => 'In\\Valid\\Nested\\Deep',
-                                'actualNamespace'   => 'So',
-                            ],
+                            0 =>
+                                [
+                                    'fileInfo'          => $projectRoot.'/src/Nested/Deep/Bad.php',
+                                    'expectedNamespace' => 'In\\Valid\\Nested\\Deep',
+                                    'actualNamespace'   => 'So',
+                                ],
+                            1 =>
+                                [
+                                    'fileInfo'          => $projectRoot.'/src/Wrong.php',
+                                    'expectedNamespace' => 'In\\Valid',
+                                    'actualNamespace'   => 'Totally',
+                                ],
                         ],
                 ],
             'Parse Errors:'  =>
                 [
-                    $projectRoot.'/tests/ParseError.php',
-                ],
-            'Ignored Files:' =>
-                [
-                    $projectRoot.'/src/IgnoredStuff/Ignored.php',
-                    $projectRoot.'/src/IgnoredStuff/InvalidIgnored.php',
+                    0 => $projectRoot.'/tests/ParseError.php',
                 ],
             'Missing Paths:' =>
                 [
@@ -95,20 +90,14 @@ contains a path \'missing/magento/path\'\'
 which doesn\'t exist
 Magento\'s composer includes this by default, it should be removed from the psr-4 section',
                 ],
+            'Ignored Files:' =>
+                [
+                    0 => $projectRoot.'/src/IgnoredStuff/Ignored.php',
+                    1 => $projectRoot.'/src/IgnoredStuff/InvalidIgnored.php',
+                ],
         ];
-        $this->recursiveKeySort($expected);
-        $this->recursiveKeySort($actual);
-        $this->assertSame($expected, $actual);
+
+        $this->assertEquals($expected, $actual);
     }
 
-    private function recursiveKeySort(array &$array): bool
-    {
-        foreach ($array as &$value) {
-            if (\is_array($value)) {
-                $this->recursiveKeySort($value);
-            }
-        }
-
-        return ksort($array);
-    }
 }

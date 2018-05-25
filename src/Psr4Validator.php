@@ -13,11 +13,11 @@ class Psr4Validator
      * @var array
      */
     protected $decodedComposerJson;
-    private $parseErrors  = [];
-    private $psr4Errors   = [];
-    private $ignoreRegexPatterns;
-    private $ignoredFiles = [];
-    private $missingPaths = [];
+    private   $parseErrors  = [];
+    private   $psr4Errors   = [];
+    private   $ignoreRegexPatterns;
+    private   $ignoredFiles = [];
+    private   $missingPaths = [];
 
     /**
      * Psr4Validator constructor.
@@ -120,9 +120,9 @@ class Psr4Validator
     /**
      * @param string $realPath
      *
-     * @return \RecursiveIteratorIterator|\SplFileInfo[]
+     * @return \SplHeap|\SplFileInfo[]
      */
-    private function getDirectoryIterator(string $realPath): \RecursiveIteratorIterator
+    private function getDirectoryIterator(string $realPath)
     {
         $directoryIterator = new \RecursiveDirectoryIterator(
             $realPath,
@@ -133,7 +133,20 @@ class Psr4Validator
             \RecursiveIteratorIterator::SELF_FIRST
         );
 
-        return $iterator;
+        return new class($iterator) extends \SplHeap
+        {
+            public function __construct(\RecursiveIteratorIterator $iterator)
+            {
+                foreach ($iterator as $item) {
+                    $this->insert($item);
+                }
+            }
+
+            public function compare($item1, $item2)
+            {
+                return strcmp($item2->getRealpath(), $item1->getRealpath());
+            }
+        };
     }
 
     private function addMissingPathError(string $path, string $namespaceRoot, string $absPathRoot)
