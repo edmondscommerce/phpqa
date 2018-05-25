@@ -2,7 +2,7 @@
 language: php
 
 git:
-  depth: 1
+  depth: false
 
 matrix:
   include:
