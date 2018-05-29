@@ -11,6 +11,7 @@ echo "
 $(hostname) $0 $@
 ===========================================
 "
+export phpqaQuickTests=0
 export phpUnitQuickTests=0
 export phpUnitCoverage=${phpunitCoverage:-0}
 export CI=true
