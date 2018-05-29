@@ -4,7 +4,7 @@ Here are the full details of how PHPStan is used with PHPQA and how you can conf
 
 #### Configuration 
 
-Default configuration is in [./configDefaults/generic/phpstan.neon](./configDefaults/generic/phpstan.neon)
+Default configuration is in [./configDefaults/generic/phpstan.neon](./../../configDefaults/generic/phpstan.neon)
 
 To override the configuration you need to copy it to `{project-root}/qaConfig/phpstan.neon`
 

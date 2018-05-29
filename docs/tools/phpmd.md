@@ -1,6 +1,6 @@
 # PHPQA PHP Mess Detector (PHPMD)
 
-[PHP Mess Detector Tool](../includes/generic/messDetector.inc.bash)
+[PHP Mess Detector Tool](./../../includes/generic/messDetector.inc.bash)
  
 PHPMD Looks for messy, complex and otherwise problematic code.
 

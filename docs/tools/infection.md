@@ -8,7 +8,7 @@ In PHPQA we run this after the normal PHPUnit run and pass in the coverage gener
 ## Configuration
 
 You may need to tell infection where the configuration directory for PHPUnit is. To do this, override the
-[./configDefaults/generic/infection.json](./configDefaults/generic/infection.json) file and add the following to it
+[./configDefaults/generic/infection.json](./../../configDefaults/generic/infection.json) file and add the following to it
 
 ```json
 "phpUnit": {
@@ -38,7 +38,7 @@ See the following page for more information on MSIs being used in CI [https://in
 
 The easiest way to override the default minimum score indicators permanently for your project is to include these in a `qaConfig.inc.bash` file in your projects `qaConfig` folder.
 
-You can see that this is being done in the phpqa project itself in it's own [qaConfig](./qaConfig) folder.
+You can see that this is being done in the phpqa project itself in it's own [qaConfig](./../../qaConfig) folder.
 
 #### Disabling Infection
 

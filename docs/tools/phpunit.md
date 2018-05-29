@@ -62,7 +62,7 @@ And this will then run with full tests
 
 If enabled, the PHPUnit command will generate both textual output and HTML coverage.
 
-The coverage report will go into the project root /var directory as configured in [./configDefaults/phpunit-with-coverage.xml](./configDefaults/phpunit-with-coverage.xml)
+The coverage report will go into the project root /var directory as configured in [./configDefaults/phpunit.xml](./../../configDefaults/generic/phpunit.xml)
 
 If you want to override the coverage report location, you will need to override this config file as normal.
 
@@ -72,7 +72,7 @@ You can enable the coverage report on the fly by doing:
 phpUnitCoverage=1 bin/qa 
 ```
 
-You might decide to do this if you are running these tests on travis, as you can see in [./travis.yml](./.travis.yml)
+You might decide to do this if you are running these tests on travis, as you can see in [./travis.yml](./../../.travis.yml)
 
 ### Speed Impact of Enabling Coverage
 
@@ -136,7 +136,7 @@ As with the other tools, there is an option to rerun this step if it fails.
 
 Where PHPUnit is different is that you also get the option to only rerun your failed tests.
 
-This uses another bin command [./bin/phpunit-runfailed-filter](./bin/phpunit-runfailed-filter) which generates the filter syntax to pull out the failed tests.
+This uses another bin command [./bin/phpunit-runfailed-filter](./../../bin/phpunit-runfailed-filter) which generates the filter syntax to pull out the failed tests.
 
 You can also use this in isolation if you want, eg:
 

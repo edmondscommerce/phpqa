@@ -10,7 +10,7 @@ In local development, a failed tool can be retried indefinitely, in CI a failed 
 
 Each tool is run by calling the [`runTool`](./../includes/functions.inc.bash#L30) function.
 
-The `runTool` function takes into account the platform that PHPQA detected via the [`detectPlatform`]((./../includes/functions.inc.bash#L7)) function
+The `runTool` function takes into account the platform that PHPQA detected via the [`detectPlatform`](./../includes/functions.inc.bash#L7) function
 
 - It will first look inside `includes/{detectedPlatform}/{toolName}.inc.bash`
 - If none is found, it will fall back to `includes/generic/{toolName}.inc.bash`
