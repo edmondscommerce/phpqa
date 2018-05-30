@@ -5,7 +5,7 @@ phpmdConfigPath="$projectRoot/dev/tests/static/testsuite/Magento/Test/Php/_files
 
 # coding Standard for checking
 # checks for a folder called 'condingStandards' in the $projectConfigPath, falls back to the PSR2 standards
-phpcsCodingStandardsPath="$projectRoot/vendor/magento/marketplace-eqp/MEQP2/"
+phpcsCodingStandardsNameOrPath="$projectRoot/vendor/magento/marketplace-eqp/MEQP2/"
 
 ##PHPUnit Configs
 if [[ -f $projectRoot/dev/tests/unit/phpunit.xml ]]

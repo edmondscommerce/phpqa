@@ -9,7 +9,7 @@ phpcsExitCode=99
 while (( phpcsExitCode > 0 ))
 do
     phpNoXdebug -f bin/phpcs -- \
-        --standard="$phpcsCodingStandardsPath" \
+        --standard="$phpcsCodingStandardsNameOrPath" \
         --colors \
         --cache="$cacheDir"/phpcs.cache \
         -s \
