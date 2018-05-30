@@ -29,7 +29,7 @@ phpmdConfigPath="$(configPath phpmd/ruleset.xml)"
 
 # coding Standard for checking
 # checks for a folder called 'condingStandards' in the $projectConfigPath, falls back to the PSR2 standards
-phpcsCodingStandardsPath="PSR2"
+phpcsCodingStandardsNameOrPath="PSR2"
 
 # should coding standards warnings be a fail?
 phpcsFailOnWarning=0
