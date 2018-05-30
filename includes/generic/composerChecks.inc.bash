@@ -1,4 +1,5 @@
 set +e
+set -x
 phpNoXdebug -f $(which composer) -- diagnose
 set +x
 set -e

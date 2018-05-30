@@ -1,4 +1,5 @@
 set +e
+set -x
 phpNoXdebug -f bin/phpcbf -- \
     --standard="$phpcsCodingStandardsNameOrPath" \
     --colors \
