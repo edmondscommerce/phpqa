@@ -38,7 +38,7 @@ See the following page for more information on MSIs being used in CI [https://in
 
 The easiest way to override the default minimum score indicators permanently for your project is to include these in a `qaConfig.inc.bash` file in your projects `qaConfig` folder.
 
-You can see that this is being done in the phpqa project itself in it's own [qaConfig](./../../qaConfig) folder.
+You can see that this is being done in the phpqa project itself in its own [qaConfig](./../../qaConfig) folder.
 
 #### Disabling Infection
 

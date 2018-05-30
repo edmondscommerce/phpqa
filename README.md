@@ -62,4 +62,4 @@ Specific platforms' docs are at:
 
 ## Using for Continuous Integration (CI)
 
-Please see teh [CI docs](./docs/ci.md)
+Please see the [CI docs](./docs/ci.md)
