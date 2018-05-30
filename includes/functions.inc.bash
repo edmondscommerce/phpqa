@@ -172,10 +172,14 @@ function phpunitReRunFailedOrFull(){
 
         Would you like to just rerun failed tests?
 
+        (will timeout and run full in 10 seconds)
+
     ==================================================
 
         "
-    read -n 1 rerunFailed
+    set +e
+    read  -t 10 -n 1 rerunFailed
+    set -e
     if [[ "y" != "$rerunFailed" ]]
     then
         printf "\n\nRunning Full...\n\n"
