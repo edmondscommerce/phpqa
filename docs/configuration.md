@@ -1,8 +1,8 @@
-#PHPQA Configuration
+# PHPQA Configuration
 
 There are multiple ways to configure PHPQA and the component tools
 
-The general strategy with PHPQA is that there is extensive and relatively sensible default configuration. This means that in your project you should hopefully only need to make minor adjustments to the configuration by overriding it.
+The general strategy with PHPQA is that, there is a extensive and relatively sensible default configuration. This means that in your project you should hopefully only need to make minor adjustments to the configuration by overriding it.
 
 ## qaConfig Folder
 
@@ -60,7 +60,7 @@ The bulk of the configuration is handled with configuration files which are sepa
     - [magento2/](./../configDefaults/magento2) for config files specific to Magento 2
     - [laravellumen/](./../configDefaults/laravellumen) for config files specific to Laravel or Lumen project
         
-Each platform folder contains the configuration files for that platform. Where a file does not exist in the platform folder, the generic configuration file is used.
+Each platform folder contains the configuration files for that platform. Where if a file does not exist in the platform folder, the generic configuration file is used.
 
 PHPQA's [configDefaults/generic](./../configDefaults/generic) folder contains a config file for each tool run by phpqa. At the moment this is
 
