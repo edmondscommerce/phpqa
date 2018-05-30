@@ -5,6 +5,7 @@ set +e
 phpMdExitCode=99
 while (( phpMdExitCode > 0 ))
 do
+    set -x
     phpNoXdebug -f bin/phpmd -- \
         $pathsString \
         text \
