@@ -2,7 +2,7 @@
 
 /* Find bootstrap path */
 $rootPath = realpath(dirname(__FILE__));
-while (!file_exists($rootPath . '/app/bootstrap.php') || $rootPath == '/') {
+while (!file_exists($rootPath . '/app/bootstrap.php') && $rootPath !== '/') {
     $rootPath = realpath(dirname($rootPath));
 }
 
