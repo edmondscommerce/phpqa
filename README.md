@@ -37,6 +37,9 @@ To run the full pipline, simply execute in your BASH terminal:
 ### Usage:
 
 ```
+$ ./bin/qa -h
+
+Usage:
 bin/qa [-t tool to run ] [ -p path to scan ]
 
 Defaults to using all tools and scanning whole project based on platform
@@ -59,6 +62,7 @@ Defaults to using all tools and scanning whole project based on platform
      bf|phpbf         php beautifier and fixer
      cs|phpcs         php code sniffer
      l|loc            lines of code and other stats
+
 
 ```
 
