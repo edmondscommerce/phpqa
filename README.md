@@ -52,7 +52,6 @@ Defaults to using all tools and scanning whole project based on platform
      psr|psr4         psr4 validation
      com|composer     composer validation
      st|stricttypes   strict types validation
-     psr|psr4         psr4 validation
      lint|phplint     phplint
      stan|phpstan     phpstan
      unit|phpunit     phpunit

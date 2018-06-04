@@ -24,7 +24,6 @@ function usage {
     echo "     psr|psr4         psr4 validation"
     echo "     com|composer     composer validation"
     echo "     st|stricttypes   strict types validation"
-    echo "     psr|psr4         psr4 validation"
     echo "     lint|phplint     phplint"
     echo "     stan|phpstan     phpstan"
     echo "     unit|phpunit     phpunit"
