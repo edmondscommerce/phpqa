@@ -30,18 +30,15 @@ $(hostname) $0 $@
 ===========================================
 "
 
-function usage {
-    echo "Usage:"
-    echo "bin/qa (subfolder/to/scan)"
-    echo "Defaults to scanning whole project based on platform, set a parameter to specify a folder"
-    echo ""
-    exit 1
-}
-phpBinPath=$(which php)
 
-specifiedPath=${1:-""};
+#### OPTIONS ###################################################
+
+source ./../includes/options.inc.bash
+
 
 #### FUNCTIONS #################################################
+
+phpBinPath=$(which php)
 source ./../includes/functions.inc.bash
 
 
@@ -103,7 +100,7 @@ then
     pathsToCheck+=($projectRoot/$specifiedPath)
 fi
 
-#### PROCESS #################################################
+#### PRE PROCESS #############################################
 
 hasBeenRestarted="false"
 
@@ -129,6 +126,19 @@ Running Pre Hook $projectConfigPath/hookPre.bash
 ------------------------------------------------
 "
     source $projectConfigPath/hookPre.bash
+fi
+
+#### PROCESS #################################################
+
+if [[ "" != "$singleToolToRun" ]]
+then
+    echo "
+
+Running Single Tool: $singleToolToRun
+------------------------
+"
+    runTool "$singleToolToRun"
+    exit $?
 fi
 
 echo "
