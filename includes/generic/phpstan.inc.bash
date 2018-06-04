@@ -1,9 +1,14 @@
 set +e
 phpStanExitCode=99
+phpstanNoProgress=()
+if [[ "true" == "$CI" ]]
+then
+    phpstanNoProgress+=( --no-progress)
+fi
 while (( phpStanExitCode > 0 ))
 do
     set -x
-    phpNoXdebug -f bin/phpstan.phar -- analyse ${pathsToCheck[@]} -l7 -c "$phpstanConfigPath"
+    phpNoXdebug -f bin/phpstan.phar -- analyse ${pathsToCheck[@]} -l7 -c "$phpstanConfigPath" ${phpstanNoProgress[@]:-}
     phpStanExitCode=$?
     set +x
     #exit code 0 = fine, 1 = ran fine but found errors, else it means it crashed
