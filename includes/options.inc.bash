@@ -16,6 +16,8 @@ function usage {
     echo ""
     echo "Defaults to using all tools and scanning whole project based on platform"
     echo ""
+    echo " - use -h to see this help"
+    echo ""
     echo " - use -p to specify a specific path to scan"
     echo ""
     echo " - use -t to specify a single tool:"

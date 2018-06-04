@@ -29,13 +29,64 @@ Your project's `composer.json` needs to specify a bin folder. If it's not alread
 
 ## Running
 
+To run the full pipline, simply execute in your BASH terminal: 
 ```bash
-./bin/qa (optional/path/to/scan)
+./bin/qa 
+```
+
+### Usage:
+
+```
+bin/qa [-t tool to run ] [ -p path to scan ]
+
+Defaults to using all tools and scanning whole project based on platform
+
+ - use -h to see this help
+
+ - use -p to specify a specific path to scan
+
+ - use -t to specify a single tool:
+     psr|psr4         psr4 validation
+     com|composer     composer validation
+     st|stricttypes   strict types validation
+     psr|psr4         psr4 validation
+     lint|phplint     phplint
+     stan|phpstan     phpstan
+     unit|phpunit     phpunit
+     infect|infection infection
+     md|messdetector  php mess detector
+     ma|markdown      markdown validation
+     bf|phpbf         php beautifier and fixer
+     cs|phpcs         php code sniffer
+     l|loc            lines of code and other stats
+
 ```
 
 By default, PHPQA will run against the entire project root.
 
-Adding a second parameter ensures that the tools scan only that folder.
+### Single Tool:
+
+If you want to run a single tool, use the `-t` option. See the usage above to get the shortcuts for the tools
+
+```bash
+./bin/qa -t stan
+```
+
+### Specified Path:
+
+Some of the tools allow us to restrict the scan to a specified path. To specify the path, use the `-p` option.
+
+```bash 
+./bin/qa -p ./src/specified/path.php
+```
+
+### Combined
+
+You can combine both options
+
+```bash 
+./bin/qa -t stan -p ./src/specified/path.php
+```
  
 ## Configuration
 
