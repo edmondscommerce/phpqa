@@ -9,6 +9,11 @@
         timeoutForMediumTests="5"
         timeoutForSmallTests="1"
         timeoutForLargeTests="300"
+        failOnRisky="true"
+        failOnWarning="true"
+        defaultTestSuite="tests"
+        beStrictAboutCoversAnnotation="true"
+        beStrictAboutTodoAnnotatedTests="true"
 >
     <logging>
         <log type="coverage-html" target="../var/qa/phpunit_coverage"/>
