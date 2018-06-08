@@ -185,6 +185,13 @@ fi
 
 echo "
 
+Running PHPUnit Annotations Check
+--------------------------------
+"
+runTool phpunitAnnotations
+
+echo "
+
 Running PHPUnit Tests
 ---------------------
 "

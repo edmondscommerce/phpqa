@@ -1,7 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace EdmondsCommerce\PHPQA;
+namespace EdmondsCommerce\PHPQA\Tests\Small;
 
+use EdmondsCommerce\PHPQA\Helper;
+use EdmondsCommerce\PHPQA\Psr4Validator;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -9,15 +11,18 @@ use PHPUnit\Framework\TestCase;
  *
  * @package EdmondsCommerce\PHPQA
  * @SuppressWarnings(PHPMD.StaticAccess)
+ * @coversDefaultClass \EdmondsCommerce\PHPQA\Psr4Validator
  */
 class Psr4ValidatorTest extends TestCase
 {
     /**
      * @throws \Exception
+     * @covers \EdmondsCommerce\PHPQA\Psr4Validator
+   *
      */
-    public function testItFindsNoErrorsOnAValidProject()
+    public function testItFindsNoErrorsOnAValidProject(): void
     {
-        $projectRoot = \realpath(__DIR__.'/assets/psr4/projectAllValid/');
+        $projectRoot = \realpath(__DIR__.'/../assets/psr4/projectAllValid/');
         $validator   = new Psr4Validator(
             [],
             $projectRoot,
@@ -30,10 +35,12 @@ class Psr4ValidatorTest extends TestCase
 
     /**
      * @throws \Exception
+     * @covers \EdmondsCommerce\PHPQA\Psr4Validator
+   *
      */
     public function testItCanHandleOddComposerConfigs()
     {
-        $projectRoot = \realpath(__DIR__.'/assets/psr4/projectOddComposer/');
+        $projectRoot = \realpath(__DIR__.'/../assets/psr4/projectOddComposer/');
         $validator   = new Psr4Validator(
             [],
             $projectRoot,
@@ -46,10 +53,12 @@ class Psr4ValidatorTest extends TestCase
 
     /**
      * @throws \Exception
+     * @covers \EdmondsCommerce\PHPQA\Psr4Validator
+   *
      */
     public function testItFindsErrorsAndThrowsAnExceptionOnAnInvalidProject()
     {
-        $projectRoot = \realpath(__DIR__.'/assets/psr4/projectInValid/');
+        $projectRoot = \realpath(__DIR__.'/../assets/psr4/projectInValid/');
         $validator   = new Psr4Validator(
             ['%IgnoredStuff%'],
             $projectRoot,

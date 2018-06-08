@@ -22,7 +22,7 @@ if (!$autoloadFileFound) {
 }
 
 try {
-    $filter = (new \EdmondsCommerce\PHPQA\PHPUnitRerunCommandGenerator())->main();
+    $filter = (new \EdmondsCommerce\PHPQA\PHPUnit\RerunCommandGenerator())->main();
 } catch (\RuntimeException $e) {
     echo "\n".$e->getMessage()."\n";
     exit(1);

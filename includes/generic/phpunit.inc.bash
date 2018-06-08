@@ -47,12 +47,26 @@ do
         -c ${phpUnitConfigPath} \
         ${rerunFilter[@]} \
         ${noCoverage[@]} \
-        "$testsDir"
+        --enforce-time-limit \
+        --fail-on-risky \
+        --fail-on-warning \
+        --disallow-todo-tests
 
     phpunitExitCode=$?
     set -e
     set +x
-    set +f
+    if [[ "" != "$(grep '<testsuites/>' $varDir/phpunit_logs/phpunit.junit.xml)" ]]
+    then
+        echo "
+
+        ERROR - no tests have been run!
+
+        Please ensure you have at least one valid test suite configured in your phpunit.xml file
+
+        "
+        phpunitExitCode=1
+    fi
+
     if (( $phpunitExitCode > 0 ))
     then
         if (( $phpunitExitCode > 2 ))

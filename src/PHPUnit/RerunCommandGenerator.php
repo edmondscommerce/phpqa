@@ -1,8 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace EdmondsCommerce\PHPQA;
+namespace EdmondsCommerce\PHPQA\PHPUnit;
 
-class PHPUnitRerunCommandGenerator
+use EdmondsCommerce\PHPQA\Helper;
+
+class RerunCommandGenerator
 {
     /**
      * no failed tests so just include all

@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace EdmondsCommerce\PHPQA;
+namespace EdmondsCommerce\PHPQA\Tests\Small;
 
+use EdmondsCommerce\PHPQA\Helper;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -9,24 +10,40 @@ use PHPUnit\Framework\TestCase;
  *
  * @package EdmondsCommerce\PHPQA
  * @SuppressWarnings(PHPMD.StaticAccess)
+ * @coversDefaultClass \EdmondsCommerce\PHPQA\Helper
  */
 class HelperTest extends TestCase
 {
+    /**
+     * @throws \Exception
+     * @covers ::getComposerJsonDecoded()
+   *
+     */
     public function testItCanGetComposerJsonDecode()
     {
         $actual = Helper::getComposerJsonDecoded();
         $this->assertNotEmpty($actual);
     }
 
+    /**
+     * @throws \Exception
+     * @covers ::getComposerJsonDecoded()
+   *
+     */
     public function testItWillThrowExceptionForInvalidComposerJson()
     {
         $this->expectException(\RuntimeException::class);
-        Helper::getComposerJsonDecoded(__DIR__.'/assets/helper/invalid.composer.json');
+        Helper::getComposerJsonDecoded(__DIR__.'/../assets/helper/invalid.composer.json');
     }
 
+    /**
+     * @throws \Exception
+     * @covers ::getProjectRootDirectory()
+   *
+     */
     public function testGetProjectRoot()
     {
-        $expected = \realpath(__DIR__.'/../');
+        $expected = \realpath(__DIR__.'/../../../phpqa/');
         $actual   = Helper::getProjectRootDirectory();
         $this->assertSame($expected, $actual);
     }

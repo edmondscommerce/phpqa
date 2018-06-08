@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace EdmondsCommerce\PHPQA\Markdown;
+namespace EdmondsCommerce\PHPQA\Tests\Small\Markdown;
 
+use EdmondsCommerce\PHPQA\Markdown\LinksChecker;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -9,16 +10,19 @@ use PHPUnit\Framework\TestCase;
  *
  * @package EdmondsCommerce\PHPQA\Markdown
  * @SuppressWarnings(PHPMD.StaticAccess)
+ * @coversDefaultClass \EdmondsCommerce\PHPQA\Markdown\LinksChecker
  */
 class LinksCheckerTest extends TestCase
 {
     /**
      * @throws \Exception
      * @SuppressWarnings(PHPMD.StaticAccess)
+     * @covers \EdmondsCommerce\PHPQA\Markdown\LinksChecker
+   *
      */
     public function testInvalidProject()
     {
-        $pathToProject    = __DIR__.'/../assets/linksChecker/projectWithBrokenLinks';
+        $pathToProject    = __DIR__.'/../../assets/linksChecker/projectWithBrokenLinks';
         $expectedExitCode = 1;
         $expectedOutput   = '
 /docs/linksCheckerTest.md
@@ -37,24 +41,35 @@ Bad link for "incorrect link" to "./foo.md"
     /**
      * @throws \Exception
      * @SuppressWarnings(PHPMD.StaticAccess)
+     * @covers \EdmondsCommerce\PHPQA\Markdown\LinksChecker
+   *
      */
     public function testMainNoReadmeFile()
     {
         $this->expectException(\RuntimeException::class);
-        LinksChecker::main(__DIR__.'/../assets/linksChecker/projectNoReadme');
+        LinksChecker::main(__DIR__.'/../../assets/linksChecker/projectNoReadme');
     }
 
+    /**
+     * @throws \Exception
+     * @covers \EdmondsCommerce\PHPQA\Markdown\LinksChecker
+   *
+     */
     public function testValidNoDocsFolder()
     {
-        $pathToProject    = __DIR__.'/../assets/linksChecker/projectWithReadmeNoDocsFolder';
+        $pathToProject    = __DIR__.'/../../assets/linksChecker/projectWithReadmeNoDocsFolder';
         $expectedExitCode = 0;
         $expectedOutput   = '';
         $this->assertResult($pathToProject, $expectedExitCode, $expectedOutput);
     }
 
+    /**
+     * @covers \EdmondsCommerce\PHPQA\Markdown\LinksChecker
+   *
+     */
     public function testItHandlesNonFileLinks()
     {
-        $pathToProject    = __DIR__.'/../assets/linksChecker/projectWithNonFileLinks';
+        $pathToProject    = __DIR__.'/../../assets/linksChecker/projectWithNonFileLinks';
         $expectedExitCode = 1;
         $expectedOutput   = '
 /README.md

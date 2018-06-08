@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9572ceb649f7345dcfe8d5508225716d",
+    "content-hash": "9b13cb39cebb058e311388d89150886d",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -115,6 +115,33 @@
                 "instantiate"
             ],
             "time": "2017-07-22T11:58:36+00:00"
+        },
+        {
+            "name": "funkyproject/reflection-file",
+            "version": "v0.1",
+            "target-dir": "Funkyproject",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/funkyproject/reflection-file.git",
+                "reference": "26968788a6f55e910e78b83b56ceb6675449c320"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/funkyproject/reflection-file/zipball/26968788a6f55e910e78b83b56ceb6675449c320",
+                "reference": "26968788a6f55e910e78b83b56ceb6675449c320",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.0.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Funkyproject": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "time": "2014-04-02T16:24:49+00:00"
         },
         {
             "name": "infection/infection",
@@ -1194,6 +1221,56 @@
                 "iterator"
             ],
             "time": "2017-11-27T13:52:08+00:00"
+        },
+        {
+            "name": "phpunit/php-invoker",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/php-invoker.git",
+                "reference": "4a01883f660b10d4a19a14de5efd19b22eac2d93"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-invoker/zipball/4a01883f660b10d4a19a14de5efd19b22eac2d93",
+                "reference": "4a01883f660b10d4a19a14de5efd19b22eac2d93",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pcntl": "*",
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian Bergmann",
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
+                }
+            ],
+            "description": "Invoke callables with a timeout",
+            "homepage": "https://github.com/sebastianbergmann/php-invoker/",
+            "keywords": [
+                "process"
+            ],
+            "time": "2018-01-27T06:52:17+00:00"
         },
         {
             "name": "phpunit/php-text-template",
