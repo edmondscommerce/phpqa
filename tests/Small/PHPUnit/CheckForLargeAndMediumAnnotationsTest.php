@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace EdmondsCommerce\PHPQA\Tests\Large\PHPUnit;
+namespace EdmondsCommerce\PHPQA\Tests\Small\PHPUnit;
 
 use EdmondsCommerce\PHPQA\PHPUnit\CheckForLargeAndMediumAnnotations;
 use PHPUnit\Framework\TestCase;
