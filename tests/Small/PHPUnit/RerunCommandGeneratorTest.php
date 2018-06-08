@@ -15,7 +15,7 @@ class RerunCommandGeneratorTest extends TestCase
 {
     /**
      * @covers \EdmondsCommerce\PHPQA\PHPUnit\RerunCommandGenerator
-   *
+     * @small
      */
     public function testCanParseFailuresAndErrors()
     {
@@ -27,7 +27,7 @@ class RerunCommandGeneratorTest extends TestCase
 
     /**
      * @covers \EdmondsCommerce\PHPQA\PHPUnit\RerunCommandGenerator
-   *
+     * @small
      */
     public function testWillReturnNoFilterIfLogPathDoesNotExist()
     {
@@ -38,7 +38,7 @@ class RerunCommandGeneratorTest extends TestCase
 
     /**
      * @covers \EdmondsCommerce\PHPQA\PHPUnit\RerunCommandGenerator
-   *
+     * @small
      */
     public function testWillReturnNoFilterIfLogIsEmpty()
     {
@@ -49,7 +49,7 @@ class RerunCommandGeneratorTest extends TestCase
 
     /**
      * @covers \EdmondsCommerce\PHPQA\PHPUnit\RerunCommandGenerator
-   *
+     * @small
      */
     public function testWillReturnNoFilterIfNoFailures()
     {
@@ -60,7 +60,7 @@ class RerunCommandGeneratorTest extends TestCase
 
     /**
      * @covers \EdmondsCommerce\PHPQA\PHPUnit\RerunCommandGenerator
-   *
+     * @small
      */
     public function testItWillThrowExceptionIfXmlInvalid()
     {

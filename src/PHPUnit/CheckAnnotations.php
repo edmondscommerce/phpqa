@@ -11,7 +11,7 @@ namespace EdmondsCommerce\PHPQA\PHPUnit;
  *
  * @package EdmondsCommerce\PHPQA\PHPUnit
  */
-class CheckForLargeAndMediumAnnotations
+class CheckAnnotations
 {
     /**
      * @var string
@@ -21,6 +21,11 @@ class CheckForLargeAndMediumAnnotations
      * @var string
      */
     private $mediumPath;
+
+    /**
+     * @var string
+     */
+    private $smallPath;
 
     /**
      * @var array
@@ -43,8 +48,10 @@ class CheckForLargeAndMediumAnnotations
         }
         $this->largePath  = $pathToTestsDirectory.'/Large';
         $this->mediumPath = $pathToTestsDirectory.'/Medium';
+        $this->smallPath  = $pathToTestsDirectory.'/Small';
         $this->checkLarge();
         $this->checkMedium();
+        $this->checkSmall();
 
         return $this->errors;
     }
@@ -63,6 +70,14 @@ class CheckForLargeAndMediumAnnotations
             return;
         }
         $this->checkDirectory($this->mediumPath, 'medium');
+    }
+
+    private function checkSmall(): void
+    {
+        if (!is_dir($this->smallPath)) {
+            return;
+        }
+        $this->checkDirectory($this->smallPath, 'small');
     }
 
     private function checkDirectory(string $path, string $annotation)

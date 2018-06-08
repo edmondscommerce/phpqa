@@ -18,7 +18,7 @@ class LinksCheckerTest extends TestCase
      * @throws \Exception
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @covers \EdmondsCommerce\PHPQA\Markdown\LinksChecker
-   *
+     * @small
      */
     public function testInvalidProject()
     {
@@ -42,7 +42,7 @@ Bad link for "incorrect link" to "./foo.md"
      * @throws \Exception
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @covers \EdmondsCommerce\PHPQA\Markdown\LinksChecker
-   *
+     * @small
      */
     public function testMainNoReadmeFile()
     {
@@ -53,7 +53,7 @@ Bad link for "incorrect link" to "./foo.md"
     /**
      * @throws \Exception
      * @covers \EdmondsCommerce\PHPQA\Markdown\LinksChecker
-   *
+     * @small
      */
     public function testValidNoDocsFolder()
     {
@@ -65,7 +65,7 @@ Bad link for "incorrect link" to "./foo.md"
 
     /**
      * @covers \EdmondsCommerce\PHPQA\Markdown\LinksChecker
-   *
+     * @small
      */
     public function testItHandlesNonFileLinks()
     {

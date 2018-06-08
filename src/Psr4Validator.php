@@ -13,11 +13,11 @@ class Psr4Validator
      * @var array
      */
     protected $decodedComposerJson;
-    private $parseErrors  = [];
-    private $psr4Errors   = [];
-    private $ignoreRegexPatterns;
-    private $ignoredFiles = [];
-    private $missingPaths = [];
+    private   $parseErrors  = [];
+    private   $psr4Errors   = [];
+    private   $ignoreRegexPatterns;
+    private   $ignoredFiles = [];
+    private   $missingPaths = [];
 
     /**
      * Psr4Validator constructor.
@@ -108,7 +108,7 @@ class Psr4Validator
     {
         $contents = \file_get_contents($fileInfo->getPathname());
         \preg_match('%namespace\s+?([^;]+)%', $contents, $matches);
-        if (empty($matches) || !isset($matches[1])) {
+        if (empty($matches)) {
             $this->parseErrors[] = $fileInfo->getRealPath();
 
             return '';
@@ -142,7 +142,7 @@ class Psr4Validator
                 }
             }
 
-            public function compare($item1, $item2)
+            protected function compare($item1, $item2)
             {
                 return strcmp($item2->getRealpath(), $item1->getRealpath());
             }
