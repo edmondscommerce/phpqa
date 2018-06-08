@@ -4,9 +4,10 @@
         cacheTokens="false"
         colors="true"
         verbose="true"
+        timeoutForLargeTests="300"
         timeoutForMediumTests="5"
         timeoutForSmallTests="1"
-        failOnRisky="true
+        failOnRisky="true"
         >
 <!--phpunit recommended>
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

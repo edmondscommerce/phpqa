@@ -8,6 +8,7 @@
         printerClass="\PHPUnit\Util\TestDox\CliTestDoxPrinter"
         timeoutForMediumTests="5"
         timeoutForSmallTests="1"
+        timeoutForLargeTests="300"
         failOnRisky="true"
 >
     <logging>
