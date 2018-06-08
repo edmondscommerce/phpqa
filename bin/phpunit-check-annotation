@@ -23,7 +23,7 @@ if (!$autoloadFileFound) {
 
 try {
     $pathToTest = $argv[1];
-    $errors     = (new \EdmondsCommerce\PHPQA\PHPUnit\CheckForLargeAndMediumAnnotations())->main($pathToTest);
+    $errors     = (new \EdmondsCommerce\PHPQA\PHPUnit\CheckAnnotations())->main($pathToTest);
 } catch (\RuntimeException $e) {
     echo "\n".$e->getMessage()."\n";
     exit(1);

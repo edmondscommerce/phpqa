@@ -162,24 +162,49 @@ class LinksChecker
 
     private static function validateHttpLink(array $link, array &$errors, int &$return)
     {
-        list(, $anchor, $link) = $link;
-        $context = stream_context_create(['http' => ['method' => 'HEAD']]);
+        list(, $anchor, $href) = $link;
+        static $checked = [];
+        $hashPos = strpos($href, '#');
+        if ($hashPos > 0) {
+            $href = substr($href, 0, $hashPos);
+        }
+        if (isset($checked[$href])) {
+            return;
+        }
+        $checked[$href] = true;
+        $start          = microtime(true);
+        fwrite(STDERR, "\n".'Validating link: '.$href);
+        $context = stream_context_create([
+                                             'http' => [
+                                                 'method'           => 'HEAD',
+                                                 'protocol_version' => 1.1,
+                                                 'header'           => [
+                                                     'Connection: close',
+                                                 ],
+                                             ],
+                                         ]);
         $result  = null;
         try {
-            $headers=get_headers($link, 0, $context);
+            $headers = get_headers($href, 0, $context);
             foreach ($headers as $header) {
                 if (false !== strpos($header, ' 200 ')) {
+                    $time = round(microtime(true) - $start, 2);
+                    fwrite(STDERR, "\n".'OK ('.$time.' seconds): '.$href);
+
                     return;
                 }
             }
         } catch (\Throwable $e) {
         }
+
         $errors[] = \sprintf(
             "\nBad link for \"%s\" to \"%s\"\nresult: %s\n",
             $anchor,
-            $link,
+            $href,
             var_export($result, true)
         );
         $return   = 1;
+        $time     = round(microtime(true) - $start, 2);
+        fwrite(STDERR, "\n".'Failed ('.$time.' seconds): '.$href);
     }
 }

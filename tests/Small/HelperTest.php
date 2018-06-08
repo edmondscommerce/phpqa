@@ -17,7 +17,7 @@ class HelperTest extends TestCase
     /**
      * @throws \Exception
      * @covers ::getComposerJsonDecoded()
-   *
+     * @small
      */
     public function testItCanGetComposerJsonDecode()
     {
@@ -28,7 +28,7 @@ class HelperTest extends TestCase
     /**
      * @throws \Exception
      * @covers ::getComposerJsonDecoded()
-   *
+     * @small
      */
     public function testItWillThrowExceptionForInvalidComposerJson()
     {
@@ -39,7 +39,7 @@ class HelperTest extends TestCase
     /**
      * @throws \Exception
      * @covers ::getProjectRootDirectory()
-   *
+     * @small
      */
     public function testGetProjectRoot()
     {
