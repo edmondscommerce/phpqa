@@ -22,9 +22,22 @@ if (!$autoloadFileFound) {
 }
 
 try {
-    $filter = (new \EdmondsCommerce\PHPQA\PHPUnit\RerunCommandGenerator())->main();
+    $pathToTest = $argv[1];
+    $errors     = (new \EdmondsCommerce\PHPQA\PHPUnit\CheckForLargeAndMediumAnnotations())->main($pathToTest);
 } catch (\RuntimeException $e) {
     echo "\n".$e->getMessage()."\n";
     exit(1);
 }
-echo $filter;
+if ([] === $errors) {
+    exit(0);
+}
+echo "
+
+ERROR:
+
+Found PHPUnit tests missing the @small and/or @medium annotations
+
+";
+
+var_export($errors);
+exit(1);

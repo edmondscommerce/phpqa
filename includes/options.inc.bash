@@ -21,18 +21,19 @@ function usage {
     echo " - use -p to specify a specific path to scan"
     echo ""
     echo " - use -t to specify a single tool:"
-    echo "     psr|psr4         psr4 validation"
-    echo "     com|composer     composer validation"
-    echo "     st|stricttypes   strict types validation"
-    echo "     lint|phplint     phplint"
-    echo "     stan|phpstan     phpstan"
-    echo "     unit|phpunit     phpunit"
-    echo "     infect|infection infection"
-    echo "     md|messdetector  php mess detector"
-    echo "     ma|markdown      markdown validation"
-    echo "     bf|phpbf         php beautifier and fixer"
-    echo "     cs|phpcs         php code sniffer"
-    echo "     l|loc            lines of code and other stats"
+    echo "     psr|psr4                   psr4 validation"
+    echo "     com|composer               composer validation"
+    echo "     st|stricttypes             strict types validation"
+    echo "     lint|phplint               phplint"
+    echo "     stan|phpstan               phpstan"
+    echo "     ann|phpunitAnnotations     phpunitAnnotations"
+    echo "     unit|phpunit               phpunit"
+    echo "     infect|infection           infection"
+    echo "     md|messdetector            php mess detector"
+    echo "     ma|markdown                markdown validation"
+    echo "     bf|phpbf                   php beautifier and fixer"
+    echo "     cs|phpcs                   php code sniffer"
+    echo "     l|loc                      lines of code and other stats"
     exit 1
 }
 
@@ -55,18 +56,19 @@ done
 if [[ "" != "$singleToolToRun" ]]
 then
     case "$singleToolToRun" in
-        psr | psr4        ) singleToolToRun="psr4Validate";;
-        com | composer    ) singleToolToRun="composerChecks";;
-        st | stricttypes  ) singleToolToRun="phpStrictTypes";;
-        lint | phplint    ) singleToolToRun="phpLint";;
-        stan | phpstan    ) singleToolToRun="phpstan";;
-        unit | phpunit    ) singleToolToRun="phpunit";;
-        infect | infection) singleToolToRun="infection";;
-        md | messdetector ) singleToolToRun="messDetector";;
-        ml | markdown     ) singleToolToRun="markdownLinks";;
-        bf | phpbf        ) singleToolToRun="beautifierFixer";;
-        cs | phpcs        ) singleToolToRun="codeSniffer";;
-        l | loc           ) singleToolToRun="phploc";;
+        psr | psr4                  ) singleToolToRun="psr4Validate";;
+        com | composer              ) singleToolToRun="composerChecks";;
+        st | stricttypes            ) singleToolToRun="phpStrictTypes";;
+        lint | phplint              ) singleToolToRun="phpLint";;
+        stan | phpstan              ) singleToolToRun="phpstan";;
+        ann | phpunitAnnotations    ) singleToolToRun="phpunitAnnotations";;
+        unit | phpunit              ) singleToolToRun="phpunit";;
+        infect | infection          ) singleToolToRun="infection";;
+        md | messdetector           ) singleToolToRun="messDetector";;
+        ml | markdown               ) singleToolToRun="markdownLinks";;
+        bf | phpbf                  ) singleToolToRun="beautifierFixer";;
+        cs | phpcs                  ) singleToolToRun="codeSniffer";;
+        l | loc                     ) singleToolToRun="phploc";;
         * )
             printf "\nERROR:\nInvalid tool: $singleToolToRun\n\n" >&2
             usage
