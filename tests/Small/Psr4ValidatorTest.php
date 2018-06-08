@@ -18,6 +18,7 @@ class Psr4ValidatorTest extends TestCase
     /**
      * @throws \Exception
      * @covers \EdmondsCommerce\PHPQA\Psr4Validator
+     * @uses   \EdmondsCommerce\PHPQA\Helper::getComposerJsonDecoded
      * @small
      */
     public function testItFindsNoErrorsOnAValidProject(): void
@@ -36,6 +37,7 @@ class Psr4ValidatorTest extends TestCase
     /**
      * @throws \Exception
      * @covers \EdmondsCommerce\PHPQA\Psr4Validator
+     * @uses   \EdmondsCommerce\PHPQA\Helper::getComposerJsonDecoded
      * @small
      */
     public function testItCanHandleOddComposerConfigs()
@@ -54,6 +56,7 @@ class Psr4ValidatorTest extends TestCase
     /**
      * @throws \Exception
      * @covers \EdmondsCommerce\PHPQA\Psr4Validator
+     * @uses   \EdmondsCommerce\PHPQA\Helper::getComposerJsonDecoded()
      * @small
      */
     public function testItFindsErrorsAndThrowsAnExceptionOnAnInvalidProject()

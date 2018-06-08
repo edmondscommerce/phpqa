@@ -17,6 +17,7 @@ class HelperTest extends TestCase
     /**
      * @throws \Exception
      * @covers ::getComposerJsonDecoded()
+     * @covers ::getProjectRootDirectory()
      * @small
      */
     public function testItCanGetComposerJsonDecode()

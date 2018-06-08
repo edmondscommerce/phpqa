@@ -8,3 +8,4 @@ coveredCodeMSI=52
 
 
 pathsToIgnore+=("tests/assets")
+pathsToIgnore+=("src/PHPUnit/TestDox")
