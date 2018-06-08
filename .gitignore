@@ -6,6 +6,7 @@
 !/bin/mdlinks
 !/bin/psr4-validate
 !/bin/phpunit-runfailed-filter
+!/bin/phpunit-check-annotation
 /cache/
 qaConfig/phpstan.neon
 # If this is being installed as a standalone project then we can not include the lock file
