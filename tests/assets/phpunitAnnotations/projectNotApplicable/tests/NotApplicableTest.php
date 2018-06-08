@@ -6,6 +6,5 @@ class NotApplicableTest
 {
     public function testSomething()
     {
-        
     }
 }

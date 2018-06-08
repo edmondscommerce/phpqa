@@ -13,6 +13,5 @@ class SomethingTest extends TestCase
      */
     public function itDoesSomething()
     {
-
     }
 }

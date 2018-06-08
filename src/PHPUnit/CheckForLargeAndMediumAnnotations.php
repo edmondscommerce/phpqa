@@ -104,7 +104,6 @@ REGEXP
             $this->errors[$fileInfo->getFilename()][] =
                 'Failed finding @'.$annotation.' for method: '.$matches['method'][$key];
         }
-
     }
 
     /**

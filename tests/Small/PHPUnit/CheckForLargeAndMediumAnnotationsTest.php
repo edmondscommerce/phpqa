@@ -83,6 +83,4 @@ class CheckForLargeAndMediumAnnotationsTest extends TestCase
         $actual               = $this->checker->main($pathToTestsDirectory);
         $this->assertSame($expected, $actual);
     }
-
-
 }
