@@ -5,7 +5,7 @@
         colors="true"
         verbose="true"
         forceCoversAnnotation="true"
-        printerClass="\PHPUnit\Util\TestDox\CliTestDoxPrinter"
+        printerClass="\EdmondsCommerce\PHPQA\PHPUnit\TestDox\CliTestDoxPrinter"
         timeoutForMediumTests="5"
         timeoutForSmallTests="1"
         timeoutForLargeTests="300"
