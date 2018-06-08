@@ -61,7 +61,7 @@ class RerunCommandGenerator
     }
 
 
-    protected function load(string $contents)
+    private function load(string $contents)
     {
 
         libxml_use_internal_errors(true);
@@ -80,7 +80,7 @@ class RerunCommandGenerator
      * @throws \Exception
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    protected function getDefaultFilePath(): string
+    private function getDefaultFilePath(): string
     {
         return Helper::getProjectRootDirectory().'/var/qa/phpunit.junit.log.xml';
     }

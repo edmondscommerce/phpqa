@@ -172,8 +172,8 @@ class LinksChecker
             return;
         }
         $checked[$href] = true;
-        $start          = microtime(true);
-        fwrite(STDERR, "\n".'Validating link: '.$href);
+        #$start          = microtime(true);
+        #fwrite(STDERR, "\n".'Validating link: '.$href);
         $context = stream_context_create([
                                              'http' => [
                                                  'method'           => 'HEAD',
@@ -188,8 +188,8 @@ class LinksChecker
             $headers = get_headers($href, 0, $context);
             foreach ($headers as $header) {
                 if (false !== strpos($header, ' 200 ')) {
-                    $time = round(microtime(true) - $start, 2);
-                    fwrite(STDERR, "\n".'OK ('.$time.' seconds): '.$href);
+                    #$time = round(microtime(true) - $start, 2);
+                    #fwrite(STDERR, "\n".'OK ('.$time.' seconds): '.$href);
 
                     return;
                 }
@@ -204,7 +204,7 @@ class LinksChecker
             var_export($result, true)
         );
         $return   = 1;
-        $time     = round(microtime(true) - $start, 2);
-        fwrite(STDERR, "\n".'Failed ('.$time.' seconds): '.$href);
+        #$time     = round(microtime(true) - $start, 2);
+        #fwrite(STDERR, "\n".'Failed ('.$time.' seconds): '.$href);
     }
 }

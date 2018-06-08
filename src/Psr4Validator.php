@@ -142,7 +142,7 @@ class Psr4Validator
                 }
             }
 
-            public function compare($item1, $item2)
+            protected function compare($item1, $item2)
             {
                 return strcmp($item2->getRealpath(), $item1->getRealpath());
             }
