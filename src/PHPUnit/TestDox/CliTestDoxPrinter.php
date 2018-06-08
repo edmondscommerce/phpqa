@@ -27,17 +27,17 @@ use SebastianBergmann\Timer\Timer;
 class CliTestDoxPrinter extends ResultPrinter
 {
     /**
-     * @var TestResult
+     * @var \EdmondsCommerce\PHPQA\PHPUnit\TestDox\TestResult
      */
     private $currentTestResult;
 
     /**
-     * @var TestResult
+     * @var \EdmondsCommerce\PHPQA\PHPUnit\TestDox\TestResult
      */
     private $previousTestResult;
 
     /**
-     * @var TestResult[]
+     * @var \EdmondsCommerce\PHPQA\PHPUnit\TestDox\TestResult[]
      */
     private $nonSuccessfulTestResults = [];
 
@@ -64,6 +64,7 @@ class CliTestDoxPrinter extends ResultPrinter
         if (!$test instanceof TestCase && !$test instanceof PhptTestCase) {
             return;
         }
+        $className = $testMethod = '';
 
         $class = \get_class($test);
 
@@ -79,7 +80,7 @@ class CliTestDoxPrinter extends ResultPrinter
             if (isset($annotations['method']['testdox'][0])) {
                 $testMethod = $annotations['method']['testdox'][0];
             } else {
-                $testMethod = $this->prettifier->prettifyTestMethod($test->getName(false));
+                $testMethod = $this->prettifier->prettifyTestMethod((string)$test->getName(false));
             }
 
             $testMethod .= \substr($test->getDataSetAsString(false), 5);

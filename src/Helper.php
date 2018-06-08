@@ -18,20 +18,12 @@ class Helper
      */
     public static function getProjectRootDirectory(): string
     {
-        try {
-            if (null === self::$projectRootDirectory) {
-                $reflection                 = new \ReflectionClass(ClassLoader::class);
-                self::$projectRootDirectory = \dirname($reflection->getFileName(), 3);
-            }
-
-            return self::$projectRootDirectory;
-        } catch (\Exception $e) {
-            throw new \Exception(
-                'Exception in '.__METHOD__.': '.$e->getMessage(),
-                $e->getCode(),
-                $e
-            );
+        if (null === self::$projectRootDirectory) {
+            $reflection                 = new \ReflectionClass(ClassLoader::class);
+            self::$projectRootDirectory = \dirname($reflection->getFileName(), 3);
         }
+
+        return self::$projectRootDirectory;
     }
 
     /**

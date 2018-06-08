@@ -17,7 +17,7 @@ class HelperTest extends TestCase
     /**
      * @throws \Exception
      * @covers ::getComposerJsonDecoded()
-     * @uses \EdmondsCommerce\PHPQA\Helper::getProjectRootDirectory()
+     * @covers ::getProjectRootDirectory()
      * @small
      */
     public function testItCanGetComposerJsonDecode()
