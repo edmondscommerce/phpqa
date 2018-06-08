@@ -87,8 +87,8 @@ final class TestResult
     {
         return \sprintf(
             "%s%s %s %s%s\n%s",
-            $previousTestResult && $previousTestResult->additionalInformationPrintable($verbose) ? "\n" : '',
-            $this->getClassNameHeader($previousTestResult ? $previousTestResult->testClass : null),
+            $previousTestResult instanceof self && $previousTestResult->additionalInformationPrintable($verbose) ? "\n" : '',
+            $this->getClassNameHeader(!empty($previousTestResult) ? $previousTestResult->testClass : null),
             $this->symbol,
             $this->testMethod,
             $verbose ? ' '.$this->getFormattedRuntime() : '',

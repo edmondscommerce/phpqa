@@ -27,17 +27,17 @@ use SebastianBergmann\Timer\Timer;
 class CliTestDoxPrinter extends ResultPrinter
 {
     /**
-     * @var TestDoxTestResult
+     * @var TestResult
      */
     private $currentTestResult;
 
     /**
-     * @var TestDoxTestResult
+     * @var TestResult
      */
     private $previousTestResult;
 
     /**
-     * @var TestDoxTestResult[]
+     * @var TestResult[]
      */
     private $nonSuccessfulTestResults = [];
 
