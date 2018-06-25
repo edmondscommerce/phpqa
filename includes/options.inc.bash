@@ -30,7 +30,7 @@ function usage {
     echo "     unit|phpunit               phpunit"
     echo "     infect|infection           infection"
     echo "     md|messdetector            php mess detector"
-    echo "     ma|markdown                markdown validation"
+    echo "     ml|markdown                markdown validation"
     echo "     bf|phpbf                   php beautifier and fixer"
     echo "     cs|phpcs                   php code sniffer"
     echo "     l|loc                      lines of code and other stats"
