@@ -9,7 +9,7 @@ function runInfection(){
     if [[ "0" == "${phpunitFailedOnlyFiltered:-0}" ]]
     then
         # Don't run infection without xdebug
-        ${phpBinPath} -f ./bin/infection \
+        ${phpBinPath} -f ./bin/infection.phar \
             "${extraArgs[@]}" \
             --coverage=$varDir/phpunit_logs \
             --threads=${infectionThreads} \
@@ -18,7 +18,7 @@ function runInfection(){
             --min-covered-msi=${infectionCoveredCodeMSI} \
             --test-framework-options=" --verbose --debug"
     else
-        ${phpBinPath} -f ./bin/infection \
+        ${phpBinPath} -f ./bin/infection.phar \
             "${extraArgs[@]}" \
             --threads=${infectionThreads} \
             --configuration=${infectionConfig} \

@@ -20,7 +20,7 @@ class LinksCheckerTest extends TestCase
      * @covers \EdmondsCommerce\PHPQA\Markdown\LinksChecker
      * @small
      */
-    public function testInvalidProject()
+    public function testInvalidProject(): void
     {
         $pathToProject    = __DIR__.'/../../assets/linksChecker/projectWithBrokenLinks';
         $expectedExitCode = 1;
@@ -35,7 +35,7 @@ Bad link for "incorrect link" to "./../nothere.md"
 
 Bad link for "incorrect link" to "./foo.md"
 ';
-        $this->assertResult($pathToProject, $expectedExitCode, $expectedOutput);
+        self::assertResult($pathToProject, $expectedExitCode, $expectedOutput);
     }
 
     /**
@@ -44,7 +44,7 @@ Bad link for "incorrect link" to "./foo.md"
      * @covers \EdmondsCommerce\PHPQA\Markdown\LinksChecker
      * @small
      */
-    public function testMainNoReadmeFile()
+    public function testMainNoReadmeFile(): void
     {
         $this->expectException(\RuntimeException::class);
         LinksChecker::main(__DIR__.'/../../assets/linksChecker/projectNoReadme');
@@ -55,19 +55,19 @@ Bad link for "incorrect link" to "./foo.md"
      * @covers \EdmondsCommerce\PHPQA\Markdown\LinksChecker
      * @small
      */
-    public function testValidNoDocsFolder()
+    public function testValidNoDocsFolder(): void
     {
         $pathToProject    = __DIR__.'/../../assets/linksChecker/projectWithReadmeNoDocsFolder';
         $expectedExitCode = 0;
         $expectedOutput   = '';
-        $this->assertResult($pathToProject, $expectedExitCode, $expectedOutput);
+        self::assertResult($pathToProject, $expectedExitCode, $expectedOutput);
     }
 
     /**
      * @covers \EdmondsCommerce\PHPQA\Markdown\LinksChecker
      * @small
      */
-    public function testItHandlesNonFileLinks()
+    public function testItHandlesNonFileLinks(): void
     {
         $pathToProject    = __DIR__.'/../../assets/linksChecker/projectWithNonFileLinks';
         $expectedExitCode = 1;
@@ -78,15 +78,22 @@ Bad link for "incorrect link" to "./foo.md"
 Bad link for "invalid link" to "https://httpstat.us/404"
 result: NULL
 ';
-        $this->assertResult($pathToProject, $expectedExitCode, $expectedOutput);
+        self::assertResult($pathToProject, $expectedExitCode, $expectedOutput);
     }
 
-    protected function assertResult(string $pathToProject, int $expectedExitCode, string $expectedOutput)
+    /**
+     * @param string $pathToProject
+     * @param int    $expectedExitCode
+     * @param string $expectedOutput
+     *
+     * @throws \Exception
+     */
+    protected function assertResult(string $pathToProject, int $expectedExitCode, string $expectedOutput): void
     {
         ob_start();
         $actualExitCode = LinksChecker::main($pathToProject);
         $actualOutput   = ob_get_clean();
-        $this->assertSame($expectedOutput, $actualOutput);
-        $this->assertSame($expectedExitCode, $actualExitCode);
+        self::assertSame($expectedOutput, $actualOutput);
+        self::assertSame($expectedExitCode, $actualExitCode);
     }
 }

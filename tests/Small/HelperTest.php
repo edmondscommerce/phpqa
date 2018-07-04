@@ -20,10 +20,10 @@ class HelperTest extends TestCase
      * @covers ::getProjectRootDirectory()
      * @small
      */
-    public function testItCanGetComposerJsonDecode()
+    public function testItCanGetComposerJsonDecode(): void
     {
         $actual = Helper::getComposerJsonDecoded();
-        $this->assertNotEmpty($actual);
+        self::assertNotEmpty($actual);
     }
 
     /**
@@ -31,7 +31,7 @@ class HelperTest extends TestCase
      * @covers ::getComposerJsonDecoded()
      * @small
      */
-    public function testItWillThrowExceptionForInvalidComposerJson()
+    public function testItWillThrowExceptionForInvalidComposerJson(): void
     {
         $this->expectException(\RuntimeException::class);
         Helper::getComposerJsonDecoded(__DIR__.'/../assets/helper/invalid.composer.json');
@@ -42,10 +42,10 @@ class HelperTest extends TestCase
      * @covers ::getProjectRootDirectory()
      * @small
      */
-    public function testGetProjectRoot()
+    public function testGetProjectRoot(): void
     {
         $expected = \realpath(__DIR__.'/../../../phpqa/');
         $actual   = Helper::getProjectRootDirectory();
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 }

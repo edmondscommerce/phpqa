@@ -13,11 +13,26 @@ class Psr4Validator
      * @var array
      */
     protected $decodedComposerJson;
-    private   $parseErrors  = [];
-    private   $psr4Errors   = [];
-    private   $ignoreRegexPatterns;
-    private   $ignoredFiles = [];
-    private   $missingPaths = [];
+    /**
+     * @var array
+     */
+    private $parseErrors = [];
+    /**
+     * @var array
+     */
+    private $psr4Errors = [];
+    /**
+     * @var array
+     */
+    private $ignoreRegexPatterns;
+    /**
+     * @var array
+     */
+    private $ignoredFiles = [];
+    /**
+     * @var array
+     */
+    private $missingPaths = [];
 
     /**
      * Psr4Validator constructor.
@@ -41,20 +56,20 @@ class Psr4Validator
         $this->loop();
         $errors = [];
         //Actual Errors
-        if (!empty($this->psr4Errors)) {
+        if ([] !== $this->psr4Errors) {
             $errors['PSR-4 Errors:'] = $this->psr4Errors;
         }
-        if (!empty($this->parseErrors)) {
+        if ([] !== $this->parseErrors) {
             $errors['Parse Errors:'] = $this->parseErrors;
         }
-        if (!empty($this->missingPaths)) {
+        if ([] !== $this->missingPaths) {
             $errors['Missing Paths:'] = $this->missingPaths;
         }
         if ([] === $errors) {
             return $errors;
         }
         //Debug Info
-        if (!empty($this->ignoredFiles)) {
+        if ([] !== $this->ignoredFiles) {
             $errors['Ignored Files:'] = $this->ignoredFiles;
         }
 
@@ -64,14 +79,14 @@ class Psr4Validator
     /**
      * @throws \Exception
      */
-    private function loop()
+    private function loop(): void
     {
         foreach ($this->yieldPhpFilesToCheck() as list($absPathRoot, $namespaceRoot, $fileInfo)) {
             $this->check($absPathRoot, $namespaceRoot, $fileInfo);
         }
     }
 
-    private function check(string $absPathRoot, string $namespaceRoot, \SplFileInfo $fileInfo)
+    private function check(string $absPathRoot, string $namespaceRoot, \SplFileInfo $fileInfo): void
     {
         $actualNamespace = $this->getActualNamespace($fileInfo);
         if ('' === $actualNamespace) {
@@ -107,8 +122,11 @@ class Psr4Validator
     private function getActualNamespace(\SplFileInfo $fileInfo): string
     {
         $contents = \file_get_contents($fileInfo->getPathname());
+        if (false === $contents) {
+            throw new \RuntimeException('Failed getting file contents for '.$fileInfo->getPathname());
+        }
         \preg_match('%namespace\s+?([^;]+)%', $contents, $matches);
-        if (empty($matches)) {
+        if ([] === $matches) {
             $this->parseErrors[] = $fileInfo->getRealPath();
 
             return '';
@@ -122,7 +140,7 @@ class Psr4Validator
      *
      * @return \SplHeap|\SplFileInfo[]
      */
-    private function getDirectoryIterator(string $realPath)
+    private function getDirectoryIterator(string $realPath): \SplHeap
     {
         $directoryIterator = new \RecursiveDirectoryIterator(
             $realPath,
@@ -142,14 +160,20 @@ class Psr4Validator
                 }
             }
 
-            protected function compare($item1, $item2)
+            /**
+             * @param \SplFileInfo $item1
+             * @param \SplFileInfo $item2
+             *
+             * @return int
+             */
+            protected function compare($item1, $item2): int
             {
-                return strcmp($item2->getRealpath(), $item1->getRealpath());
+                return strcmp($item2->getRealPath(), $item1->getRealPath());
             }
         };
     }
 
-    private function addMissingPathError(string $path, string $namespaceRoot, string $absPathRoot)
+    private function addMissingPathError(string $path, string $namespaceRoot, string $absPathRoot): void
     {
         $invalidPathMessage = "Namespace root '$namespaceRoot'".
                               "\ncontains a path '$path''".
@@ -192,7 +216,7 @@ class Psr4Validator
                             continue;
                         }
                         foreach ($this->ignoreRegexPatterns as $pattern) {
-                            if (\preg_match($pattern, $fileInfo->getRealPath())) {
+                            if (1 === \preg_match($pattern, $fileInfo->getRealPath())) {
                                 $this->ignoredFiles[] = $fileInfo->getRealPath();
                                 continue 2;
                             }

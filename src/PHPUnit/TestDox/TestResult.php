@@ -83,12 +83,15 @@ final class TestResult
         $this->runtime = $runtime;
     }
 
-    public function toString(?self $previousTestResult, $verbose = false): string
+    public function toString(?self $previousTestResult, bool $verbose = false): string
     {
         return \sprintf(
             "%s%s %s %s%s\n%s",
-            $previousTestResult instanceof self && $previousTestResult->additionalInformationPrintable($verbose) ? "\n" : '',
-            $this->getClassNameHeader(!empty($previousTestResult) ? $previousTestResult->testClass : null),
+            $previousTestResult instanceof self
+            && $previousTestResult->additionalInformationPrintable($verbose) ? "\n" : '',
+            $this->getClassNameHeader(
+                null !== $previousTestResult ? $previousTestResult->testClass : null
+            ),
             $this->symbol,
             $this->testMethod,
             $verbose ? ' '.$this->getFormattedRuntime() : '',
@@ -124,7 +127,7 @@ final class TestResult
         return \sprintf('[%.2f ms]', $this->runtime * 1000);
     }
 
-    private function getFormattedAdditionalInformation($verbose): string
+    private function getFormattedAdditionalInformation(bool $verbose): string
     {
         if (!$this->additionalInformationPrintable($verbose)) {
             return '';

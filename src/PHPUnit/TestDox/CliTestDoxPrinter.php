@@ -46,12 +46,22 @@ class CliTestDoxPrinter extends ResultPrinter
      */
     private $prettifier;
 
+    /**
+     * CliTestDoxPrinter constructor.
+     *
+     * @param null|mixed $out
+     * @param bool       $verbose
+     * @param string     $colors
+     * @param bool       $debug
+     * @param int        $numberOfColumns
+     * @param bool       $reverse
+     */
     public function __construct(
         $out = null,
         bool $verbose = false,
-        $colors = self::COLOR_DEFAULT,
+        string $colors = self::COLOR_DEFAULT,
         bool $debug = false,
-        $numberOfColumns = 80,
+        int $numberOfColumns = 80,
         bool $reverse = false
     ) {
         parent::__construct($out, $verbose, $colors, $debug, $numberOfColumns, $reverse);
@@ -61,11 +71,6 @@ class CliTestDoxPrinter extends ResultPrinter
 
     public function startTest(Test $test): void
     {
-        if (!$test instanceof TestCase && !$test instanceof PhptTestCase) {
-            return;
-        }
-        $className = $testMethod = '';
-
         $class = \get_class($test);
 
         if ($test instanceof TestCase) {
@@ -87,6 +92,8 @@ class CliTestDoxPrinter extends ResultPrinter
         } elseif ($test instanceof PhptTestCase) {
             $className  = $class;
             $testMethod = $test->getName();
+        } else {
+            return;
         }
 
         $this->currentTestResult = new \EdmondsCommerce\PHPQA\PHPUnit\TestDox\TestResult(

@@ -19,7 +19,7 @@ class CheckAnnotationsTest extends TestCase
      */
     private $checker;
 
-    public function setup(): void
+    public function setUp(): void
     {
         $this->checker = new CheckAnnotations();
     }
@@ -29,7 +29,7 @@ class CheckAnnotationsTest extends TestCase
      * @covers ::main()
      * @small
      */
-    public function itThrowAnExceptionIfTestsPathIsInvalid()
+    public function itThrowAnExceptionIfTestsPathIsInvalid(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->checker->main('/invalid/path');
@@ -45,7 +45,7 @@ class CheckAnnotationsTest extends TestCase
         $pathToTestsDirectory = __DIR__.'/../../assets/phpunitAnnotations/projectAllGood/tests';
         $expected             = [];
         $actual               = $this->checker->main($pathToTestsDirectory);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -62,7 +62,7 @@ class CheckAnnotationsTest extends TestCase
             ],
         ];
         $actual               = $this->checker->main($pathToTestsDirectory);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -79,7 +79,7 @@ class CheckAnnotationsTest extends TestCase
             ],
         ];
         $actual               = $this->checker->main($pathToTestsDirectory);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -96,7 +96,7 @@ class CheckAnnotationsTest extends TestCase
             ],
         ];
         $actual               = $this->checker->main($pathToTestsDirectory);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -109,6 +109,6 @@ class CheckAnnotationsTest extends TestCase
         $pathToTestsDirectory = __DIR__.'/../../assets/phpunitAnnotations/projectNotApplicable/tests';
         $expected             = [];
         $actual               = $this->checker->main($pathToTestsDirectory);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 }
