@@ -2,7 +2,7 @@
   "name": "edmondscommerce/phpqa",
   "license": "MIT",
   "type": "project",
-  "description": "Simple PHP QA pipeline and scripts. Largely just a collection of dependencies with configuration and scripts to run them together",
+  "description": "PHP QA Pipeline optimised for usage in local development and also in CI. Written in BASH",
   "autoload": {
     "psr-4": {
       "EdmondsCommerce\\PHPQA\\": [
