@@ -24,10 +24,11 @@
     "jakub-onderka/php-parallel-lint": "~1",
     "phploc/phploc": "^4.0",
     "phpmd/phpmd": "^2.6",
-    "phpstan/phpstan-shim": "@stable",
+    "phpstan/phpstan-shim": "dev-master@dev",
     "squizlabs/php_codesniffer": "~3",
     "sllh/composer-versions-check": "^2.0",
     "phpstan/phpstan-strict-rules": "~0",
+    "infection/infection": "~0",
     "funkyproject/reflection-file": "^0.1.0",
     "phpunit/php-invoker": "^2.0"
   },
@@ -51,10 +52,5 @@
     },
     "optimize-autoloader": true
   },
-  "minimum-stability": "stable",
-  "scripts":{
-    "post-update-cmd":[
-      "bash composerScripts/installUpdateInfection.bash"
-    ]
-  }
+  "minimum-stability": "stable"
 }
