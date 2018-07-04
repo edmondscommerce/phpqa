@@ -60,7 +60,7 @@ class LinksChecker
             \RecursiveRegexIterator::GET_MATCH
         );
         foreach ($regex as $file) {
-            if (!empty($file[0])) {
+            if ('' !== $file[0]) {
                 $files[] = $file[0];
             }
         }
@@ -77,8 +77,8 @@ class LinksChecker
     private static function getLinks(string $file): array
     {
         $links    = [];
-        $contents = file_get_contents($file);
-        if (preg_match_all(
+        $contents = (string)file_get_contents($file);
+        if (false !== preg_match_all(
             '/\[(.+?)\].*?\((.+?)\)/',
             $contents,
             $matches,
@@ -105,13 +105,15 @@ class LinksChecker
         string $file,
         array &$errors,
         int &$return
-    ) {
+    ): void {
         $path = \trim($link[2]);
         if (0 === \strpos($path, '#')) {
             return;
         }
-        if (\preg_match('%^(http|//)%', $path)) {
-            return self::validateHttpLink($link, $errors, $return);
+        if (1 === \preg_match('%^(http|//)%', $path)) {
+            self::validateHttpLink($link, $errors, $return);
+
+            return;
         }
 
         $path  = \current(\explode('#', $path, 2));
@@ -125,7 +127,7 @@ class LinksChecker
             $start           .= '/'.\rtrim($relativeSubdirs, '/');
         }
         $realpath = \realpath($start.'/'.$path);
-        if (empty($realpath) || (!\file_exists($realpath) && !\is_dir($realpath))) {
+        if (false === $realpath) {
             $errors[] = \sprintf("\nBad link for \"%s\" to \"%s\"\n", $link[1], $link[2]);
             $return   = 1;
         }
@@ -152,7 +154,7 @@ class LinksChecker
             foreach ($links as $link) {
                 static::checkLink($projectRootDirectory, $link, $file, $errors, $return);
             }
-            if (!empty($errors)) {
+            if ([] !== $errors) {
                 echo $title.implode('', $errors);
             }
         }
@@ -160,11 +162,11 @@ class LinksChecker
         return $return;
     }
 
-    private static function validateHttpLink(array $link, array &$errors, int &$return)
+    private static function validateHttpLink(array $link, array &$errors, int &$return): void
     {
         list(, $anchor, $href) = $link;
         static $checked = [];
-        $hashPos = strpos($href, '#');
+        $hashPos = (int)strpos($href, '#');
         if ($hashPos > 0) {
             $href = substr($href, 0, $hashPos);
         }

@@ -80,7 +80,7 @@ class CheckAnnotations
         $this->checkDirectory($this->smallPath, 'small');
     }
 
-    private function checkDirectory(string $path, string $annotation)
+    private function checkDirectory(string $path, string $annotation): void
     {
         foreach ($this->yieldTestFilesInPath($path) as $fileInfo) {
             if (false === strpos($fileInfo->getFilename(), 'Test.php')) {
@@ -95,9 +95,9 @@ class CheckAnnotations
      * @param string       $annotation
      *
      */
-    private function checkFile(\SplFileInfo $fileInfo, string $annotation)
+    private function checkFile(\SplFileInfo $fileInfo, string $annotation): void
     {
-        $contents = file_get_contents($fileInfo->getPathname());
+        $contents = (string)file_get_contents($fileInfo->getPathname());
         $matches  = [];
         preg_match_all(
             <<<REGEXP
@@ -107,7 +107,7 @@ REGEXP
             $contents,
             $matches
         );
-        if (empty($matches[0])) {
+        if ('' === $matches[0]) {
             $this->errors[$fileInfo->getFilename()][] = 'Failed finding any doc blocks';
 
             return;

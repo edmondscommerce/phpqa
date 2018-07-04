@@ -6,6 +6,9 @@ use Composer\Autoload\ClassLoader;
 
 class Helper
 {
+    /**
+     * @var string
+     */
     private static $projectRootDirectory;
 
     /**
@@ -20,7 +23,7 @@ class Helper
     {
         if (null === self::$projectRootDirectory) {
             $reflection                 = new \ReflectionClass(ClassLoader::class);
-            self::$projectRootDirectory = \dirname($reflection->getFileName(), 3);
+            self::$projectRootDirectory = \dirname((string)$reflection->getFileName(), 3);
         }
 
         return self::$projectRootDirectory;
@@ -35,8 +38,12 @@ class Helper
      */
     public static function getComposerJsonDecoded(string $path = null): array
     {
-        $path    = $path ?? self::getProjectRootDirectory().'/composer.json';
-        $decoded = \json_decode(\file_get_contents($path), true);
+        $path     = $path ?? self::getProjectRootDirectory().'/composer.json';
+        $contents = (string)\file_get_contents($path);
+        if ('' === $contents) {
+            throw new \RuntimeException('composer.json is empty');
+        }
+        $decoded = \json_decode($contents, true);
         if (JSON_ERROR_NONE !== \json_last_error()) {
             throw new \RuntimeException('Failed loading composer.json: '.\json_last_error_msg());
         }

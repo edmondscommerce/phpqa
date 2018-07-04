@@ -17,52 +17,52 @@ class RerunCommandGeneratorTest extends TestCase
      * @covers \EdmondsCommerce\PHPQA\PHPUnit\RerunCommandGenerator
      * @small
      */
-    public function testCanParseFailuresAndErrors()
+    public function testCanParseFailuresAndErrors(): void
     {
         $generator = new RerunCommandGenerator();
         $filter    = $generator->main(__DIR__.'/../../assets/phpunitRerun/phpunit.junit.log.xml');
-        $this->assertNotEmpty($filter);
-        $this->assertNotEquals(RerunCommandGenerator::NO_FILTER, $filter);
+        self::assertNotEmpty($filter);
+        self::assertNotEquals(RerunCommandGenerator::NO_FILTER, $filter);
     }
 
     /**
      * @covers \EdmondsCommerce\PHPQA\PHPUnit\RerunCommandGenerator
      * @small
      */
-    public function testWillReturnNoFilterIfLogPathDoesNotExist()
+    public function testWillReturnNoFilterIfLogPathDoesNotExist(): void
     {
         $generator = new RerunCommandGenerator();
         $filter    = $generator->main('/path/not/exists');
-        $this->assertEquals(RerunCommandGenerator::NO_FILTER, $filter);
+        self::assertEquals(RerunCommandGenerator::NO_FILTER, $filter);
     }
 
     /**
      * @covers \EdmondsCommerce\PHPQA\PHPUnit\RerunCommandGenerator
      * @small
      */
-    public function testWillReturnNoFilterIfLogIsEmpty()
+    public function testWillReturnNoFilterIfLogIsEmpty(): void
     {
         $generator = new RerunCommandGenerator();
         $filter    = $generator->main(__DIR__.'/../../assets/phpunitRerun/empty.phpunit.junit.log.xml');
-        $this->assertEquals(RerunCommandGenerator::NO_FILTER, $filter);
+        self::assertEquals(RerunCommandGenerator::NO_FILTER, $filter);
     }
 
     /**
      * @covers \EdmondsCommerce\PHPQA\PHPUnit\RerunCommandGenerator
      * @small
      */
-    public function testWillReturnNoFilterIfNoFailures()
+    public function testWillReturnNoFilterIfNoFailures(): void
     {
         $generator = new RerunCommandGenerator();
         $filter    = $generator->main(__DIR__.'/../../assets/phpunitRerun/no.failures.phpunit.junit.log.xml');
-        $this->assertEquals(RerunCommandGenerator::NO_FILTER, $filter);
+        self::assertEquals(RerunCommandGenerator::NO_FILTER, $filter);
     }
 
     /**
      * @covers \EdmondsCommerce\PHPQA\PHPUnit\RerunCommandGenerator
      * @small
      */
-    public function testItWillThrowExceptionIfXmlInvalid()
+    public function testItWillThrowExceptionIfXmlInvalid(): void
     {
         $generator = new RerunCommandGenerator();
         $this->expectException(\RuntimeException::class);

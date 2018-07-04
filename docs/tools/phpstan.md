@@ -89,3 +89,114 @@ to `qaConfig/phpstan.neon` and uncomment the 2 PHPUnit specific lines:
     - ../vendor/phpstan/phpstan-phpunit/extension.neon
     - ../vendor/phpstan/phpstan-phpunit/rules.neon
 ```
+
+### Tips for Resolving Issues
+
+#### Can't use `empty()`
+
+You should not use empty, instead you should do more typesafe comparisons.
+
+For example:
+
+```php
+<?php
+$maybeEmptyArray=getMaybeEmptyArray();
+if([]===$maybeEmptyArray){
+    throw new \RuntimeException('the array is empty');
+}
+```
+
+#### Type Can Be False or Otherwise not certain
+
+You need to be more explicit about the type you are dealing with. For example, you can safely cast false to empty string if that is suitable in your situation. If not, then you should check for false and handle that as an Exception.
+
+For example:
+
+```php
+<?php
+$contents=\file_get_contents('/path/to/file');
+if(false === $contents){
+    throw new \RuntimeException('Failed getting file contents');
+}
+#now work with $contents as a string
+```
+
+See [\EdmondsCommerce\PHPQA\Psr4Validator::getActualNamespace](./../../src/Psr4Validator.php)
+
+#### Only Booleans allowed in `if` Conditions
+
+This means you need to do something explicitly boolean, generally involving a `===`
+
+For example
+
+```php
+<?php
+$subject='string containing pattern';
+if(1===\preg_match('%pa[t]{2}ern%', $subject)){
+    echo 'it matches';
+}
+```
+
+#### PHPUnit Dynamic Call to Static Method
+
+The convention is often to use `$this->assertSame`
+
+Actually, the `assertSame` method is static, so you should really be doing `self::assertSame`
+
+Generally you should be able to fix this in bulk by doing a "Replace in path" finding `$this->assert` and replacing with `self::assert`
+
+#### Missing Type Hints
+
+To resolve this, you should first try to declare a real PHP type hint
+
+If you can't, for example the type is mixed, or you are extending or overriding a third party or core class, then you can still declare type hints but just using the legacy docblock method
+
+For example:
+
+Have a look at [\EdmondsCommerce\PHPQA\Psr4Validator::getDirectoryIterator](./../../src/Psr4Validator.php)
+
+```php
+<?php
+
+#....
+
+    /**
+     * @param string $realPath
+     *
+     * @return \SplHeap|\SplFileInfo[]
+     */
+    private function getDirectoryIterator(string $realPath)
+    {
+        $directoryIterator = new \RecursiveDirectoryIterator(
+            $realPath,
+            \RecursiveDirectoryIterator::SKIP_DOTS
+        );
+        $iterator          = new \RecursiveIteratorIterator(
+            $directoryIterator,
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        return new class($iterator) extends \SplHeap
+        {
+            public function __construct(\RecursiveIteratorIterator $iterator)
+            {
+                foreach ($iterator as $item) {
+                    $this->insert($item);
+                }
+            }
+
+            /**
+             * @param \SplFileInfo $item1
+             * @param \SplFileInfo $item2
+             *
+             * @return int
+             */
+            protected function compare($item1, $item2): int
+            {
+                return strcmp($item2->getRealPath(), $item1->getRealPath());
+            }
+        };
+    }
+
+
+```

@@ -23,15 +23,19 @@ class Psr4ValidatorTest extends TestCase
      */
     public function testItFindsNoErrorsOnAValidProject(): void
     {
-        $projectRoot = \realpath(__DIR__.'/../assets/psr4/projectAllValid/');
-        $validator   = new Psr4Validator(
+        $assetsPath  = __DIR__.'/../assets/psr4/projectAllValid/';
+        $projectRoot = \realpath($assetsPath);
+        if (false === $projectRoot) {
+            self::fail('failed getting realpath to '.$assetsPath);
+        }
+        $validator = new Psr4Validator(
             [],
             $projectRoot,
             Helper::getComposerJsonDecoded($projectRoot.'/composer.json')
         );
-        $actual      = $validator->main();
-        $expected    = [];
-        $this->assertSame($expected, $actual);
+        $actual    = $validator->main();
+        $expected  = [];
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -40,17 +44,21 @@ class Psr4ValidatorTest extends TestCase
      * @uses   \EdmondsCommerce\PHPQA\Helper::getComposerJsonDecoded
      * @small
      */
-    public function testItCanHandleOddComposerConfigs()
+    public function testItCanHandleOddComposerConfigs(): void
     {
-        $projectRoot = \realpath(__DIR__.'/../assets/psr4/projectOddComposer/');
-        $validator   = new Psr4Validator(
+        $assetsPath  = __DIR__.'/../assets/psr4/projectOddComposer/';
+        $projectRoot = \realpath($assetsPath);
+        if (false === $projectRoot) {
+            self::fail('failed getting realpath to '.$assetsPath);
+        }
+        $validator = new Psr4Validator(
             [],
             $projectRoot,
             Helper::getComposerJsonDecoded($projectRoot.'/composer.json')
         );
-        $actual      = $validator->main();
-        $expected    = [];
-        $this->assertSame($expected, $actual);
+        $actual    = $validator->main();
+        $expected  = [];
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -59,16 +67,20 @@ class Psr4ValidatorTest extends TestCase
      * @uses   \EdmondsCommerce\PHPQA\Helper::getComposerJsonDecoded()
      * @small
      */
-    public function testItFindsErrorsAndThrowsAnExceptionOnAnInvalidProject()
+    public function testItFindsErrorsAndThrowsAnExceptionOnAnInvalidProject(): void
     {
-        $projectRoot = \realpath(__DIR__.'/../assets/psr4/projectInValid/');
-        $validator   = new Psr4Validator(
+        $assetsPath  = __DIR__.'/../assets/psr4/projectInValid/';
+        $projectRoot = \realpath($assetsPath);
+        if (false === $projectRoot) {
+            self::fail('failed getting realpath to '.$assetsPath);
+        }
+        $validator = new Psr4Validator(
             ['%IgnoredStuff%'],
             $projectRoot,
             Helper::getComposerJsonDecoded($projectRoot.'/composer.json')
         );
-        $actual      = $validator->main();
-        $expected    = [
+        $actual    = $validator->main();
+        $expected  = [
             'PSR-4 Errors:'  =>
                 [
                     'In\\Valid\\' =>
@@ -109,6 +121,6 @@ Magento\'s composer includes this by default, it should be removed from the psr-
                 ],
         ];
 
-        $this->assertEquals($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 }
