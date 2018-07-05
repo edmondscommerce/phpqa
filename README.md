@@ -13,7 +13,10 @@ PHPQA has only been tested on Linux.
 
 ## Installing
 
+We need to install phpstan shim dev master first, and then PHPQA. This is the case until we get a stable release with important bug fixes
+
 ```bash
+composer require phpstan/phpstan-shim:dev-master@dev --dev
 composer require edmondscommerce/phpqa:dev-master@dev --dev
 ```
 
