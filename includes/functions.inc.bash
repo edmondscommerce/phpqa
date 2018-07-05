@@ -27,18 +27,30 @@ function detectPlatform(){
     echo $platformGeneric
 }
 
+################################################################
+# Run a tool
+# First check for a project qaConfig tool override
+# Then a platform tool
+# finally the Generic tool
 function runTool(){
     local tool="$1"
-    local pathToTool="$DIR/../includes/$platform/$tool.inc.bash"
-    if [[ -f $pathToTool ]]
+    local projectOverridePath="$projectConfigPath/tools/$tool.inc.bash"
+    local platformPath="$DIR/../includes/$platform/$tool.inc.bash"
+    local genericPath="$DIR/../includes/generic/$tool.inc.bash"
+
+    if [[ -f "$projectOverridePath" ]]
+    then
+        echo "Running Project Override $tool"
+        source "$projectOverridePath"
+        return 0
+    elif [[ -f "$platformPath" ]]
     then
         echo "Running $platform $tool"
-        source $pathToTool
+        source "$platformPath"
         return 0
     fi
-    pwd
-        echo "Running generic $tool"
-    source "$DIR/../includes/generic/$tool.inc.bash"
+    echo "Running generic $tool"
+    source "$genericPath"
 }
 
 ################################################################
