@@ -2,7 +2,7 @@
   "name": "edmondscommerce/phpqa",
   "license": "MIT",
   "type": "project",
-  "description": "PHP QA Pipeline optimised for usage in local development and also in CI. Written in BASH",
+  "description": "Simple PHP QA pipeline and scripts. Largely just a collection of dependencies with configuration and scripts to run them together",
   "autoload": {
     "psr-4": {
       "EdmondsCommerce\\PHPQA\\": [
@@ -18,17 +18,17 @@
     }
   },
   "require": {
-    "php": "~7.1",
+    "php": "~7",
     "phpunit/phpunit": "~6 || ~7",
     "jakub-onderka/php-console-highlighter": "^0.3.2",
     "jakub-onderka/php-parallel-lint": "~1",
     "phploc/phploc": "^4.0",
     "phpmd/phpmd": "^2.6",
-    "phpstan/phpstan-shim": "dev-master@dev",
+    "phpstan/phpstan-shim": "@stable",
     "squizlabs/php_codesniffer": "~3",
     "sllh/composer-versions-check": "^2.0",
-    "phpstan/phpstan-strict-rules": "~0",
-    "infection/infection": "~0",
+    "phpstan/phpstan-strict-rules": "^0.9.0",
+    "infection/infection": "^0.8",
     "funkyproject/reflection-file": "^0.1.0",
     "phpunit/php-invoker": "^2.0"
   },
