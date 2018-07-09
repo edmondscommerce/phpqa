@@ -13,4 +13,12 @@ class SomethingTest extends TestCase
     public function itDoesSomething()
     {
     }
+
+    /**
+     * This method does not have the size annotation but it is not a test, so this should not cause any problem
+     */
+    public function methodThatIsNotATest()
+    {
+
+    }
 }
