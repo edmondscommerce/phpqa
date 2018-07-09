@@ -113,7 +113,12 @@ REGEXP
             return;
         }
         foreach ($matches['docblock'] as $key => $docblock) {
+            /* Found the annotation - continue */
             if (false !== strpos($docblock, '@'.$annotation)) {
+                continue;
+            }
+            /* No @test annotation found, not a test so continue */
+            if (false === strpos($docblock, '@test')) {
                 continue;
             }
             $this->errors[$fileInfo->getFilename()][] =
