@@ -8,6 +8,7 @@ class SomethingTest extends TestCase
 {
     /**
      * @largo
+     * @test
      */
     public function itDoesSomething()
     {

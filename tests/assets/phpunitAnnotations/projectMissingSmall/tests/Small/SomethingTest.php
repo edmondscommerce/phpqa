@@ -8,6 +8,7 @@ class SomethingTest extends TestCase
 {
     /**
      * @smaalll
+     * @test
      */
     public function itDoesSomething()
     {
