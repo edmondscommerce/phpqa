@@ -98,6 +98,10 @@ class CheckAnnotations
     private function checkFile(\SplFileInfo $fileInfo, string $annotation): void
     {
         $contents = (string)file_get_contents($fileInfo->getPathname());
+        if($this->isAnnotationInClassDocBlock($contents, $annotation) === true) {
+            return;
+        }
+
         $matches  = [];
         preg_match_all(
             <<<REGEXP
@@ -120,6 +124,35 @@ REGEXP
                 'Failed finding @'.$annotation.' for method: '.$matches['method'][$key];
         }
     }
+
+    /**
+     * It is possible to put the annotation in the class doc, and have it apply to all tests in the file. This checks
+     * the class docblock and if the annotation is found there returns true. If not it returns false and the rest of the
+     * self::checkFile method runs looking for it in the method docblocks
+     *
+     * @param string $fileContent
+     * @param string $annotation
+     *
+     * @return bool
+     */
+    private function isAnnotationInClassDocBlock(string $fileContent, string $annotation):bool
+    {
+        $matches = [];
+        preg_match_all(
+            <<<REGEXP
+%(?<docblock>/\*(?:[^*]|\n|(?:\*(?:[^/]|\n)))*\*/)\s+?class\s+?(?<classname>.+?)\s+?extends%
+REGEXP
+            . 'si',
+            $fileContent,
+            $matches
+        );
+        if (count($matches['docblock']) !== 1) {
+            return false;
+        }
+        $docBlock = array_shift($matches['docblock']);
+        return strpos($docBlock, '@'. $annotation) !== false;
+    }
+
 
     /**
      * @param string $path
