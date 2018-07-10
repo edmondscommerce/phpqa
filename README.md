@@ -13,10 +13,9 @@ PHPQA has only been tested on Linux.
 
 ## Installing
 
-We need to install phpstan shim dev master first, and then PHPQA. This is the case until we get a stable release with important bug fixes
+You can follow dev-master which should generally be pretty stable (all features are developed in feature branches and must pass CI before making it into master. Alternatively if you want real stability, you can track a release version of your choice.
 
 ```bash
-composer require phpstan/phpstan-shim:dev-master@dev --dev
 composer require edmondscommerce/phpqa:dev-master@dev --dev
 ```
 
