@@ -8,6 +8,7 @@ class SomethingTest extends TestCase
 {
     /**
      * @modium
+     * @test
      */
     public function itDoesSomething()
     {
