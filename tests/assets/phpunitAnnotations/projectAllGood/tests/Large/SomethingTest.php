@@ -10,8 +10,18 @@ class SomethingTest extends TestCase
      * @throws \Exception
      * @covers ::somethingThings()
      * @large
+     * @test
      */
     public function itDoesSomething()
+    {
+    }
+
+    /**
+     * @throws \Exception
+     * @covers ::somethingThings()
+     * @large
+     */
+    public function testItDoesSomething()
     {
     }
 }

@@ -105,7 +105,7 @@ class CheckAnnotations
         $matches  = [];
         preg_match_all(
             <<<REGEXP
-%(?<docblock>/\*(?:[^*]|\n|(?:\*(?:[^/]|\n)))*\*/)\s+?public\s+?function\s+?(?<method>.+?)\(%
+%(?<docblock>/\*(?:[^*]|\n|(?:\*(?:[^/]|\n)))*\*/|\n)\s+?public\s+?function\s+?(?<method>.+?)\(%
 REGEXP
             .'si',
             $contents,
@@ -116,12 +116,18 @@ REGEXP
 
             return;
         }
-        foreach ($matches['docblock'] as $key => $docblock) {
-            if (false !== strpos($docblock, '@'.$annotation)) {
+        foreach ($matches['method'] as $key => $method) {
+            $docblock = $matches['docblock'][$key];
+            /* Found the annotation - continue */
+            if (false !== \strpos($docblock, '@'.$annotation)) {
+                continue;
+            }
+            /* No @test annotation found & method not beginning test =  not a test, so continue */
+            if (false === \strpos($docblock, '@test') && false === \strpos($method, 'test')) {
                 continue;
             }
             $this->errors[$fileInfo->getFilename()][] =
-                'Failed finding @'.$annotation.' for method: '.$matches['method'][$key];
+                'Failed finding @'.$annotation.' for method: '.$method;
         }
     }
 
