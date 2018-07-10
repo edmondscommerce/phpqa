@@ -19,6 +19,7 @@ then
 fi
 phpunitFailedOnlyFiltered=0
 phpunitExitCode=99
+phpunitLogFilePath="$varDir/phpunit_logs/phpunit.junit.xml"
 while (( phpunitExitCode > 0 ))
 do
     declare -a rerunFilter
@@ -55,7 +56,7 @@ do
     phpunitExitCode=$?
     set -e
     set +x
-    if [[ "" != "$(grep '<testsuites/>' $varDir/phpunit_logs/phpunit.junit.xml)" ]]
+    if [[ "" != "$(grep '<testsuites/>' $phpunitLogFilePath)" || ! -f  $phpunitLogFilePath ]]
     then
         echo "
 
