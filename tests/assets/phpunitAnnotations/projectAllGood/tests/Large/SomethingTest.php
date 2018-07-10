@@ -15,4 +15,13 @@ class SomethingTest extends TestCase
     public function itDoesSomething()
     {
     }
+
+    /**
+     * @throws \Exception
+     * @covers ::somethingThings()
+     * @large
+     */
+    public function testItDoesSomething()
+    {
+    }
 }

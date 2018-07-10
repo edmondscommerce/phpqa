@@ -93,6 +93,7 @@ class CheckAnnotationsTest extends TestCase
         $expected             = [
             'SomethingTest.php' => [
                 'Failed finding @large for method: itDoesSomething',
+                'Failed finding @large for method: testSomethingHappens',
             ],
         ];
         $actual               = $this->checker->main($pathToTestsDirectory);

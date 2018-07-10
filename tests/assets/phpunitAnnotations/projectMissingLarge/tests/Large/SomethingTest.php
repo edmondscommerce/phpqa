@@ -13,4 +13,9 @@ class SomethingTest extends TestCase
     public function itDoesSomething()
     {
     }
+
+    public function testSomethingHappens()
+    {
+
+    }
 }
