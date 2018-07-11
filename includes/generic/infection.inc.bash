@@ -9,7 +9,7 @@ function runInfection(){
     if [[ "0" == "${phpunitFailedOnlyFiltered:-0}" ]]
     then
         # Don't run infection without xdebug
-        ${phpBinPath} -f ./bin/infection \
+         phpNoXdebug -f ./bin/infection \
             "${extraArgs[@]}" \
             --coverage=$varDir/phpunit_logs \
             --threads=${infectionThreads} \
