@@ -93,6 +93,7 @@ class CliTestDoxPrinter extends ResultPrinter
             $className  = $class;
             $testMethod = $test->getName();
         } else {
+
             return;
         }
 
@@ -128,6 +129,14 @@ class CliTestDoxPrinter extends ResultPrinter
 
     public function addError(Test $test, \Throwable $t, float $time): void
     {
+        if (null === $this->currentTestResult) {
+            throw new \RuntimeException(
+                'Error in '.__METHOD__.': '
+                .$t->getMessage()."\n\n".$t->getTraceAsString(),
+                $t->getCode(),
+                $t
+            );
+        }
         $this->currentTestResult->fail(
             $this->formatWithColor('fg-yellow', '✘'),
             (string)$t
