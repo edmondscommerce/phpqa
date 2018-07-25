@@ -29,7 +29,7 @@ phpmdConfigPath="$(configPath phpmd/ruleset.xml)"
 
 # coding Standard for checking
 # For PSR2, you need to override this and set the value to "PSR2"
-phpcsCodingStandardsNameOrPath="$(configPath codingStandards)"
+phpcsCodingStandardsNameOrPath="$(configPath codingStandard)"
 
 # should coding standards warnings be a fail?
 phpcsFailOnWarning=0
