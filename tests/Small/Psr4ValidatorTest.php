@@ -23,15 +23,15 @@ class Psr4ValidatorTest extends TestCase
      */
     public function testItFindsNoErrorsOnAValidProject(): void
     {
-        $assetsPath  = __DIR__.'/../assets/psr4/projectAllValid/';
+        $assetsPath  = __DIR__ . '/../assets/psr4/projectAllValid/';
         $projectRoot = \realpath($assetsPath);
         if (false === $projectRoot) {
-            self::fail('failed getting realpath to '.$assetsPath);
+            self::fail('failed getting realpath to ' . $assetsPath);
         }
         $validator = new Psr4Validator(
             [],
             $projectRoot,
-            Helper::getComposerJsonDecoded($projectRoot.'/composer.json')
+            Helper::getComposerJsonDecoded($projectRoot . '/composer.json')
         );
         $actual    = $validator->main();
         $expected  = [];
@@ -46,15 +46,15 @@ class Psr4ValidatorTest extends TestCase
      */
     public function testItCanHandleOddComposerConfigs(): void
     {
-        $assetsPath  = __DIR__.'/../assets/psr4/projectOddComposer/';
+        $assetsPath  = __DIR__ . '/../assets/psr4/projectOddComposer/';
         $projectRoot = \realpath($assetsPath);
         if (false === $projectRoot) {
-            self::fail('failed getting realpath to '.$assetsPath);
+            self::fail('failed getting realpath to ' . $assetsPath);
         }
         $validator = new Psr4Validator(
             [],
             $projectRoot,
-            Helper::getComposerJsonDecoded($projectRoot.'/composer.json')
+            Helper::getComposerJsonDecoded($projectRoot . '/composer.json')
         );
         $actual    = $validator->main();
         $expected  = [];
@@ -69,15 +69,15 @@ class Psr4ValidatorTest extends TestCase
      */
     public function testItFindsErrorsAndThrowsAnExceptionOnAnInvalidProject(): void
     {
-        $assetsPath  = __DIR__.'/../assets/psr4/projectInValid/';
+        $assetsPath  = __DIR__ . '/../assets/psr4/projectInValid/';
         $projectRoot = \realpath($assetsPath);
         if (false === $projectRoot) {
-            self::fail('failed getting realpath to '.$assetsPath);
+            self::fail('failed getting realpath to ' . $assetsPath);
         }
         $validator = new Psr4Validator(
             ['%IgnoredStuff%'],
             $projectRoot,
-            Helper::getComposerJsonDecoded($projectRoot.'/composer.json')
+            Helper::getComposerJsonDecoded($projectRoot . '/composer.json')
         );
         $actual    = $validator->main();
         $expected  = [
@@ -87,13 +87,13 @@ class Psr4ValidatorTest extends TestCase
                         [
                             0 =>
                                 [
-                                    'fileInfo'          => $projectRoot.'/src/Nested/Deep/Bad.php',
+                                    'fileInfo'          => $projectRoot . '/src/Nested/Deep/Bad.php',
                                     'expectedNamespace' => 'In\\Valid\\Nested\\Deep',
                                     'actualNamespace'   => 'So',
                                 ],
                             1 =>
                                 [
-                                    'fileInfo'          => $projectRoot.'/src/Wrong.php',
+                                    'fileInfo'          => $projectRoot . '/src/Wrong.php',
                                     'expectedNamespace' => 'In\\Valid',
                                     'actualNamespace'   => 'Totally',
                                 ],
@@ -101,7 +101,7 @@ class Psr4ValidatorTest extends TestCase
                 ],
             'Parse Errors:'  =>
                 [
-                    0 => $projectRoot.'/tests/ParseError.php',
+                    0 => $projectRoot . '/tests/ParseError.php',
                 ],
             'Missing Paths:' =>
                 [
@@ -116,8 +116,8 @@ Magento\'s composer includes this by default, it should be removed from the psr-
                 ],
             'Ignored Files:' =>
                 [
-                    0 => $projectRoot.'/src/IgnoredStuff/Ignored.php',
-                    1 => $projectRoot.'/src/IgnoredStuff/InvalidIgnored.php',
+                    0 => $projectRoot . '/src/IgnoredStuff/Ignored.php',
+                    1 => $projectRoot . '/src/IgnoredStuff/InvalidIgnored.php',
                 ],
         ];
 

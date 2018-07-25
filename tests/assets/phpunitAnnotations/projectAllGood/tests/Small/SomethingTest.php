@@ -19,6 +19,5 @@ class SomethingTest extends TestCase
      */
     public function methodThatIsNotATest()
     {
-
     }
 }

@@ -116,14 +116,14 @@ class Psr4Validator
             );
         }
 
-        return rtrim($namespaceRoot.$relativeNs, '\\');
+        return rtrim($namespaceRoot . $relativeNs, '\\');
     }
 
     private function getActualNamespace(\SplFileInfo $fileInfo): string
     {
         $contents = \file_get_contents($fileInfo->getPathname());
         if (false === $contents) {
-            throw new \RuntimeException('Failed getting file contents for '.$fileInfo->getPathname());
+            throw new \RuntimeException('Failed getting file contents for ' . $fileInfo->getPathname());
         }
         \preg_match('%namespace\s+?([^;]+)%', $contents, $matches);
         if ([] === $matches) {
@@ -175,12 +175,10 @@ class Psr4Validator
 
     private function addMissingPathError(string $path, string $namespaceRoot, string $absPathRoot): void
     {
-        $invalidPathMessage = "Namespace root '$namespaceRoot'".
-                              "\ncontains a path '$path''".
-                              "\nwhich doesn't exist\n";
+        $invalidPathMessage = "Namespace root '$namespaceRoot'\ncontains a path '$path'\nwhich doesn't exist\n";
         if (stripos($absPathRoot, "Magento") !== false) {
             $invalidPathMessage .= 'Magento\'s composer includes this by default, '
-                                   .'it should be removed from the psr-4 section';
+                                   . 'it should be removed from the psr-4 section';
         }
         $this->missingPaths[$path] = $invalidPathMessage;
     }
@@ -204,7 +202,7 @@ class Psr4Validator
                     $paths = [$paths];
                 }
                 foreach ($paths as $path) {
-                    $absPathRoot     = $this->pathToProjectRoot.'/'.$path;
+                    $absPathRoot     = $this->pathToProjectRoot . '/' . $path;
                     $realAbsPathRoot = \realpath($absPathRoot);
                     if (false === $realAbsPathRoot) {
                         $this->addMissingPathError($path, $namespaceRoot, $absPathRoot);

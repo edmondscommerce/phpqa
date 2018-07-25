@@ -74,7 +74,7 @@ final class TestResult
     ): void {
         $this->testSuccesful                = false;
         $this->symbol                       = $symbol;
-        $this->additionalInformation        .= "\n".$additionalInformation;
+        $this->additionalInformation        .= "\n" . $additionalInformation;
         $this->additionalInformationVerbose = $additionalInformationVerbose;
     }
 
@@ -94,7 +94,7 @@ final class TestResult
             ),
             $this->symbol,
             $this->testMethod,
-            $verbose ? ' '.$this->getFormattedRuntime() : '',
+            $verbose ? ' ' . $this->getFormattedRuntime() : '',
             $this->getFormattedAdditionalInformation($verbose)
         );
     }

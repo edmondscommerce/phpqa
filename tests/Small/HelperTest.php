@@ -34,7 +34,7 @@ class HelperTest extends TestCase
     public function testItWillThrowExceptionForInvalidComposerJson(): void
     {
         $this->expectException(\RuntimeException::class);
-        Helper::getComposerJsonDecoded(__DIR__.'/../assets/helper/invalid.composer.json');
+        Helper::getComposerJsonDecoded(__DIR__ . '/../assets/helper/invalid.composer.json');
     }
 
     /**
@@ -44,7 +44,7 @@ class HelperTest extends TestCase
      */
     public function testGetProjectRoot(): void
     {
-        $expected = \realpath(__DIR__.'/../../../phpqa/');
+        $expected = \realpath(__DIR__ . '/../../../phpqa/');
         $actual   = Helper::getProjectRootDirectory();
         self::assertSame($expected, $actual);
     }

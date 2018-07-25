@@ -43,12 +43,12 @@ class CheckAnnotations
     {
         if (!is_dir($pathToTestsDirectory)) {
             throw new \InvalidArgumentException(
-                '$pathToTestsDirectory "'.$pathToTestsDirectory.'" does not exist"'
+                '$pathToTestsDirectory "' . $pathToTestsDirectory . '" does not exist"'
             );
         }
-        $this->largePath  = $pathToTestsDirectory.'/Large';
-        $this->mediumPath = $pathToTestsDirectory.'/Medium';
-        $this->smallPath  = $pathToTestsDirectory.'/Small';
+        $this->largePath  = $pathToTestsDirectory . '/Large';
+        $this->mediumPath = $pathToTestsDirectory . '/Medium';
+        $this->smallPath  = $pathToTestsDirectory . '/Small';
         $this->checkLarge();
         $this->checkMedium();
         $this->checkSmall();
@@ -98,7 +98,7 @@ class CheckAnnotations
     private function checkFile(\SplFileInfo $fileInfo, string $annotation): void
     {
         $contents = (string)file_get_contents($fileInfo->getPathname());
-        if($this->isAnnotationInClassDocBlock($contents, $annotation) === true) {
+        if ($this->isAnnotationInClassDocBlock($contents, $annotation) === true) {
             return;
         }
 
@@ -107,7 +107,7 @@ class CheckAnnotations
             <<<REGEXP
 %(?<docblock>/\*(?:[^*]|\n|(?:\*(?:[^/]|\n)))*\*/|\n)\s+?public\s+?function\s+?(?<method>.+?)\(%
 REGEXP
-            .'si',
+            . 'si',
             $contents,
             $matches
         );
@@ -119,7 +119,7 @@ REGEXP
         foreach ($matches['method'] as $key => $method) {
             $docblock = $matches['docblock'][$key];
             /* Found the annotation - continue */
-            if (false !== \strpos($docblock, '@'.$annotation)) {
+            if (false !== \strpos($docblock, '@' . $annotation)) {
                 continue;
             }
             /* No @test annotation found & method not beginning test =  not a test, so continue */
@@ -127,7 +127,7 @@ REGEXP
                 continue;
             }
             $this->errors[$fileInfo->getFilename()][] =
-                'Failed finding @'.$annotation.' for method: '.$method;
+                'Failed finding @' . $annotation . ' for method: ' . $method;
         }
     }
 
@@ -156,7 +156,7 @@ REGEXP
             return false;
         }
         $docBlock = array_shift($matches['docblock']);
-        return strpos($docBlock, '@'. $annotation) !== false;
+        return strpos($docBlock, '@' . $annotation) !== false;
     }
 
 

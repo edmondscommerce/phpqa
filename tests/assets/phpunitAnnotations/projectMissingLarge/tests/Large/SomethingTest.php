@@ -16,6 +16,5 @@ class SomethingTest extends TestCase
 
     public function testSomethingHappens()
     {
-
     }
 }

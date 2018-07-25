@@ -22,7 +22,7 @@ class LinksCheckerTest extends TestCase
      */
     public function testInvalidProject(): void
     {
-        $pathToProject    = __DIR__.'/../../assets/linksChecker/projectWithBrokenLinks';
+        $pathToProject    = __DIR__ . '/../../assets/linksChecker/projectWithBrokenLinks';
         $expectedExitCode = 1;
         $expectedOutput   = '
 /docs/linksCheckerTest.md
@@ -47,7 +47,7 @@ Bad link for "incorrect link" to "./foo.md"
     public function testMainNoReadmeFile(): void
     {
         $this->expectException(\RuntimeException::class);
-        LinksChecker::main(__DIR__.'/../../assets/linksChecker/projectNoReadme');
+        LinksChecker::main(__DIR__ . '/../../assets/linksChecker/projectNoReadme');
     }
 
     /**
@@ -57,7 +57,7 @@ Bad link for "incorrect link" to "./foo.md"
      */
     public function testValidNoDocsFolder(): void
     {
-        $pathToProject    = __DIR__.'/../../assets/linksChecker/projectWithReadmeNoDocsFolder';
+        $pathToProject    = __DIR__ . '/../../assets/linksChecker/projectWithReadmeNoDocsFolder';
         $expectedExitCode = 0;
         $expectedOutput   = '';
         self::assertResult($pathToProject, $expectedExitCode, $expectedOutput);
@@ -69,7 +69,7 @@ Bad link for "incorrect link" to "./foo.md"
      */
     public function testItHandlesNonFileLinks(): void
     {
-        $pathToProject    = __DIR__.'/../../assets/linksChecker/projectWithNonFileLinks';
+        $pathToProject    = __DIR__ . '/../../assets/linksChecker/projectWithNonFileLinks';
         $expectedExitCode = 1;
         $expectedOutput   = '
 /README.md
