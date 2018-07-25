@@ -28,8 +28,8 @@ phpstanConfigPath="$(configPath phpstan.neon)"
 phpmdConfigPath="$(configPath phpmd/ruleset.xml)"
 
 # coding Standard for checking
-# checks for a folder called 'condingStandards' in the $projectConfigPath, falls back to the PSR2 standards
-phpcsCodingStandardsNameOrPath="PSR2"
+# For PSR2, you need to override this and set the value to "PSR2"
+phpcsCodingStandardsNameOrPath="$(configPath codingStandards)"
 
 # should coding standards warnings be a fail?
 phpcsFailOnWarning=0
