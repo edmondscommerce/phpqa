@@ -106,11 +106,11 @@ class Psr4ValidatorTest extends TestCase
             'Missing Paths:' =>
                 [
                     'missing/path'         => 'Namespace root \'In\\Valid\\\'
-contains a path \'missing/path\'\'
+contains a path \'missing/path\'
 which doesn\'t exist
 ',
                     'missing/magento/path' => 'Namespace root \'In\\Valid\\\'
-contains a path \'missing/magento/path\'\'
+contains a path \'missing/magento/path\'
 which doesn\'t exist
 Magento\'s composer includes this by default, it should be removed from the psr-4 section',
                 ],
