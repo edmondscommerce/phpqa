@@ -18,6 +18,5 @@ class ClassDocsTest extends TestCase
      */
     public function testWithNoAnnotation()
     {
-
     }
 }

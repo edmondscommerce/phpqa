@@ -76,7 +76,7 @@ class RerunCommandGenerator
         }
         if (null === $class || null === $name) {
             throw new \RuntimeException(
-                'Failed finding the class and/or name in the attributes:'.$attributes->__toString()
+                'Failed finding the class and/or name in the attributes:' . $attributes->__toString()
             );
         }
 
@@ -94,7 +94,7 @@ class RerunCommandGenerator
 
         $nodes = $this->simpleXml->xpath(
             '//testsuite/testcase[error] | //testsuite/testcase[failure] '
-            .'| //testsuite/testcase[skipped] | //testsuite/testcase[incomplete]'
+            . '| //testsuite/testcase[skipped] | //testsuite/testcase[incomplete]'
         );
         if (false === $nodes) {
             return [];
@@ -112,7 +112,7 @@ class RerunCommandGenerator
         if (false === $sXml) {
             $message = "Failed loading XML\n";
             foreach (libxml_get_errors() as $error) {
-                $message .= "\n\t".$error->message;
+                $message .= "\n\t" . $error->message;
             }
             throw new \RuntimeException($message);
         }
@@ -126,6 +126,6 @@ class RerunCommandGenerator
      */
     private function getDefaultFilePath(): string
     {
-        return Helper::getProjectRootDirectory().'/var/qa/phpunit.junit.log.xml';
+        return Helper::getProjectRootDirectory() . '/var/qa/phpunit.junit.log.xml';
     }
 }

@@ -93,7 +93,6 @@ class CliTestDoxPrinter extends ResultPrinter
             $className  = $class;
             $testMethod = $test->getName();
         } else {
-
             return;
         }
 
@@ -131,8 +130,8 @@ class CliTestDoxPrinter extends ResultPrinter
     {
         if (null === $this->currentTestResult) {
             throw new \RuntimeException(
-                'Error in '.__METHOD__.': '
-                .$t->getMessage()."\n\n".$t->getTraceAsString(),
+                'Error in ' . __METHOD__ . ': '
+                . $t->getMessage() . "\n\n" . $t->getTraceAsString(),
                 $t->getCode(),
                 $t
             );
@@ -205,7 +204,7 @@ class CliTestDoxPrinter extends ResultPrinter
 
     protected function printHeader(): void
     {
-        $this->write("\n".Timer::resourceUsage()."\n\n");
+        $this->write("\n" . Timer::resourceUsage() . "\n\n");
     }
 
     private function printNonSuccessfulTestsSummary(int $numberOfExecutedTests): void

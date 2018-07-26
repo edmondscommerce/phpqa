@@ -20,7 +20,7 @@ class RerunCommandGeneratorTest extends TestCase
     public function testCanParseFailuresAndErrors(): void
     {
         $generator = new RerunCommandGenerator();
-        $filter    = $generator->main(__DIR__.'/../../assets/phpunitRerun/phpunit.junit.log.xml');
+        $filter    = $generator->main(__DIR__ . '/../../assets/phpunitRerun/phpunit.junit.log.xml');
         self::assertNotEmpty($filter);
         self::assertNotEquals(RerunCommandGenerator::NO_FILTER, $filter);
     }
@@ -43,7 +43,7 @@ class RerunCommandGeneratorTest extends TestCase
     public function testWillReturnNoFilterIfLogIsEmpty(): void
     {
         $generator = new RerunCommandGenerator();
-        $filter    = $generator->main(__DIR__.'/../../assets/phpunitRerun/empty.phpunit.junit.log.xml');
+        $filter    = $generator->main(__DIR__ . '/../../assets/phpunitRerun/empty.phpunit.junit.log.xml');
         self::assertEquals(RerunCommandGenerator::NO_FILTER, $filter);
     }
 
@@ -54,7 +54,7 @@ class RerunCommandGeneratorTest extends TestCase
     public function testWillReturnNoFilterIfNoFailures(): void
     {
         $generator = new RerunCommandGenerator();
-        $filter    = $generator->main(__DIR__.'/../../assets/phpunitRerun/no.failures.phpunit.junit.log.xml');
+        $filter    = $generator->main(__DIR__ . '/../../assets/phpunitRerun/no.failures.phpunit.junit.log.xml');
         self::assertEquals(RerunCommandGenerator::NO_FILTER, $filter);
     }
 
@@ -66,6 +66,6 @@ class RerunCommandGeneratorTest extends TestCase
     {
         $generator = new RerunCommandGenerator();
         $this->expectException(\RuntimeException::class);
-        $generator->main(__DIR__.'/../../assets/phpunitRerun/invalid.xml.phpunit.junit.log.xml');
+        $generator->main(__DIR__ . '/../../assets/phpunitRerun/invalid.xml.phpunit.junit.log.xml');
     }
 }

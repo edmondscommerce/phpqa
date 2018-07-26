@@ -28,11 +28,11 @@ class LinksChecker
      */
     private static function getMainReadme(string $projectRootDirectory): string
     {
-        $path = $projectRootDirectory.'/README.md';
+        $path = $projectRootDirectory . '/README.md';
         if (!is_file($path)) {
             throw new \RuntimeException(
                 "\n\nYou have no README.md file in your project"
-                ."\n\nAs the bear minimum you need to have this file to pass QA"
+                . "\n\nAs the bear minimum you need to have this file to pass QA"
             );
         }
 
@@ -48,7 +48,7 @@ class LinksChecker
     private static function getDocsFiles(string $projectRootDirectory): array
     {
         $files = [];
-        $dir   = $projectRootDirectory.'/docs';
+        $dir   = $projectRootDirectory . '/docs';
         if (!is_dir($dir)) {
             return $files;
         }
@@ -120,13 +120,13 @@ class LinksChecker
         $start = \rtrim($projectRootDirectory, '/');
         if ($path[0] !== '/' || 0 === \strpos($path, './')) {
             $relativeSubdirs = \preg_replace(
-                '%^'.$projectRootDirectory.'%',
+                '%^' . $projectRootDirectory . '%',
                 '',
                 \dirname($file)
             );
-            $start           .= '/'.\rtrim($relativeSubdirs, '/');
+            $start           .= '/' . \rtrim($relativeSubdirs, '/');
         }
-        $realpath = \realpath($start.'/'.$path);
+        $realpath = \realpath($start . '/' . $path);
         if (false === $realpath) {
             $errors[] = \sprintf("\nBad link for \"%s\" to \"%s\"\n", $link[1], $link[2]);
             $return   = 1;
@@ -148,14 +148,14 @@ class LinksChecker
         $files                = static::getFiles($projectRootDirectory);
         foreach ($files as $file) {
             $relativeFile = str_replace($projectRootDirectory, '', $file);
-            $title        = "\n$relativeFile\n".str_repeat('-', strlen($relativeFile))."\n";
+            $title        = "\n$relativeFile\n" . str_repeat('-', strlen($relativeFile)) . "\n";
             $errors       = [];
             $links        = static::getLinks($file);
             foreach ($links as $link) {
                 static::checkLink($projectRootDirectory, $link, $file, $errors, $return);
             }
             if ([] !== $errors) {
-                echo $title.implode('', $errors);
+                echo $title . implode('', $errors);
             }
         }
 
