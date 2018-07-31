@@ -24,17 +24,18 @@ while (( phpunitExitCode > 0 ))
 do
     declare -a rerunFilter
     rerunFilter=(" ")
-    if phpunitReRunFailedOrFull
-    then
-        #set no glob
-        set -f
-        rerunFilterPattern=$(phpNoXdebug bin/phpunit-runfailed-filter)
-        if [[ "$rerunFilterPattern" != '/.*/' ]]
-        then
-            rerunFilter+=( --filter $IFS $rerunFilterPattern)
-            phpunitFailedOnlyFiltered=1
-        fi
-    fi
+# THIS ISNT WORKING AT THE MOMENT - COMMENTING OUT FOR NOW
+#    if phpunitReRunFailedOrFull
+#    then
+#        #set no glob
+#        set -f
+#        rerunFilterPattern=$(phpNoXdebug bin/phpunit-runfailed-filter)
+#        if [[ "$rerunFilterPattern" != '/.*/' ]]
+#        then
+#            rerunFilter+=( --filter $IFS $rerunFilterPattern)
+#            phpunitFailedOnlyFiltered=1
+#        fi
+#    fi
     noCoverage=(" ")
     if [[ "1" != "$phpUnitCoverage" ]]
     then
