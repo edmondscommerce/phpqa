@@ -36,10 +36,15 @@ do
 #            phpunitFailedOnlyFiltered=1
 #        fi
 #    fi
-    noCoverage=(" ")
+    extraConfigs=(" ")
     if [[ "1" != "$phpUnitCoverage" ]]
     then
-        noCoverage+=( --no-coverage )
+        extraConfigs+=( --no-coverage )
+    fi
+    if [[ "1" == "$phpUnitIterativeMode" ]]
+    then
+        extraConfigs+=( --order-by=depends,defects )
+        extraConfigs+=( --stop-on-failure --stop-on-error --stop-on-defect --stop-on-warning )
     fi
     set +e
     set -x
@@ -48,7 +53,7 @@ do
         ${paratestConfig[@]} \
         -c ${phpUnitConfigPath} \
         ${rerunFilter[@]} \
-        ${noCoverage[@]} \
+        ${extraConfigs[@]} \
         --enforce-time-limit \
         --fail-on-risky \
         --fail-on-warning \

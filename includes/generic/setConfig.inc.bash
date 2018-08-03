@@ -36,6 +36,9 @@ phpcsFailOnWarning=0
 
 ##PHPUnit Configs
 
+#Iterative Mode - prioritises runnign failed tests and stops on first error
+phpUnitIterativeMode=${phpUnitIterativeMode:-0}
+
 # PHPUnit Quick Tests - optional skip slow tests
 phpUnitQuickTests=${phpUnitQuickTests:-0}
 
