@@ -28,6 +28,7 @@ function usage {
     echo "     stan|phpstan               phpstan"
     echo "     ann|phpunitAnnotations     phpunitAnnotations"
     echo "     unit|phpunit               phpunit"
+    echo "     uniterate                  phpunit iterative mode - prioritise broken tests and fail on error"
     echo "     infect|infection           infection"
     echo "     md|messdetector            php mess detector"
     echo "     ml|markdown                markdown validation"
@@ -63,6 +64,7 @@ then
         stan | phpstan              ) singleToolToRun="phpstan";;
         ann | phpunitAnnotations    ) singleToolToRun="phpunitAnnotations";;
         unit | phpunit              ) singleToolToRun="phpunit";;
+        uniterate                   ) singleToolToRun="phpunit"; phpUnitIterativeMode=1;;
         infect | infection          ) singleToolToRun="infection";;
         md | messdetector           ) singleToolToRun="messDetector";;
         ml | markdown               ) singleToolToRun="markdownLinks";;
