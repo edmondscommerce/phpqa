@@ -19,7 +19,7 @@
   },
   "require": {
     "php": "~7.1",
-    "phpunit/phpunit": "~6 || ~7",
+    "phpunit/phpunit": "^7.3",
     "jakub-onderka/php-console-highlighter": "^0.3.2",
     "jakub-onderka/php-parallel-lint": "~1",
     "phploc/phploc": "^4.0",
