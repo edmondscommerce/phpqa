@@ -43,6 +43,10 @@ do
     fi
     if [[ "1" == "$phpUnitIterativeMode" ]]
     then
+        echo
+        echo "Uniterate Mode - Iterative Testing with Fast Failure"
+        echo "----------------------------------------------------"
+        echo
         extraConfigs+=( --order-by=depends,defects )
         extraConfigs+=( --stop-on-failure --stop-on-error --stop-on-defect --stop-on-warning )
     fi
