@@ -49,6 +49,7 @@ do
         echo
         extraConfigs+=( --order-by=depends,defects )
         extraConfigs+=( --stop-on-failure --stop-on-error --stop-on-defect --stop-on-warning )
+        extraConfigs+=( --no-coverage )
     fi
     set +e
     set -x
