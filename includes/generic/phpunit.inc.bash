@@ -22,20 +22,6 @@ phpunitExitCode=99
 phpunitLogFilePath="$varDir/phpunit_logs/phpunit.junit.xml"
 while (( phpunitExitCode > 0 ))
 do
-    declare -a rerunFilter
-    rerunFilter=(" ")
-# THIS ISNT WORKING AT THE MOMENT - COMMENTING OUT FOR NOW
-#    if phpunitReRunFailedOrFull
-#    then
-#        #set no glob
-#        set -f
-#        rerunFilterPattern=$(phpNoXdebug bin/phpunit-runfailed-filter)
-#        if [[ "$rerunFilterPattern" != '/.*/' ]]
-#        then
-#            rerunFilter+=( --filter $IFS $rerunFilterPattern)
-#            phpunitFailedOnlyFiltered=1
-#        fi
-#    fi
     extraConfigs=(" ")
     if [[ "1" != "$phpUnitCoverage" ]]
     then
@@ -57,7 +43,6 @@ do
         -- \
         ${paratestConfig[@]} \
         -c ${phpUnitConfigPath} \
-        ${rerunFilter[@]} \
         ${extraConfigs[@]} \
         --enforce-time-limit \
         --fail-on-risky \

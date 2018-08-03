@@ -46,9 +46,6 @@ phpUnitQuickTests=${phpUnitQuickTests:-0}
 # if enabled, tests will run with Xdebug and generate coverage (which is a lot slower)
 phpUnitCoverage=${phpUnitCoverage:-1}
 
-# How many minutes after a failed PHPUnit run you can retry failed only
-phpunitRerunTimeoutMins=${phpunitRerunTimeoutMins:-5}
-
 # Can only generate coverage if Xdebug is enabled
 if [[ "1" != "$xdebugEnabled" ]]
 then
