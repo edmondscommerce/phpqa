@@ -47,7 +47,8 @@ do
         --enforce-time-limit \
         --fail-on-risky \
         --fail-on-warning \
-        --disallow-todo-tests
+        --disallow-todo-tests \
+        --log-junit "$phpunitLogFilePath"
 
     phpunitExitCode=$?
     set -e
