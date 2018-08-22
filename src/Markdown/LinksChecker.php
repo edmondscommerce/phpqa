@@ -188,6 +188,9 @@ class LinksChecker
         $result  = null;
         try {
             $headers = get_headers($href, 0, $context);
+            if (false === $headers) {
+                throw new \RuntimeException('Failed getting headers for href ' . $href);
+            }
             foreach ($headers as $header) {
                 if (false !== strpos($header, ' 200 ')) {
                     #$time = round(microtime(true) - $start, 2);

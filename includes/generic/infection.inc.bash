@@ -16,7 +16,7 @@ function runInfection(){
             --configuration=${infectionConfig} \
             --min-msi=${infectionMutationScoreIndicator} \
             --min-covered-msi=${infectionCoveredCodeMSI} \
-            --test-framework-options=" --verbose --debug --cache-result-file=/tmp/.infection.phpunit.cache"
+            --test-framework-options="--cache-result-file=/tmp/.infection.phpunit.cache"
     else
         ${phpBinPath} -f ./bin/infection \
             "${extraArgs[@]}" \
@@ -24,7 +24,7 @@ function runInfection(){
             --configuration=${infectionConfig} \
             --min-msi=${infectionMutationScoreIndicator} \
             --min-covered-msi=${infectionCoveredCodeMSI} \
-            --test-framework-options=" --verbose  --debug --cache-result-file=/tmp/.infection.phpunit.cache "
+            --test-framework-options="--cache-result-file=/tmp/.infection.phpunit.cache"
     fi
 }
 
