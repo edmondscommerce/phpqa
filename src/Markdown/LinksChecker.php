@@ -79,11 +79,11 @@ class LinksChecker
         $links    = [];
         $contents = (string)file_get_contents($file);
         if (false !== preg_match_all(
-                '/\[(.+?)\].*?\((.+?)\)/',
-                $contents,
-                $matches,
-                PREG_SET_ORDER
-            )) {
+            '/\[(.+?)\].*?\((.+?)\)/',
+            $contents,
+            $matches,
+            PREG_SET_ORDER
+        )) {
             $links = array_merge($links, $matches);
         }
 
