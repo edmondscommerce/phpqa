@@ -4,8 +4,6 @@ cd $DIR;
 set -e
 set -u
 set -o pipefail
-standardIFS="$IFS"
-IFS=$'\n\t'
 echo "
 ===========================================
 PHPQA Pre Commit Hook
