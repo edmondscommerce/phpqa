@@ -119,3 +119,40 @@ Specific platforms' docs are at:
 ## Using for Continuous Integration (CI)
 
 Please see the [CI docs](./docs/ci.md)
+
+## Git Hooks
+
+Have a look in [gitHooks](./gitHooks) for git hooks that can be used in your project
+
+The suggested way to use these is to symlink. Note that your actual git hook should not include the `.bash` file extension
+
+To use the `pre-commit` hook, for example, you would do:
+
+```bash
+#cd to project root
+cd /var/www/project/root
+
+#cd to hooks folder
+cd .git/hooks/
+
+#create relative symlink
+ln -s ../../vendor/edmondscommerce/phpqa/gitHooks/pre-commit.bash pre-commit
+```
+
+Then ensure the hook is executable by running it:
+
+``` bash
+#cd to project root
+cd /var/www/project/root
+
+./git/hooks/pre-commit
+```
+
+And you should then see 
+
+```
+===========================================
+PHPQA Pre Commit Hook
+===========================================
+```
+
