@@ -79,11 +79,11 @@ class LinksChecker
         $links    = [];
         $contents = (string)file_get_contents($file);
         if (false !== preg_match_all(
-            '/\[(.+?)\].*?\((.+?)\)/',
-            $contents,
-            $matches,
-            PREG_SET_ORDER
-        )) {
+                '/\[(.+?)\].*?\((.+?)\)/',
+                $contents,
+                $matches,
+                PREG_SET_ORDER
+            )) {
             $links = array_merge($links, $matches);
         }
 
@@ -188,6 +188,9 @@ class LinksChecker
         $result  = null;
         try {
             $headers = get_headers($href, 0, $context);
+            if (false === $headers) {
+                throw new \RuntimeException('Failed getting headers for href ' . $href);
+            }
             foreach ($headers as $header) {
                 if (false !== strpos($header, ' 200 ')) {
                     #$time = round(microtime(true) - $start, 2);
