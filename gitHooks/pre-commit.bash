@@ -15,6 +15,8 @@ readonly projectRoot="$DIR/../../"
 
 cd $projectRoot
 
+./bin/qa -t lint
+
 ./bin/qa -t bf
 
 echo "
