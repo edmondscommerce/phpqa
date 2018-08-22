@@ -36,6 +36,9 @@ do
         extraConfigs+=( --order-by=depends,defects )
         extraConfigs+=( --stop-on-failure --stop-on-error --stop-on-defect --stop-on-warning )
         extraConfigs+=( --no-coverage )
+    else
+        #Only enforce time limit if we are not in iterative mode, otherwise it kills Xdebug sessions
+        extraConfigs+=( --enforce-time-limit )
     fi
     set +e
     set -x
@@ -44,7 +47,6 @@ do
         ${paratestConfig[@]} \
         -c ${phpUnitConfigPath} \
         ${extraConfigs[@]} \
-        --enforce-time-limit \
         --fail-on-risky \
         --fail-on-warning \
         --disallow-todo-tests \
