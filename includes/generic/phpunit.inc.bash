@@ -23,12 +23,9 @@ phpunitLogFilePath="$varDir/phpunit_logs/phpunit.junit.xml"
 while (( phpunitExitCode > 0 ))
 do
     extraConfigs=(" ")
-    if [[ "1" != "$phpUnitCoverage" ]]
-    then
-        extraConfigs+=( --no-coverage )
-    fi
     if [[ "1" == "$phpUnitIterativeMode" ]]
     then
+        # Uniterate mode - order by defects, stop on first error, no coverage and enforce time limits
         echo
         echo "Uniterate Mode - Iterative Testing with Fast Failure"
         echo "----------------------------------------------------"
@@ -36,8 +33,17 @@ do
         extraConfigs+=( --order-by=depends,defects )
         extraConfigs+=( --stop-on-failure --stop-on-error --stop-on-defect --stop-on-warning )
         extraConfigs+=( --no-coverage )
+        extraConfigs+=( --enforce-time-limit )
+    elif [[ "1" != "$phpUnitCoverage" ]]
+    then
+        # No Coverage mode - do not generate coverage, do enforce time limits
+        extraConfigs+=( --no-coverage )
+        extraConfigs+=( --enforce-time-limit )
+    elif [[ "false" != "${CI:-'false'}" ]]
+        # When in CI and generating coverage - stop on first error, do not enforce time limits
+        extraConfigs+=( --stop-on-failure --stop-on-error --stop-on-defect --stop-on-warning )
     else
-        #Only enforce time limit if we are not in iterative mode, otherwise it kills Xdebug sessions
+        # Default mode - do generate coverage if configured to do so, do enforce time limits
         extraConfigs+=( --enforce-time-limit )
     fi
     set +e
