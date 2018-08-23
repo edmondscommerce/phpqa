@@ -92,6 +92,13 @@ phpUnitCoverage=1 bin/qa
 
 You might decide to do this if you are running these tests on travis, as you can see in [./travis.yml](./../../.travis.yml)
 
+#### Config Changes When Generating Coverage
+
+Generating coverage can cause a dramatic speed degradation. For this reason
+
+* PHPUnit will fail on the first error rather than run the full suite
+* We will not enforce any time limits for `@small` `@medium` `@large`
+
 ### Speed Impact of Enabling Coverage
 
 If coverage is enabled, then the tests have to be run with Xdebug enabled. This on it's own has a dramatic impact on the speed of PHP execution.
