@@ -40,6 +40,7 @@ do
         extraConfigs+=( --no-coverage )
         extraConfigs+=( --enforce-time-limit )
     elif [[ "false" != "${CI:-'false'}" ]]
+    then
         # When in CI and generating coverage - stop on first error, do not enforce time limits
         extraConfigs+=( --stop-on-failure --stop-on-error --stop-on-defect --stop-on-warning )
     else
