@@ -39,9 +39,12 @@ do
         # No Coverage mode - do not generate coverage, do enforce time limits
         extraConfigs+=( --no-coverage )
         extraConfigs+=( --enforce-time-limit )
-    else
-        # Coverage generation mode (slow) - stop on first error, do not enforce time limits
+    elif [[ "false" != "${CI:-'false'}" ]]
+        # When in CI and generating coverage - stop on first error, do not enforce time limits
         extraConfigs+=( --stop-on-failure --stop-on-error --stop-on-defect --stop-on-warning )
+    else
+        # Default mode - do generate coverage if configured to do so, do enforce time limits
+        extraConfigs+=( --enforce-time-limit )
     fi
     set +e
     set -x
