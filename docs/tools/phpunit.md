@@ -2,6 +2,24 @@
 
 Here is the full documentation about how you can use and configure PHPUnit in your PHPQA project.
 
+## Iterative Mode
+
+When you have tests that are failing and you are working towards getting everything green, then you might want to try iterative mode.
+
+The easiest way to do this is:
+
+```bash
+./bin/qa -t uniterate
+```
+
+This will run PHPunit in isolation
+
+The first run will be a full run (unless you have done one previously)
+
+Subsequent runs will then run your failed tests first and will stop on the first error.
+
+This allows you to quickly iterate on your test suite and push it towards getting everything passing.
+
 ## Quick Tests
 
 There is an environment variable for PHPUnit set called `phpUnitQuickTests`
@@ -74,6 +92,13 @@ phpUnitCoverage=1 bin/qa
 
 You might decide to do this if you are running these tests on travis, as you can see in [./travis.yml](./../../.travis.yml)
 
+#### Config Changes When Generating Coverage
+
+Generating coverage can cause a dramatic speed degradation. For this reason
+
+* PHPUnit will fail on the first error rather than run the full suite
+* We will not enforce any time limits for `@small` `@medium` `@large`
+
 ### Speed Impact of Enabling Coverage
 
 If coverage is enabled, then the tests have to be run with Xdebug enabled. This on it's own has a dramatic impact on the speed of PHP execution.
@@ -128,21 +153,6 @@ composer require --dev brianium/paratest
 We suggest that you install [https://github.com/phpstan/phpstan-phpunit](https://github.com/phpstan/phpstan-phpunit) which allows you to properly use mocks with PHPUnit tests and keep PHPStan happy.
 
 Read the [PHPQA PHPStan docs](./phpstan.md) for more information on this.
-
-
-## Rerun Failed Tests
-
-As with the other tools, there is an option to rerun this step if it fails.
-
-Where PHPUnit is different is that you also get the option to only rerun your failed tests.
-
-This uses another bin command [./bin/phpunit-runfailed-filter](./../../bin/phpunit-runfailed-filter) which generates the filter syntax to pull out the failed tests.
-
-You can also use this in isolation if you want, eg:
-
-```bash
-./bin/phpunit -c qaConfig/phpunit.xml --filter "$(bin/phpunit-runfailed-filter)" tests/
-```
 
 ## Infection
 

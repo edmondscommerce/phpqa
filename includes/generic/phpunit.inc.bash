@@ -22,23 +22,26 @@ phpunitExitCode=99
 phpunitLogFilePath="$varDir/phpunit_logs/phpunit.junit.xml"
 while (( phpunitExitCode > 0 ))
 do
-    declare -a rerunFilter
-    rerunFilter=(" ")
-    if phpunitReRunFailedOrFull
+    extraConfigs=(" ")
+    if [[ "1" == "$phpUnitIterativeMode" ]]
     then
-        #set no glob
-        set -f
-        rerunFilterPattern=$(phpNoXdebug bin/phpunit-runfailed-filter)
-        if [[ "$rerunFilterPattern" != '/.*/' ]]
-        then
-            rerunFilter+=( --filter $IFS $rerunFilterPattern)
-            phpunitFailedOnlyFiltered=1
-        fi
-    fi
-    noCoverage=(" ")
-    if [[ "1" != "$phpUnitCoverage" ]]
+        # Uniterate mode - order by defects, stop on first error, no coverage and enforce time limits
+        echo
+        echo "Uniterate Mode - Iterative Testing with Fast Failure"
+        echo "----------------------------------------------------"
+        echo
+        extraConfigs+=( --order-by=depends,defects )
+        extraConfigs+=( --stop-on-failure --stop-on-error --stop-on-defect --stop-on-warning )
+        extraConfigs+=( --no-coverage )
+        extraConfigs+=( --enforce-time-limit )
+    elif [[ "1" != "$phpUnitCoverage" ]]
     then
-        noCoverage+=( --no-coverage )
+        # No Coverage mode - do not generate coverage, do enforce time limits
+        extraConfigs+=( --no-coverage )
+        extraConfigs+=( --enforce-time-limit )
+    else
+        # Coverage generation mode (slow) - stop on first error, do not enforce time limits
+        extraConfigs+=( --stop-on-failure --stop-on-error --stop-on-defect --stop-on-warning )
     fi
     set +e
     set -x
@@ -46,12 +49,11 @@ do
         -- \
         ${paratestConfig[@]} \
         -c ${phpUnitConfigPath} \
-        ${rerunFilter[@]} \
-        ${noCoverage[@]} \
-        --enforce-time-limit \
+        ${extraConfigs[@]} \
         --fail-on-risky \
         --fail-on-warning \
-        --disallow-todo-tests
+        --disallow-todo-tests \
+        --log-junit "$phpunitLogFilePath"
 
     phpunitExitCode=$?
     set -e

@@ -168,7 +168,7 @@ class Psr4Validator
              */
             protected function compare($item1, $item2): int
             {
-                return strcmp($item2->getRealPath(), $item1->getRealPath());
+                return strcmp((string)$item2->getRealPath(), (string)$item1->getRealPath());
             }
         };
     }
@@ -214,7 +214,7 @@ class Psr4Validator
                             continue;
                         }
                         foreach ($this->ignoreRegexPatterns as $pattern) {
-                            if (1 === \preg_match($pattern, $fileInfo->getRealPath())) {
+                            if (1 === \preg_match($pattern, (string)$fileInfo->getRealPath())) {
                                 $this->ignoredFiles[] = $fileInfo->getRealPath();
                                 continue 2;
                             }
