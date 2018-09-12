@@ -76,7 +76,7 @@ do
 
     if (( $phpunitExitCode > 0 ))
     then
-        if (( $phpunitExitCode > 2 ))
+        if (( $phpunitExitCode > 2 && $phpUnitIterativeMode == 0 ))
         then
             printf "\n\n\nPHPUnit Crashed\n\nRunning again with Debug mode...\n\n\n"
             qaQuickTests="$phpUnitQuickTests" phpNoXdebug -f bin/phpunit -- "$testsDir" --debug
