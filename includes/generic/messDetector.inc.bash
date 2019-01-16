@@ -6,18 +6,24 @@ phpMdExitCode=99
 while (( phpMdExitCode > 0 ))
 do
     set -x
-    phpNoXdebug -f bin/phpmd -- \
+    output=$(phpNoXdebug -f bin/phpmd -- \
         $pathsString \
         text \
         "$phpmdConfigPath" \
         --suffixes php,phtml \
-        --exclude $ignoreString \
-        | sort -u \
-        | sed G \
-        | sed -e 's#p:#p\nLine: #' \
-        | sed -e 's#\t\{1,\}#\nMessage: #' \
-        | sed -e 's#\. #\.\n#'
-    phpMdExitCode=$?
+        --exclude $ignoreString)
+        if [[ "$output" == "" ]]
+        then
+            phpMdExitCode=0;
+        else
+            echo "$output" \
+                | sort -u \
+                | sed G \
+                | sed -e 's#p:#p\nLine: #' \
+                | sed -e 's#\t\{1,\}#\nMessage: #' \
+                | sed -e 's#\. #\.\n#'
+            phpMdExitCode=1
+        fi
     set +x
     if (( phpMdExitCode > 0 ))
     then
