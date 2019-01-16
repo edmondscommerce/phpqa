@@ -26,19 +26,21 @@ use SebastianBergmann\Timer\Timer;
  */
 class CliTestDoxPrinter extends ResultPrinter
 {
-    private const SYMBOL_SKIP = '→';
     /**
      * @var \EdmondsCommerce\PHPQA\PHPUnit\TestDox\TestResult
      */
     private $currentTestResult;
+
     /**
      * @var \EdmondsCommerce\PHPQA\PHPUnit\TestDox\TestResult
      */
     private $previousTestResult;
+
     /**
      * @var \EdmondsCommerce\PHPQA\PHPUnit\TestDox\TestResult[]
      */
     private $nonSuccessfulTestResults = [];
+
     /**
      * @var NamePrettifier
      */
@@ -177,12 +179,11 @@ class CliTestDoxPrinter extends ResultPrinter
     public function addSkippedTest(Test $test, \Throwable $t, float $time): void
     {
         $this->currentTestResult->fail(
-            $this->formatWithColor('fg-yellow', self::SYMBOL_SKIP),
+            $this->formatWithColor('fg-yellow', '→'),
             (string)$t,
             true
         );
     }
-
 
     public function writeProgress(string $progress): void
     {
@@ -218,34 +219,14 @@ class CliTestDoxPrinter extends ResultPrinter
             return;
         }
 
-        $this->write(
-            $this->formatWithColor(
-                'fg-yellow',
-                "Summary of non-successful tests:"
-            )
-            . "\n\n"
-        );
+        $this->write("Summary of non-successful tests:\n\n");
 
         $previousTestResult = null;
 
-        $skippedTests = 0;
         foreach ($this->nonSuccessfulTestResults as $testResult) {
-            $line = $testResult->toString($previousTestResult, $this->verbose);
-            if (false !== \strpos($line, self::SYMBOL_SKIP)) {
-                $skippedTests++;
-                continue;
-            }
-            $this->write($line);
+            $this->write($testResult->toString($previousTestResult, $this->verbose));
 
             $previousTestResult = $testResult;
-        }
-        if ($skippedTests > 0) {
-            $this->write(
-                $this->formatWithColor(
-                    'fg-yellow',
-                    "\n" . self::SYMBOL_SKIP . ' Skipped Tests: ' . $skippedTests . "\n\n"
-                )
-            );
         }
     }
 }
