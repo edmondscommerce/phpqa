@@ -10,7 +10,8 @@ do
         text \
         "$phpmdConfigPath" \
         --suffixes php,phtml \
-        --exclude $ignoreString)
+        --exclude $ignoreString \
+        2> /dev/null)
         if [[ "$output" == "" ]]
         then
             phpMdExitCode=0;

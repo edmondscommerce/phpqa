@@ -88,7 +88,6 @@ function phpNoXdebug {
         # Using awk to ensure that files ending without newlines do not lead to configuration error
         ${phpBinPath} -i | grep "\.ini" | grep -o -e '\(/[a-z0-9._-]\+\)\+\.ini' | grep -v xdebug | xargs awk 'FNR==1{print ""}1' > "$noXdebugConfigPath"
     fi
-    echo "Command to rerun:"
     set -x
     ${phpBinPath} -n -c "$noXdebugConfigPath" "$@"
     set +x
