@@ -8,7 +8,6 @@ then
 fi
 while (( phpStanExitCode > 0 ))
 do
-
     phpNoXdebug -d memory_limit=${phpStanMemoryLimit} -f bin/phpstan.phar -- analyse ${pathsToCheck[@]} -l7 -c "$phpstanConfigPath" ${phpstanNoProgress[@]:-}
     phpStanExitCode=$?
 
