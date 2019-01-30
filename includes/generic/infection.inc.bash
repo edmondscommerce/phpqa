@@ -15,16 +15,14 @@ function runInfection(){
             --threads=${infectionThreads} \
             --configuration=${infectionConfig} \
             --min-msi=${infectionMutationScoreIndicator} \
-            --min-covered-msi=${infectionCoveredCodeMSI} \
-            --test-framework-options="--cache-result-file=/tmp/.infection.phpunit.cache"
+            --min-covered-msi=${infectionCoveredCodeMSI}
     else
         ${phpBinPath} -f ./bin/infection \
             "${extraArgs[@]}" \
             --threads=${infectionThreads} \
             --configuration=${infectionConfig} \
             --min-msi=${infectionMutationScoreIndicator} \
-            --min-covered-msi=${infectionCoveredCodeMSI} \
-            --test-framework-options="--cache-result-file=/tmp/.infection.phpunit.cache"
+            --min-covered-msi=${infectionCoveredCodeMSI}
     fi
 }
 
@@ -34,12 +32,12 @@ do
     backupIFS=$IFS
     IFS=$standardIFS
     set +e
-    set -x
+
     rm -rf $varDir/infection/*
     runInfection
     infectionExitCode=$?
     set -e
-    set +x
+
     IFS=$backupIFS
     if (( $infectionExitCode > 0 ))
     then

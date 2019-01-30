@@ -5,13 +5,13 @@ set +e
 phpMdExitCode=99
 while (( phpMdExitCode > 0 ))
 do
-    set -x
     output=$(phpNoXdebug -f bin/phpmd -- \
         $pathsString \
         text \
         "$phpmdConfigPath" \
         --suffixes php,phtml \
-        --exclude $ignoreString)
+        --exclude $ignoreString \
+        2> /dev/null)
         if [[ "$output" == "" ]]
         then
             phpMdExitCode=0;
@@ -24,11 +24,9 @@ do
                 | sed -e 's#\. #\.\n#'
             phpMdExitCode=1
         fi
-    set +x
     if (( phpMdExitCode > 0 ))
     then
         tryAgainOrAbort "PHP Mess Detector"
     fi
 done
-set +x
 set -e
