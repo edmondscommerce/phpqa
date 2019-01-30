@@ -90,9 +90,9 @@ function phpNoXdebug {
     fi
     set -x
     ${phpBinPath} -n -c "$noXdebugConfigPath" "$@"
+    local exitCode=$?
     set +x
     echo
-    local exitCode=$?
     return $exitCode
 }
 
