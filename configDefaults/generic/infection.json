@@ -5,11 +5,6 @@
       "src"
     ]
   },
-  "note:": [
-    "yes paths are handled inconsistently",
-    "the logs paths are from the project root",
-    "the tmp path is from the config file location"
-  ],
   "logs": {
     "text": "var/qa/infection/log.txt",
     "summary": "var/qa/infection/summary-log.txt",

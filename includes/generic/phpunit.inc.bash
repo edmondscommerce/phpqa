@@ -48,7 +48,7 @@ do
         extraConfigs+=( --enforce-time-limit )
     fi
     set +e
-    set -x
+
     phpUnitQuickTests="$phpUnitQuickTests" $phpCmd -f $phpunitPath \
         -- \
         ${paratestConfig[@]} \
@@ -61,7 +61,7 @@ do
 
     phpunitExitCode=$?
     set -e
-    set +x
+
     if [[ "" != "$(grep '<testsuites/>' $phpunitLogFilePath)" || ! -f  $phpunitLogFilePath ]]
     then
         echo "
@@ -80,7 +80,7 @@ do
         then
             printf "\n\n\nPHPUnit Crashed\n\nRunning again with Debug mode...\n\n\n"
             qaQuickTests="$phpUnitQuickTests" phpNoXdebug -f bin/phpunit -- "$testsDir" --debug
-            set +x
+
         fi
         tryAgainOrAbort "PHPUnit Tests"
     fi

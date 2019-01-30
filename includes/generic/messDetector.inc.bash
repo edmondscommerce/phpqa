@@ -17,7 +17,7 @@ do
         | sed -e 's#\t\{1,\}#\nMessage: #' \
         | sed -e 's#\. #\.\n#'
     phpMdExitCode=$?
-    set +x
+
     if (( phpMdExitCode > 0 ))
     then
         tryAgainOrAbort "PHP Mess Detector"
