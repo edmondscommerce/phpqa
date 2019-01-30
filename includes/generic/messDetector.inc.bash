@@ -5,7 +5,6 @@ set +e
 phpMdExitCode=99
 while (( phpMdExitCode > 0 ))
 do
-    set -x
     phpNoXdebug -f bin/phpmd -- \
         $pathsString \
         text \
@@ -24,5 +23,4 @@ do
         tryAgainOrAbort "PHP Mess Detector"
     fi
 done
-set +x
 set -e

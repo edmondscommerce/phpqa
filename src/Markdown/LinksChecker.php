@@ -124,7 +124,9 @@ class LinksChecker
                 '',
                 \dirname($file)
             );
-            $start           .= '/' . \rtrim($relativeSubdirs, '/');
+            if ($relativeSubdirs !== null) {
+                $start           .= '/' . \rtrim($relativeSubdirs, '/');
+            }
         }
         $realpath = \realpath($start . '/' . $path);
         if (false === $realpath) {
