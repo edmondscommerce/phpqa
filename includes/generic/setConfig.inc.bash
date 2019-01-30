@@ -12,6 +12,8 @@ varDir="$projectRoot/var/qa";
 
 cacheDir="$varDir/cache";
 
+noXdebugConfigPath="$varDir/phpqa-no-xdebug.ini"
+
 # the path in this library for default config
 defaultConfigPath="$(readlink -f ./../configDefaults/)"
 
@@ -76,6 +78,9 @@ infectionMutationScoreIndicator=${mutationScoreIndicator:-60}
 infectionCoveredCodeMSI=${coveredCodeMSI:-80}
 # Only Covered
 infectionOnlyCovered=${infectionOnlyCovered:-0}
+
+
+composerRequireCheckerConfig=$(configPath composerRequireChecker.json)
 
 # If a CI variable is set, we use that, otherwise default to false.
 # Travis-CI sets a CI variable. You can easily set this in any other CI system

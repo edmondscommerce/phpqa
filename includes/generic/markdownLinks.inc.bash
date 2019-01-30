@@ -4,10 +4,10 @@ then
     while (( linksExitCode > 0 ))
     do
         set +e
-        set -x
+
         phpNoXdebug -f bin/mdlinks
         linksExitCode=$?
-        set +x
+
         set -e
         if (( linksExitCode > 0 ))
         then
