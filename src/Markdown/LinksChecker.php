@@ -124,8 +124,7 @@ class LinksChecker
                 '',
                 \dirname($file)
             );
-            if($relativeSubdirs !== null)
-            {
+            if ($relativeSubdirs !== null) {
                 $start           .= '/' . \rtrim($relativeSubdirs, '/');
             }
         }
