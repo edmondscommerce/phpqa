@@ -11,12 +11,12 @@ phpLintExitCode=99
 set +e
 while (( phpLintExitCode > 0 ))
 do
-    set -x
+
     phpNoXdebug -f bin/parallel-lint -- \
     "${pathsToIgnorePrefixed[@]}" \
     "${pathsToCheck[@]}"
     phpLintExitCode=$?
-    set +x
+
     if (( phpLintExitCode > 0 ))
     then
         tryAgainOrAbort "PHP Lint"

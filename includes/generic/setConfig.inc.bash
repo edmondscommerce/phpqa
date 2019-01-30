@@ -12,6 +12,8 @@ varDir="$projectRoot/var/qa";
 
 cacheDir="$varDir/cache";
 
+noXdebugConfigPath="$varDir/phpqa-no-xdebug.ini"
+
 # the path in this library for default config
 defaultConfigPath="$(readlink -f ./../configDefaults/)"
 
