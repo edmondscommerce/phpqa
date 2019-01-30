@@ -15,16 +15,14 @@ function runInfection(){
             --threads=${infectionThreads} \
             --configuration=${infectionConfig} \
             --min-msi=${infectionMutationScoreIndicator} \
-            --min-covered-msi=${infectionCoveredCodeMSI} \
-            --test-framework-options="--cache-result-file=/tmp/.infection.phpunit.cache"
+            --min-covered-msi=${infectionCoveredCodeMSI}
     else
         ${phpBinPath} -f ./bin/infection \
             "${extraArgs[@]}" \
             --threads=${infectionThreads} \
             --configuration=${infectionConfig} \
             --min-msi=${infectionMutationScoreIndicator} \
-            --min-covered-msi=${infectionCoveredCodeMSI} \
-            --test-framework-options="--cache-result-file=/tmp/.infection.phpunit.cache"
+            --min-covered-msi=${infectionCoveredCodeMSI}
     fi
 }
 
