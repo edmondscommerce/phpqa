@@ -30,6 +30,7 @@ function usage {
     echo "     unit|phpunit               phpunit"
     echo "     uniterate                  phpunit iterative mode - prioritise broken tests and fail on error"
     echo "     infect|infection           infection"
+    echo "     cr                         composer require checker"
     echo "     md|messdetector            php mess detector"
     echo "     ml|markdown                markdown validation"
     echo "     bf|phpbf                   php beautifier and fixer"
@@ -66,6 +67,7 @@ then
         unit | phpunit              ) singleToolToRun="phpunit";;
         uniterate                   ) singleToolToRun="phpunit"; phpUnitIterativeMode=1;;
         infect | infection          ) singleToolToRun="infection";;
+        cr                          ) singleToolToRun="composerRequireChecker";;
         md | messdetector           ) singleToolToRun="messDetector";;
         ml | markdown               ) singleToolToRun="markdownLinks";;
         bf | phpbf                  ) singleToolToRun="beautifierFixer";;

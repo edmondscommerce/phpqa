@@ -32,12 +32,12 @@ do
     backupIFS=$IFS
     IFS=$standardIFS
     set +e
-    set -x
+
     rm -rf $varDir/infection/*
     runInfection
     infectionExitCode=$?
     set -e
-    set +x
+
     IFS=$backupIFS
     if (( $infectionExitCode > 0 ))
     then

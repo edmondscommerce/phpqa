@@ -223,6 +223,13 @@ fi
 
 echo "
 
+Running Composer Require Checker
+--------------------------------
+"
+runTool composerRequireChecker
+
+echo "
+
 Running PHP Mess Detector
 -------------------------
 "
