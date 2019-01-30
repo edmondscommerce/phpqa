@@ -1,10 +1,15 @@
 # PHPQA Coding Standard PHPStorm Configs
 
-In this folder you have 2 files that both acheive the same things
+In this folder you have 2 files that both acheive the same things, and one that does something different
 
-First is a settings export that just contains code style. We might extend this with other relevant settings
+## Code Styles
 
-The second is just the code style edit itself.
+The first [jar file](./settings-code-style.jar) is a settings export that just contains code style.
+The [XML file](./PHPQA_Code_Style_Scheme.xml) is just the code style edit itself.
+
+## Template Settings
+
+The second [jar file](./fileTemplates.jar) is a templates export file. It will set sane defaults for PHP and Bash files
 
 
 ## Importing Settings
