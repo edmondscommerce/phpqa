@@ -21,7 +21,7 @@
     "php": "~7.1",
     "phpunit/phpunit": "^7.3",
     "jakub-onderka/php-console-highlighter": "^0.3.2",
-    "jakub-onderka/php-parallel-lint": "dev-SplitAutoload@dev",
+    "edmondscommerce/php-parallel-lint": "dev-master@dev",
     "phploc/phploc": "^4.0",
     "phpmd/phpmd": "^2.6",
     "phpstan/phpstan-shim": "^0.11",
@@ -35,12 +35,6 @@
     "ext-json": "*",
     "phpunit/php-timer": "^2.0"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/edmondscommerce/PHP-Parallel-Lint"
-    }
-  ],
   "require-dev": {
     "phpstan/phpstan-phpunit": "^0.11"
   },
