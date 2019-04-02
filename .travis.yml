@@ -6,8 +6,6 @@ git:
 
 matrix:
   include:
-    - php: 7.1
-      env: phpunitCoverage="0"
     - php: 7.2
       env: phpunitCoverage="1"
 
