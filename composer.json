@@ -19,7 +19,7 @@
   },
   "require": {
     "php": "~7.1",
-    "phpunit/phpunit": "^7.3",
+    "phpunit/phpunit": "^8.0",
     "jakub-onderka/php-console-highlighter": "^0.3.2",
     "edmondscommerce/php-parallel-lint": "~1.0.1",
     "phploc/phploc": "^4.0",
@@ -31,7 +31,7 @@
     "infection/infection": "^0.10",
     "funkyproject/reflection-file": "^0.1.0",
     "phpunit/php-invoker": "^2.0",
-    "maglnet/composer-require-checker": "^1.0",
+    "maglnet/composer-require-checker": "^2.0",
     "ext-json": "*",
     "phpunit/php-timer": "^2.0"
   },
