@@ -1,6 +1,16 @@
 # PHPQA
 ## By [Edmonds Commerce](https://www.edmondscommerce.co.uk)
 
+
+## Version 3 Updates
+
+You should update your phpunit.xml file to use `        printerClass="\PHPUnit\Util\TestDox\CliTestDoxPrinter"`
+
+[see ./phpunit.xml](./phpunit.xml)
+
+
+## Introduction
+
 PHPQA is a quality assurance pipeline written in BASH that can be run both on the desktop as part of your development process and then also as part of a continuous integration (CI) pipeline.
 
 It runs tools in a logical order and will fail as quickly as possible.
