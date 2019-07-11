@@ -37,14 +37,10 @@ parameters:
 
 The strict rules are brought in as a dependency and configured by default
 
-To disable them, you need to setup your own config for PHPStan and remove this from your config file
+PHPQA now uses the PHPStan extension loader - at the time of writing it is not clear how to disable auto loaded extensions.
+Instead (for now) you will need to ignore specific rule failures instead of trying to disable the strict rule set.
 
-```php
-includes:
-	- ../vendor/phpstan/phpstan-strict-rules/rules.neon
-
-```
-see [the main PHPSTan docs](https://github.com/phpstan/phpstan-strict-rules) for more information
+See [the main PHPSTan docs](https://github.com/phpstan/phpstan-strict-rules) for more information
 
 #### Supressing Errors
 
