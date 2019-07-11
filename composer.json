@@ -33,13 +33,19 @@
     "phpunit/php-invoker": "^2.0",
     "maglnet/composer-require-checker": "^2.0",
     "ext-json": "*",
-    "phpunit/php-timer": "^2.0"
+    "phpunit/php-timer": "^2.0",
+    "phpstan/extension-installer": "^1.0"
   },
   "require-dev": {
     "phpstan/phpstan-phpunit": "^0.11"
   },
   "suggest": {
-    "phpstan/phpstan-phpunit": "Adds checks for PHPUnit tests"
+    "phpstan/phpstan-phpunit": "Adds checks for PHPUnit tests",
+    "phpstan/phpstan-mockery": "Prevents Mockery from failing on Stan",
+    "phpstan/phpstan-doctrine": "Adds checks for Doctrine",
+    "phpstan/phpstan-deprecation-rules": "Checks for deprecated functions and methods",
+    "phpstan/phpstan-symfony": "Symfony specific checks",
+    "nunomaduro/larastan": "Laravel specific checks (PHPStan Wrapper)"
   },
   "bin": [
     "bin/qa",
