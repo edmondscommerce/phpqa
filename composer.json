@@ -33,7 +33,8 @@
     "phpunit/php-invoker": "^2.0",
     "maglnet/composer-require-checker": "^2.0",
     "ext-json": "*",
-    "phpunit/php-timer": "^2.0"
+    "phpunit/php-timer": "^2.0",
+    "phpstan/extension-installer": "^1.0"
   },
   "require-dev": {
     "phpstan/phpstan-phpunit": "^0.11"
