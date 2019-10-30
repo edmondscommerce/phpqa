@@ -3,6 +3,7 @@
 readonly platformMagento2="magento2"
 readonly platformGeneric="generic"
 readonly platformLaravel="laravellumen"
+readonly platformSymfony="symfony"
 
 function detectPlatform(){
 
@@ -21,6 +22,12 @@ function detectPlatform(){
     if [[ -f $projectRoot/artisan ]]
     then
         echo $platformLaravel;
+        return 0;
+    fi
+
+    if [[ -f $projectRoot/symfony.lock ]]
+    then
+        echo $platformSymfony;
         return 0;
     fi
 
