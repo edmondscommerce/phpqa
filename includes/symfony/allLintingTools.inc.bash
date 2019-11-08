@@ -16,4 +16,6 @@ Running Yaml Linter
 
 "
 
+runTool yamlLint
+
 echo "symfony stuff"
