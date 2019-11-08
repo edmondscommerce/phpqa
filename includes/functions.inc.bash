@@ -60,6 +60,21 @@ function runTool(){
     source "$genericPath"
 }
 
+function runNonPlatformTool() {
+    local tool="$1"
+    local projectOverridePath="$projectConfigPath/tools/$tool.inc.bash"
+    local genericPath="$DIR/../includes/generic/$tool.inc.bash"
+
+    if [[ -f "$projectOverridePath" ]]
+    then
+        echo "Running Project Override $tool"
+        source "$projectOverridePath"
+        return 0
+    fi
+    echo "Running generic $tool"
+    source "$genericPath"
+}
+
 ################################################################
 # Get the path for a config file
 # Config file will be search for in:

@@ -21,6 +21,9 @@ function usage {
     echo " - use -p to specify a specific path to scan"
     echo ""
     echo " - use -t to specify a single tool:"
+    echo "     allLints                   all linting tools"
+    echo "     allStatic                  all static analysis tools"
+    echo "     allTests                   all testing tools"
     echo "     psr|psr4                   psr4 validation"
     echo "     com|composer               composer validation"
     echo "     st|stricttypes             strict types validation"
@@ -58,6 +61,9 @@ done
 if [[ "" != "$singleToolToRun" ]]
 then
     case "$singleToolToRun" in
+        allLints                    ) singleToolToRun="allLintingTools";;
+        allStatic                   ) singleToolToRun="allStaticAnalysisTools";;
+        allTests                    ) singleToolToRun="allTestingTools";;
         psr | psr4                  ) singleToolToRun="psr4Validate";;
         com | composer              ) singleToolToRun="composerChecks";;
         st | stricttypes            ) singleToolToRun="phpStrictTypes";;
