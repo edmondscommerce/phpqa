@@ -156,17 +156,8 @@ Running All Static Analysis Tools
 =================================
 
 "
-
 runTool allStaticAnalysisTools
 
-echo "
-
-Running All Testing Tools
-=========================
-
-"
-
-runTool allTestingTools
 
 echo "
 
@@ -175,7 +166,22 @@ Checking if Uncommitted Changes
 "
 checkForUncommittedChanges $specifiedPath
 
+echo "
 
+Running All Coding Standards Tools (That Might Make Code Changes)
+=================================
+
+"
+runTool allCodingStandardsTools
+
+
+echo "
+
+Running All Testing Tools
+=========================
+
+"
+runTool allTestingTools
 
 
 echo '

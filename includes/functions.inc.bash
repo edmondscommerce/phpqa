@@ -60,6 +60,9 @@ function runTool(){
     source "$genericPath"
 }
 
+# This is very much like run tool
+# It will check for a project level override
+# Then it will run the generic tool explicitly
 function runNonPlatformTool() {
     local tool="$1"
     local projectOverridePath="$projectConfigPath/tools/$tool.inc.bash"
