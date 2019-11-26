@@ -39,6 +39,7 @@ function usage {
     echo "     bf|phpbf                   php beautifier and fixer"
     echo "     cs|phpcs                   php code sniffer"
     echo "     l|loc                      lines of code and other stats"
+    echo "     f|fixer|csfixer            PHP-CS-Fixer"
     exit 1
 }
 
@@ -79,6 +80,7 @@ then
         bf | phpbf                  ) singleToolToRun="beautifierFixer";;
         cs | phpcs                  ) singleToolToRun="codeSniffer";;
         l | loc                     ) singleToolToRun="phploc";;
+        f | fixer | csfixer         ) singleToolToRun="phpCsFixer";;
         * )
             printf "\nERROR:\nInvalid tool: $singleToolToRun\n\n" >&2
             usage
