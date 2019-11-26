@@ -146,7 +146,7 @@ REGEXP
         $matches = [];
         preg_match_all(
             <<<REGEXP
-%(?<docblock>/\*(?:[^*]|\n|(?:\*(?:[^/]|\n)))*\*/)\s+?class\s+?(?<classname>.+?)\s+?extends%
+%(?<docblock>/\*(?:[^*]|\n|(?:\*(?:[^/]|\n)))*\*/)\s+?(final |)class\s+?(?<classname>.+?)\s+?extends%
 REGEXP
             . 'si',
             $fileContent,
