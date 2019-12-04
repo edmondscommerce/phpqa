@@ -8,7 +8,7 @@ then
 fi
 while (( phpStanExitCode > 0 ))
 do
-    phpNoXdebug -d memory_limit=${phpStanMemoryLimit} -f bin/phpstan.phar -- analyse ${pathsToCheck[@]} -l7 -c "$phpstanConfigPath" ${phpstanNoProgress[@]:-}
+    phpNoXdebug -d memory_limit=${phpStanMemoryLimit} -f bin/phpstan.phar -- analyse ${pathsToCheck[@]} -l8 -c "$phpstanConfigPath" ${phpstanNoProgress[@]:-}
     phpStanExitCode=$?
 
     #exit code 0 = fine, 1 = ran fine but found errors, else it means it crashed
