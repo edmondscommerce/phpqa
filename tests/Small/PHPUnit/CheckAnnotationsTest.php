@@ -74,6 +74,7 @@ final class CheckAnnotationsTest extends TestCase
             ],
         ];
         $actual   = $this->checker->main($pathToTestsDirectory);
+        /* Clean up the file once we are finished with it */
         unlink($smallTestName);
         self::assertSame($expected, $actual);
     }
@@ -126,6 +127,13 @@ final class CheckAnnotationsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    /**
+     * We need to be able to test that a file without a small annotation is picked up, however CS Fixer is adding the
+     * small tag to any test that doesn't have a size annotation.
+     *
+     * I tried to put the entire class in the heredoc, but then the CheckAnnotations tool picked it up as a false
+     * positive. Putting the class line into a var and the rest of the class in the here doc seems to work.
+     */
     private function getSmallTestWithNoAnnotation(): string
     {
         $class = 'final class SomethingTest extends TestCase';
