@@ -1,22 +1,25 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace EdmondsCommerce\PHPQA\Tests\assets\phpunitAnnotations\projectAllGood\tests\Small;
 
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class ClassDocsTest
+ * Class ClassDocsTest.
  *
  * @small
- * @package EdmondsCommerce\PHPQA\Tests\assets\phpunitAnnotations\projectAllGood\tests\Small
+ *
+ * @internal
+ * @coversNothing
  */
-class ClassDocsTest extends TestCase
+final class ClassDocsTest extends TestCase
 {
-
     /**
      * @test
      */
-    public function testWithNoAnnotation()
+    public function testWithNoAnnotation(): void
     {
     }
 }

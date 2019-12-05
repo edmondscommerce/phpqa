@@ -80,6 +80,7 @@ $rules = [
         'on_multiline'                     => 'ensure_fully_multiline',
     ],
     'single_line_throw'            => false,
+    'global_namespace_import'      => true,
 ];
 
 

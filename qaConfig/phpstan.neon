@@ -1,5 +1,6 @@
 parameters:
+    excludes_analyse:
+        - ./../tests/assets/*
     level: max
     inferPrivatePropertyTypeFromConstructor: true
-    excludes_analyse:
-        - tests/assets
+

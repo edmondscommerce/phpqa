@@ -1,18 +1,23 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace EdmondsCommerce\PHPQA\Tests\Small\PHPUnit;
 
 use EdmondsCommerce\PHPQA\PHPUnit\CheckAnnotations;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class CheckForLargeAndMediumAnnotationsTest
+ * Class CheckForLargeAndMediumAnnotationsTest.
  *
  * @coversDefaultClass \EdmondsCommerce\PHPQA\PHPUnit\CheckAnnotations
  *
- * @package EdmondsCommerce\PHPQA\Tests\Large\PHPUnit
+ * @internal
+ *
+ * @small
  */
-class CheckAnnotationsTest extends TestCase
+final class CheckAnnotationsTest extends TestCase
 {
     /**
      * @var CheckAnnotations
@@ -31,7 +36,7 @@ class CheckAnnotationsTest extends TestCase
      */
     public function itThrowAnExceptionIfTestsPathIsInvalid(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->checker->main('/invalid/path');
     }
 

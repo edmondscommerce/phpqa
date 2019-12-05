@@ -1,23 +1,31 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace EdmondsCommerce\PHPQA\Tests\assets\phpunitAnnotations\projectAllGood\tests\Medium;
 
 use PHPUnit\Framework\TestCase;
 
-class SomethingTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
+final class SomethingTest extends TestCase
 {
     /**
      * @small
      * @test
      */
-    public function itDoesSomething()
+    public function itDoesSomething(): void
     {
     }
 
     /**
-     * This method does not have the size annotation but it is not a test, so this should not cause any problem
+     * This method does not have the size annotation but it is not a test, so this should not cause any problem.
      */
-    public function methodThatIsNotATest()
+    public function methodThatIsNotATest(): void
     {
     }
 }

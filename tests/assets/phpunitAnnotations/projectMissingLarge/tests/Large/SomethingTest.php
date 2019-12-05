@@ -1,20 +1,28 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace EdmondsCommerce\PHPQA\Tests\assets\phpunitAnnotations\projectMissingSmall\tests\Small;
 
 use PHPUnit\Framework\TestCase;
 
-class SomethingTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
+final class SomethingTest extends TestCase
 {
     /**
      * @largo
      * @test
      */
-    public function itDoesSomething()
+    public function itDoesSomething(): void
     {
     }
 
-    public function testSomethingHappens()
+    public function testSomethingHappens(): void
     {
     }
 }

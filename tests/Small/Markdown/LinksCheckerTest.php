@@ -1,21 +1,28 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace EdmondsCommerce\PHPQA\Tests\Small\Markdown;
 
 use EdmondsCommerce\PHPQA\Markdown\LinksChecker;
+use Exception;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
- * Class LinksCheckerTest
+ * Class LinksCheckerTest.
  *
- * @package EdmondsCommerce\PHPQA\Markdown
  * @SuppressWarnings(PHPMD.StaticAccess)
  * @coversDefaultClass \EdmondsCommerce\PHPQA\Markdown\LinksChecker
+ *
+ * @internal
+ *
+ * @small
  */
-class LinksCheckerTest extends TestCase
+final class LinksCheckerTest extends TestCase
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @covers \EdmondsCommerce\PHPQA\Markdown\LinksChecker
      * @small
@@ -39,19 +46,19 @@ Bad link for "incorrect link" to "./foo.md"
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @covers \EdmondsCommerce\PHPQA\Markdown\LinksChecker
      * @small
      */
     public function testMainNoReadmeFile(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         LinksChecker::main(__DIR__ . '/../../assets/linksChecker/projectNoReadme');
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      * @covers \EdmondsCommerce\PHPQA\Markdown\LinksChecker
      * @small
      */
@@ -82,11 +89,7 @@ result: NULL
     }
 
     /**
-     * @param string $pathToProject
-     * @param int    $expectedExitCode
-     * @param string $expectedOutput
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function assertResult(string $pathToProject, int $expectedExitCode, string $expectedOutput): void
     {
