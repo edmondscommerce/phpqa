@@ -179,7 +179,7 @@ final class LinksChecker
      */
     private static function validateHttpLink(array $link, array &$errors, int &$return): void
     {
-        [, $anchor, $href] = $link;
+        list(, $anchor, $href) = $link;
         static $checked = [];
         $hashPos = (int)strpos($href, '#');
         if ($hashPos > 0) {
@@ -215,6 +215,7 @@ final class LinksChecker
                 }
             }
         } catch (Throwable $e) {
+            throw new RuntimeException('Unexpected error ' . $e->getMessage(), $e->getCode(), $e);
         }
 
         $errors[] = sprintf(

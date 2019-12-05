@@ -91,7 +91,7 @@ final class Psr4Validator
      */
     private function loop(): void
     {
-        foreach ($this->yieldPhpFilesToCheck() as [$absPathRoot, $namespaceRoot, $fileInfo]) {
+        foreach ($this->yieldPhpFilesToCheck() as list($absPathRoot, $namespaceRoot, $fileInfo)) {
             $this->check($absPathRoot, $namespaceRoot, $fileInfo);
         }
     }
