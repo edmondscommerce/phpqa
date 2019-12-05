@@ -1,5 +1,13 @@
 echo "
 
+Running PHP-CS-Fixer
+----------------------------
+"
+
+runTool phpCsFixer
+
+echo "
+
 Running Beautifier and Fixer
 ----------------------------
 "
