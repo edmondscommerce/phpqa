@@ -14,7 +14,6 @@ use PHPUnit\Framework\TestCase;
  *
  * @SuppressWarnings(PHPMD.StaticAccess)
  * @coversDefaultClass \EdmondsCommerce\PHPQA\Psr4Validator
- * @uses \EdmondsCommerce\PHPQA\Helper
  *
  * @internal
  *
@@ -24,6 +23,7 @@ final class Psr4ValidatorTest extends TestCase
 {
     /**
      * @throws Exception
+     * @covers \EdmondsCommerce\PHPQA\Helper::getComposerJsonDecoded
      * @covers \EdmondsCommerce\PHPQA\Psr4Validator
      * @small
      */
@@ -46,6 +46,7 @@ final class Psr4ValidatorTest extends TestCase
 
     /**
      * @throws Exception
+     * @covers \EdmondsCommerce\PHPQA\Helper::getComposerJsonDecoded
      * @covers \EdmondsCommerce\PHPQA\Psr4Validator
      * @small
      */
@@ -68,6 +69,7 @@ final class Psr4ValidatorTest extends TestCase
 
     /**
      * @throws Exception
+     * @covers \EdmondsCommerce\PHPQA\Helper::getComposerJsonDecoded
      * @covers \EdmondsCommerce\PHPQA\Psr4Validator
      * @small
      */
