@@ -8,6 +8,8 @@ use EdmondsCommerce\PHPQA\PHPUnit\CheckAnnotations;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
+use function file_put_contents;
+
 /**
  * Class CheckForLargeAndMediumAnnotationsTest.
  *
@@ -61,12 +63,18 @@ final class CheckAnnotationsTest extends TestCase
     public function itFindsMissingSmallAnnotations(): void
     {
         $pathToTestsDirectory = __DIR__ . '/../../assets/phpunitAnnotations/projectMissingSmall/tests';
-        $expected             = [
+        /* CS Fixer will add the tag automatically if the file is run through QA */
+        $testFile      = $this->getSmallTestWithNoAnnotation();
+        $smallTestName = $pathToTestsDirectory . '/Small/SomethingTest.php';
+        file_put_contents($smallTestName, $testFile);
+
+        $expected = [
             'SomethingTest.php' => [
                 'Failed finding @small for method: itDoesSomething',
             ],
         ];
-        $actual               = $this->checker->main($pathToTestsDirectory);
+        $actual   = $this->checker->main($pathToTestsDirectory);
+        unlink($smallTestName);
         self::assertSame($expected, $actual);
     }
 
@@ -116,5 +124,35 @@ final class CheckAnnotationsTest extends TestCase
         $expected             = [];
         $actual               = $this->checker->main($pathToTestsDirectory);
         self::assertSame($expected, $actual);
+    }
+
+    private function getSmallTestWithNoAnnotation(): string
+    {
+        $class = 'final class SomethingTest extends TestCase';
+
+        return <<<PHP
+<?php
+
+declare(strict_types=1);
+
+namespace EdmondsCommerce\\PHPQA\\Tests\\assets\\phpunitAnnotations\\projectMissingSmall\tests\\Small;
+
+use PHPUnit\\Framework\\TestCase;
+
+/**
+ * @internal
+ * @coversNothing
+ */
+{$class}
+{
+    /**
+     * @smaalll
+     * @test
+     */
+    public function itDoesSomething(): void
+    {
+    }
+}
+PHP;
     }
 }
