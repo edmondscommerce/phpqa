@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EdmondsCommerce\PHPQA\Tests\Small\Markdown;
+namespace EdmondsCommerce\PHPQA\Tests\Medium\Markdown;
 
 use EdmondsCommerce\PHPQA\Markdown\LinksChecker;
 use Exception;
@@ -17,7 +17,7 @@ use RuntimeException;
  *
  * @internal
  *
- * @small
+ * @medium
  */
 final class LinksCheckerTest extends TestCase
 {
@@ -43,6 +43,18 @@ Bad link for "incorrect link" to "./../nothere.md"
 Bad link for "incorrect link" to "./foo.md"
 ';
         self::assertResult($pathToProject, $expectedExitCode, $expectedOutput);
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function assertResult(string $pathToProject, int $expectedExitCode, string $expectedOutput): void
+    {
+        ob_start();
+        $actualExitCode = LinksChecker::main($pathToProject);
+        $actualOutput   = ob_get_clean();
+        self::assertSame($expectedOutput, $actualOutput);
+        self::assertSame($expectedExitCode, $actualExitCode);
     }
 
     /**
@@ -86,17 +98,5 @@ Bad link for "invalid link" to "https://httpstat.us/404"
 result: NULL
 ';
         self::assertResult($pathToProject, $expectedExitCode, $expectedOutput);
-    }
-
-    /**
-     * @throws Exception
-     */
-    protected function assertResult(string $pathToProject, int $expectedExitCode, string $expectedOutput): void
-    {
-        ob_start();
-        $actualExitCode = LinksChecker::main($pathToProject);
-        $actualOutput   = ob_get_clean();
-        self::assertSame($expectedOutput, $actualOutput);
-        self::assertSame($expectedExitCode, $actualExitCode);
     }
 }

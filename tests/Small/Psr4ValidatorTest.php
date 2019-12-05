@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @SuppressWarnings(PHPMD.StaticAccess)
  * @coversDefaultClass \EdmondsCommerce\PHPQA\Psr4Validator
+ * @uses \EdmondsCommerce\PHPQA\Helper
  *
  * @internal
  *

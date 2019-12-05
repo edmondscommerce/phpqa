@@ -39,7 +39,8 @@ final class CheckAnnotations
     private $errors = [];
 
     /**
-     * Check the Large and Medium directories, if they exist, and then assert that all tests have the correct annotation.
+     * Check the Large and Medium directories, if they exist,
+     * and then assert that all tests have the correct annotation.
      *
      * @return array[] of errors
      */

@@ -17,11 +17,11 @@ final class Psr4Validator
     /**
      * @var string
      */
-    protected $pathToProjectRoot;
+    private $pathToProjectRoot;
     /**
      * @var array|array[]
      */
-    protected $decodedComposerJson;
+    private $decodedComposerJson;
     /**
      * @var array|string[]
      */
@@ -169,7 +169,7 @@ final class Psr4Validator
             RecursiveIteratorIterator::SELF_FIRST
         );
 
-        return new class($iterator) extends SplHeap {
+        return new class ($iterator) extends SplHeap {
             public function __construct(RecursiveIteratorIterator $iterator)
             {
                 foreach ($iterator as $item) {

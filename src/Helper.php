@@ -17,8 +17,9 @@ final class Helper
     private static $projectRootDirectory;
 
     /**
-     * @return array[]
      * @throws Exception
+     *
+     * @return array[]
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public static function getComposerJsonDecoded(string $path = null): array

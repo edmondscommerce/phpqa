@@ -12,6 +12,7 @@ use RecursiveRegexIterator;
 use RegexIterator;
 use RuntimeException;
 use Throwable;
+
 use function current;
 use function dirname;
 use function explode;
@@ -67,6 +68,7 @@ final class LinksChecker
 
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
+     *
      * @return string[]
      */
     private static function getDocsFiles(string $projectRootDirectory): array
@@ -110,18 +112,21 @@ final class LinksChecker
 
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
+     *
      * @return array<array<string>>
      */
     private static function getLinks(string $file): array
     {
         $links    = [];
         $contents = (string)file_get_contents($file);
-        if (preg_match_all(
+        if (
+            preg_match_all(
                 '/\[(.+?)\].*?\((.+?)\)/',
                 $contents,
                 $matches,
                 PREG_SET_ORDER
-            ) !== false) {
+            ) !== false
+        ) {
             $links = array_merge($links, $matches);
         }
 
@@ -130,11 +135,9 @@ final class LinksChecker
 
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
-     * @param string   $projectRootDirectory
+     *
      * @param string[] $link
-     * @param string   $file
      * @param string[] $errors
-     * @param int      $return
      */
     private static function checkLink(
         string $projectRootDirectory,
@@ -175,13 +178,12 @@ final class LinksChecker
     /**
      * @param string[] $link
      * @param string[] $errors
-     * @param int      $return
      */
     private static function validateHttpLink(array $link, array &$errors, int &$return): void
     {
         list(, $anchor, $href) = $link;
-        static $checked = [];
-        $hashPos = (int)strpos($href, '#');
+        static $checked        = [];
+        $hashPos               = (int)strpos($href, '#');
         if ($hashPos > 0) {
             $href = substr($href, 0, $hashPos);
         }
@@ -192,14 +194,14 @@ final class LinksChecker
         //$start          = microtime(true);
         //fwrite(STDERR, "\n".'Validating link: '.$href);
         $context = stream_context_create([
-                                             'http' => [
-                                                 'method'           => 'HEAD',
-                                                 'protocol_version' => 1.1,
-                                                 'header'           => [
-                                                     'Connection: close',
-                                                 ],
-                                             ],
-                                         ]);
+            'http' => [
+                'method'           => 'HEAD',
+                'protocol_version' => 1.1,
+                'header'           => [
+                    'Connection: close',
+                ],
+            ],
+        ]);
         $result  = null;
         try {
             $headers = get_headers($href, 0, $context);
