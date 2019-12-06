@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EdmondsCommerce\PHPQA\Tests\Medium\Markdown;
+namespace EdmondsCommerce\PHPQA\Tests\Large\Markdown;
 
 use EdmondsCommerce\PHPQA\Markdown\LinksChecker;
 use Exception;
@@ -17,7 +17,7 @@ use RuntimeException;
  *
  * @internal
  *
- * @medium
+ * @large
  */
 final class LinksCheckerTest extends TestCase
 {
