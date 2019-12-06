@@ -3,6 +3,7 @@
 readonly platformMagento2="magento2"
 readonly platformGeneric="generic"
 readonly platformLaravel="laravellumen"
+readonly platformSymfony="symfony"
 
 function detectPlatform(){
 
@@ -21,6 +22,12 @@ function detectPlatform(){
     if [[ -f $projectRoot/artisan ]]
     then
         echo $platformLaravel;
+        return 0;
+    fi
+
+    if [[ -f $projectRoot/symfony.lock ]]
+    then
+        echo $platformSymfony;
         return 0;
     fi
 
@@ -47,6 +54,24 @@ function runTool(){
     then
         echo "Running $platform $tool"
         source "$platformPath"
+        return 0
+    fi
+    echo "Running generic $tool"
+    source "$genericPath"
+}
+
+# This is very much like run tool
+# It will check for a project level override
+# Then it will run the generic tool explicitly
+function runNonPlatformTool() {
+    local tool="$1"
+    local projectOverridePath="$projectConfigPath/tools/$tool.inc.bash"
+    local genericPath="$DIR/../includes/generic/$tool.inc.bash"
+
+    if [[ -f "$projectOverridePath" ]]
+    then
+        echo "Running Project Override $tool"
+        source "$projectOverridePath"
         return 0
     fi
     echo "Running generic $tool"

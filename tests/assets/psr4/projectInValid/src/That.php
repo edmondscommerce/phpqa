@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace In\Valid;
 
-class That
+final class That
 {
-
 }

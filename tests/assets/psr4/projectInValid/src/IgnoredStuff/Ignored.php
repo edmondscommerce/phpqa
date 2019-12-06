@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace In\Valid\IgnoredStuff;
 
-class Ignored
+final class Ignored
 {
-
 }

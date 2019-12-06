@@ -79,8 +79,10 @@ infectionCoveredCodeMSI=${coveredCodeMSI:-80}
 # Only Covered
 infectionOnlyCovered=${infectionOnlyCovered:-0}
 
-
 composerRequireCheckerConfig=$(configPath composerRequireChecker.json)
+
+phpCsConfigPath=$(configPath php_cs.php)
+phpCsCacheFile="$varDir/cache/php_cs.cache"
 
 # If a CI variable is set, we use that, otherwise default to false.
 # Travis-CI sets a CI variable. You can easily set this in any other CI system
