@@ -39,7 +39,7 @@ final class LinksChecker
         $projectRootDirectory = $projectRootDirectory ?? Helper::getProjectRootDirectory();
         $files                = static::getFiles($projectRootDirectory);
         foreach ($files as $file) {
-            $relativeFile = str_replace([$projectRootDirectory], [''], $file);
+            $relativeFile = str_replace($projectRootDirectory, '', $file);
             $title        = "\n{$relativeFile}\n" . str_repeat('-', strlen($relativeFile)) . "\n";
             $errors       = [];
             $links        = static::getLinks($file);
