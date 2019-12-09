@@ -14,6 +14,7 @@ use Composer\Autoload\ClassLoader;
 $rules = [
     '@PhpCsFixer'                  => true,
     '@Symfony'                     => true,
+    '@DoctrineAnnotation'          => true,
     'align_multiline_comment'      => true,
     'array_indentation'            => true,
     'array_syntax'                 => ['syntax' => 'short'],
