@@ -1,21 +1,28 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace EdmondsCommerce\PHPQA\Tests\Small;
 
 use EdmondsCommerce\PHPQA\Helper;
+use Exception;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
- * Class HelperTest
+ * Class HelperTest.
  *
- * @package EdmondsCommerce\PHPQA
  * @SuppressWarnings(PHPMD.StaticAccess)
  * @coversDefaultClass \EdmondsCommerce\PHPQA\Helper
+ *
+ * @internal
+ *
+ * @small
  */
-class HelperTest extends TestCase
+final class HelperTest extends TestCase
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      * @covers ::getComposerJsonDecoded()
      * @covers ::getProjectRootDirectory()
      * @small
@@ -27,18 +34,18 @@ class HelperTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      * @covers ::getComposerJsonDecoded()
      * @small
      */
     public function testItWillThrowExceptionForInvalidComposerJson(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         Helper::getComposerJsonDecoded(__DIR__ . '/../assets/helper/invalid.composer.json');
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      * @covers ::getProjectRootDirectory()
      * @small
      */
