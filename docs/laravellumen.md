@@ -51,5 +51,5 @@ For example:
 
 [PHPUnit](https://phpunit.de/) is the defacto choice for testing and with the additional
 [Laravel](https://laravel.com/docs/5.6/testing) and
-[Doctrine](https://www.laraveldoctrine.org/docs/1.3/orm/testing) 
+[Doctrine](http://www.laraveldoctrine.org/docs/1.3/orm/testing) 
 testing tools to help with database testing for your models and repositories.
