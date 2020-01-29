@@ -12,6 +12,7 @@ use RecursiveRegexIterator;
 use RegexIterator;
 use RuntimeException;
 use Throwable;
+
 use function current;
 use function dirname;
 use function explode;
@@ -182,9 +183,9 @@ final class LinksChecker
      */
     private static function validateHttpLink(array $link, array &$errors, int &$return): void
     {
-        static $checked = [];
+        static $checked        = [];
         list(, $anchor, $href) = $link;
-        $hashPos = (int)strpos($href, '#');
+        $hashPos               = (int)strpos($href, '#');
         if ($hashPos > 0) {
             $href = substr($href, 0, $hashPos);
         }

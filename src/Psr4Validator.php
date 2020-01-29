@@ -57,9 +57,9 @@ final class Psr4Validator
     }
 
     /**
-     * @return array[]
      * @throws Exception
      *
+     * @return array[]
      */
     public function main(): array
     {
@@ -97,11 +97,11 @@ final class Psr4Validator
     }
 
     /**
+     * @throws Exception
+     *
      * @return Generator|mixed[]
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @throws Exception
-     *
      */
     private function yieldPhpFilesToCheck(): Generator
     {
@@ -181,9 +181,6 @@ final class Psr4Validator
             /**
              * @param SplFileInfo|mixed $item1
              * @param SplFileInfo|mixed $item2
-             *
-             * @return int
-             *
              */
             protected function compare($item1, $item2): int
             {
