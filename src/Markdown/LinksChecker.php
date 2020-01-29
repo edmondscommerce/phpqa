@@ -119,6 +119,7 @@ final class LinksChecker
     {
         $links    = [];
         $contents = (string)file_get_contents($file);
+        $matches  = null;
         if (
             preg_match_all(
                 '/\[(.+?)\].*?\((.+?)\)/',
@@ -178,11 +179,12 @@ final class LinksChecker
     /**
      * @param string[] $link
      * @param string[] $errors
+     * @SuppressWarnings(PHPMD.UndefinedVariable) - seems to not understand the static variable
      */
     private static function validateHttpLink(array $link, array &$errors, int &$return): void
     {
-        list(, $anchor, $href) = $link;
         static $checked        = [];
+        list(, $anchor, $href) = $link;
         $hashPos               = (int)strpos($href, '#');
         if ($hashPos > 0) {
             $href = substr($href, 0, $hashPos);
@@ -191,18 +193,18 @@ final class LinksChecker
             return;
         }
         $checked[$href] = true;
-        //$start          = microtime(true);
-        //fwrite(STDERR, "\n".'Validating link: '.$href);
-        $context = stream_context_create([
-            'http' => [
-                'method'           => 'HEAD',
-                'protocol_version' => 1.1,
-                'header'           => [
-                    'Connection: close',
+        $context        = stream_context_create(
+            [
+                'http' => [
+                    'method'           => 'HEAD',
+                    'protocol_version' => 1.1,
+                    'header'           => [
+                        'Connection: close',
+                    ],
                 ],
-            ],
-        ]);
-        $result  = null;
+            ]
+        );
+        $result         = null;
         try {
             $headers = get_headers($href, 0, $context);
             if ($headers === false) {

@@ -25,7 +25,7 @@ resolve interfaces to the correct class which means that you should type hint to
 ## Doctrine vs Eloquent
 Eloquent is the default ORM and uses the active record pattern to interace with the database.
 Whilst this is fine, we prefer to use Doctrine which is possible using
-the [Laravel Doctrine Package](https://www.laraveldoctrine.org/) which generally
+the [Laravel Doctrine Package](http://www.laraveldoctrine.org/) which generally
 produces cleaner code than Eloquent.
 
 There is no preference of the mapping driver used, but generally we use 
@@ -51,5 +51,5 @@ For example:
 
 [PHPUnit](https://phpunit.de/) is the defacto choice for testing and with the additional
 [Laravel](https://laravel.com/docs/5.6/testing) and
-[Doctrine](https://www.laraveldoctrine.org/docs/1.3/orm/testing) 
+[Doctrine](http://www.laraveldoctrine.org/docs/1.3/orm/testing) 
 testing tools to help with database testing for your models and repositories.

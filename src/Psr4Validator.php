@@ -91,7 +91,7 @@ final class Psr4Validator
      */
     private function loop(): void
     {
-        foreach ($this->yieldPhpFilesToCheck() as list($absPathRoot, $namespaceRoot, $fileInfo)) {
+        foreach ($this->yieldPhpFilesToCheck() as [$absPathRoot, $namespaceRoot, $fileInfo]) {
             $this->check($absPathRoot, $namespaceRoot, $fileInfo);
         }
     }
@@ -157,6 +157,7 @@ final class Psr4Validator
 
     /**
      * @return SplHeap|SplFileInfo[]
+     * @SuppressWarnings(PHPMD.UndefinedVariable) - phpmd cant handle the anon class
      */
     private function getDirectoryIterator(string $realPath): SplHeap
     {
@@ -178,8 +179,8 @@ final class Psr4Validator
             }
 
             /**
-             * @param mixed $item1
-             * @param mixed $item2
+             * @param SplFileInfo|mixed $item1
+             * @param SplFileInfo|mixed $item2
              */
             protected function compare($item1, $item2): int
             {
@@ -211,6 +212,7 @@ final class Psr4Validator
         if ($contents === false) {
             throw new RuntimeException('Failed getting file contents for ' . $fileInfo->getPathname());
         }
+        $matches = null;
         \preg_match('%namespace\s+?([^;]+)%', $contents, $matches);
         if ([] === $matches) {
             $this->parseErrors[] = (string)$fileInfo->getRealPath();
