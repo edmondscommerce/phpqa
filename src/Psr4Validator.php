@@ -179,8 +179,8 @@ final class Psr4Validator
             }
 
             /**
-             * @param SplFileInfo $item1
-             * @param SplFileInfo $item2
+             * @param SplFileInfo|mixed $item1
+             * @param SplFileInfo|mixed $item2
              *
              * @return int
              *
