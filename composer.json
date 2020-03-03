@@ -19,7 +19,7 @@
   },
   "require": {
     "php": "^7.2",
-    "phpunit/phpunit": "^8.0",
+    "phpunit/phpunit": "^9.0",
     "jakub-onderka/php-console-highlighter": "^0.3.2",
     "edmondscommerce/php-parallel-lint": "~1.0.1",
     "phploc/phploc": "^5.0|^6.0",
