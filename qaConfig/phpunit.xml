@@ -1,6 +1,6 @@
 <phpunit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/8.0/phpunit.xsd"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.0/phpunit.xsd"
         cacheTokens="false"
         colors="true"
         verbose="true"
@@ -23,7 +23,7 @@
         <log type="coverage-text" target="php://stdout"/>
         <log type="coverage-xml" target="../var/qa/phpunit_logs/coverage-xml"/>
         <log type="coverage-clover" target="../var/qa/phpunit_logs/coverage.clover"/>
-        <log type="junit" target="../var/qa/phpunit_logs/phpunit.junit.xml"/>
+        <log type="junit" target="../var/qa/phpunit_logs/junit.xml"/>
     </logging>
     <filter>
         <whitelist>
