@@ -14,7 +14,7 @@
     "debug": "var/qa/infection/debug-log.txt"
   },
   "phpUnit": {
-    "configDir": "./"
+    "configDir": "./../"
   },
   "tmpDir": "../var/qa/infection/tmp"
 }
