@@ -174,7 +174,7 @@ final class Psr4Validator
             /**
              *  constructor.
              *
-             * @param RecursiveIteratorIterator|SplFileInfo[] $iterator
+             * @param RecursiveIteratorIterator<RecursiveDirectoryIterator> $iterator
              */
             public function __construct(RecursiveIteratorIterator $iterator)
             {
