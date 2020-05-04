@@ -57,9 +57,9 @@ final class Psr4Validator
     }
 
     /**
+     * @return array[]
      * @throws Exception
      *
-     * @return array[]
      */
     public function main(): array
     {
@@ -97,11 +97,11 @@ final class Psr4Validator
     }
 
     /**
-     * @throws Exception
-     *
      * @return Generator|mixed[]
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws Exception
+     *
      */
     private function yieldPhpFilesToCheck(): Generator
     {
@@ -171,6 +171,11 @@ final class Psr4Validator
         );
 
         return new class ($iterator) extends SplHeap {
+            /**
+             *  constructor.
+             *
+             * @param RecursiveIteratorIterator<RecursiveDirectoryIterator> $iterator
+             */
             public function __construct(RecursiveIteratorIterator $iterator)
             {
                 foreach ($iterator as $item) {
