@@ -1,21 +1,28 @@
-<?php declare(strict_types=1);
+<?php
 
-namespace EdmondsCommerce\PHPQA\Tests\Small\Markdown;
+declare(strict_types=1);
+
+namespace EdmondsCommerce\PHPQA\Tests\Large\Markdown;
 
 use EdmondsCommerce\PHPQA\Markdown\LinksChecker;
+use Exception;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
- * Class LinksCheckerTest
+ * Class LinksCheckerTest.
  *
- * @package EdmondsCommerce\PHPQA\Markdown
  * @SuppressWarnings(PHPMD.StaticAccess)
  * @coversDefaultClass \EdmondsCommerce\PHPQA\Markdown\LinksChecker
+ *
+ * @internal
+ *
+ * @large
  */
-class LinksCheckerTest extends TestCase
+final class LinksCheckerTest extends TestCase
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @covers \EdmondsCommerce\PHPQA\Markdown\LinksChecker
      * @small
@@ -35,23 +42,23 @@ Bad link for "incorrect link" to "./../nothere.md"
 
 Bad link for "incorrect link" to "./foo.md"
 ';
-        self::assertResult($pathToProject, $expectedExitCode, $expectedOutput);
+        $this->assertResult($pathToProject, $expectedExitCode, $expectedOutput);
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @covers \EdmondsCommerce\PHPQA\Markdown\LinksChecker
      * @small
      */
     public function testMainNoReadmeFile(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         LinksChecker::main(__DIR__ . '/../../assets/linksChecker/projectNoReadme');
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      * @covers \EdmondsCommerce\PHPQA\Markdown\LinksChecker
      * @small
      */
@@ -60,7 +67,7 @@ Bad link for "incorrect link" to "./foo.md"
         $pathToProject    = __DIR__ . '/../../assets/linksChecker/projectWithReadmeNoDocsFolder';
         $expectedExitCode = 0;
         $expectedOutput   = '';
-        self::assertResult($pathToProject, $expectedExitCode, $expectedOutput);
+        $this->assertResult($pathToProject, $expectedExitCode, $expectedOutput);
     }
 
     /**
@@ -78,21 +85,18 @@ Bad link for "incorrect link" to "./foo.md"
 Bad link for "invalid link" to "https://httpstat.us/404"
 result: NULL
 ';
-        self::assertResult($pathToProject, $expectedExitCode, $expectedOutput);
+        $this->assertResult($pathToProject, $expectedExitCode, $expectedOutput);
     }
 
     /**
-     * @param string $pathToProject
-     * @param int    $expectedExitCode
-     * @param string $expectedOutput
-     *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function assertResult(string $pathToProject, int $expectedExitCode, string $expectedOutput): void
     {
         ob_start();
         $actualExitCode = LinksChecker::main($pathToProject);
         $actualOutput   = ob_get_clean();
+        echo $actualOutput;
         self::assertSame($expectedOutput, $actualOutput);
         self::assertSame($expectedExitCode, $actualExitCode);
     }

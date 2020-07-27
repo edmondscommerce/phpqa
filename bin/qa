@@ -143,103 +143,21 @@ fi
 
 echo "
 
-Validating PSR-4 Roots
-------------------------
+Running All Linting Tools
+=========================
+
 "
 
-runTool psr4Validate
+runTool allLintingTools
 
 echo "
 
-Checking for Composer Issues
-----------------------------
+Running All Static Analysis Tools
+=================================
+
 "
+runTool allStaticAnalysisTools
 
-runTool composerChecks
-
-echo "
-Setting Strict Types If It's Missing
--------------------------------------
-"
-
-runTool phpStrictTypes
-
-echo "
-
-Running PHP Lint
-----------------
-"
-runTool phpLint
-
-echo "
-
-Running PHPStan
----------------------
-"
-if [[ "$phpqaQuickTests" == "1" ]]
-then
-    echo "Skipping PHPStan because \$phpqaQuickTests=1"
-else
-    runTool phpstan
-fi
-
-echo "
-
-Running PHPUnit Annotations Check
---------------------------------
-"
-runTool phpunitAnnotations
-
-echo "
-
-Running PHPUnit Tests
----------------------
-"
-if [[ "$phpqaQuickTests" == "1" ]]
-then
-    echo "Skipping PHP Unit & Infection because \$phpqaQuickTests=1"
-else
-    echo "
-Running tests using PhpUnit
----------------------------
-"
-    runTool phpunit
-
-    if [[ "${TRAVIS:-'false'}" == "true" && "$xdebugEnabled" == "1" ]]
-    then
-        echo "Disabling Xdebug After PHPUnit on Travis"
-        phpenv config-rm xdebug.ini
-    fi
-
-    if [[ "$useInfection" == "1" ]]
-    then
-        echo "
-Running tests using Infection
------------------------------
-"
-        runTool infection
-    fi
-fi
-
-echo "
-
-Running Composer Require Checker
---------------------------------
-"
-runTool composerRequireChecker
-
-echo "
-
-Running PHP Mess Detector
--------------------------
-"
-runTool messDetector
-echo "
-
-Running Markdown Links Checker
-------------------------------
-"
-runTool markdownLinks
 
 echo "
 
@@ -248,22 +166,23 @@ Checking if Uncommitted Changes
 "
 checkForUncommittedChanges $specifiedPath
 
+echo "
+
+Running All Coding Standards Tools (That Might Make Code Changes)
+=================================
+
+"
+runTool allCodingStandardsTools
+
 
 echo "
 
-Running Beautifier and Fixer
-----------------------------
+Running All Testing Tools
+=========================
+
 "
+runTool allTestingTools
 
-runTool beautifierFixer
-
-echo "
-
-Running Code Sniffer
---------------------
-"
-
-runTool codeSniffer
 
 echo '
 

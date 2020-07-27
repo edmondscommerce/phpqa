@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace All\Valid\Nested\Deep;
 
-class Thing
+final class Thing
 {
-
 }

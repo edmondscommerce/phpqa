@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Totally\Wrong;
 
-class InvalidIgnored
+final class InvalidIgnored
 {
-
 }

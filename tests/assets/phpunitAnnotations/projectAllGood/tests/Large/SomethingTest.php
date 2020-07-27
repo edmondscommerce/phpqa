@@ -1,27 +1,36 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace EdmondsCommerce\PHPQA\Tests\assets\phpunitAnnotations\projectAllGood\tests\Small;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 
-class SomethingTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
+final class SomethingTest extends TestCase
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      * @covers ::somethingThings()
      * @large
      * @test
      */
-    public function itDoesSomething()
+    public function itDoesSomething(): void
     {
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      * @covers ::somethingThings()
      * @large
      */
-    public function testItDoesSomething()
+    public function testItDoesSomething(): void
     {
     }
 }

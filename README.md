@@ -2,6 +2,30 @@
 ## By [Edmonds Commerce](https://www.edmondscommerce.co.uk)
 
 
+## Version 4 Updates
+
+Brings in PHPStan 0.12 which is great
+
+However you will need to do the following:
+
+
+# Remove PHPStan symlinks before upgrading
+```bash
+rm -f bin/phpstan*
+```
+
+# Ensuring Correct PHPStan Configs
+
+If you are overriding `phpstan.neon` in your `qaConfig` folder, then you need to make sure you have this in there:
+
+```neon
+parameters:
+    level: max
+    inferPrivatePropertyTypeFromConstructor: true
+```
+
+
+
 ## Version 3 Updates
 
 You should update your phpunit.xml file to use `        printerClass="\PHPUnit\Util\TestDox\CliTestDoxPrinter"`

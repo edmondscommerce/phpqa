@@ -8,7 +8,6 @@ set +e
 phpcsExitCode=99
 while (( phpcsExitCode > 0 ))
 do
-
     phpNoXdebug -f bin/phpcs -- \
         --standard="$phpcsCodingStandardsNameOrPath" \
         --colors \

@@ -1,10 +1,18 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace EdmondsCommerce\PHPQA\Tests\assets\phpunitAnnotations\projectNotApplicable\tests;
 
-class NotApplicableTest
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
+final class NotApplicableTest
 {
-    public function testSomething()
+    public function testSomething(): void
     {
     }
 }
