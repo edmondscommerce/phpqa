@@ -63,6 +63,8 @@ Your project's `composer.json` needs to specify a bin folder. If it's not alread
     ...
 ``` 
 
+You will also need xdebug installed to get coverage.
+
 ## Running
 
 To run the full pipline, simply execute in your BASH terminal: 
