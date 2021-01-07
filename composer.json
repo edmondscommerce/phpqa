@@ -30,10 +30,8 @@
     "phpstan/phpstan-strict-rules": "^0.12",
     "infection/infection": "^0.10|^0.20",
     "funkyproject/reflection-file": "^0.1.0",
-    "phpunit/php-invoker": "^2.0|^3.0",
     "maglnet/composer-require-checker": "^2.0",
     "ext-json": "*",
-    "phpunit/php-timer": "^2.0",
     "phpstan/extension-installer": "^1.0",
     "friendsofphp/php-cs-fixer": "^2.16"
   },
