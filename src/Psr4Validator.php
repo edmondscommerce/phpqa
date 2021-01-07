@@ -57,29 +57,29 @@ final class Psr4Validator
     }
 
     /**
-     * @return array[]
      * @throws Exception
      *
+     * @return array[]
      */
     public function main(): array
     {
         $this->loop();
         $errors = [];
         //Actual Errors
-        if ([] !== $this->psr4Errors) {
+        if ($this->psr4Errors !== []) {
             $errors['PSR-4 Errors:'] = $this->psr4Errors;
         }
-        if ([] !== $this->parseErrors) {
+        if ($this->parseErrors !== []) {
             $errors['Parse Errors:'] = $this->parseErrors;
         }
-        if ([] !== $this->missingPaths) {
+        if ($this->missingPaths !== []) {
             $errors['Missing Paths:'] = $this->missingPaths;
         }
-        if ([] === $errors) {
+        if ($errors === []) {
             return $errors;
         }
         //Debug Info
-        if ([] !== $this->ignoredFiles) {
+        if ($this->ignoredFiles !== []) {
             $errors['Ignored Files:'] = $this->ignoredFiles;
         }
 
@@ -97,11 +97,11 @@ final class Psr4Validator
     }
 
     /**
+     * @throws Exception
+     *
      * @return Generator|mixed[]
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @throws Exception
-     *
      */
     private function yieldPhpFilesToCheck(): Generator
     {
@@ -219,7 +219,7 @@ final class Psr4Validator
         }
         $matches = null;
         \preg_match('%namespace\s+?([^;]+)%', $contents, $matches);
-        if ([] === $matches) {
+        if ($matches === []) {
             $this->parseErrors[] = (string)$fileInfo->getRealPath();
 
             return '';

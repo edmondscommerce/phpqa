@@ -46,7 +46,7 @@ final class LinksChecker
             foreach ($links as $link) {
                 static::checkLink($projectRootDirectory, $link, $file, $errors, $return);
             }
-            if ([] !== $errors) {
+            if ($errors !== []) {
                 echo $title . implode('', $errors);
             }
         }
