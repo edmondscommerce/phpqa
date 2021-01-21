@@ -33,7 +33,7 @@
     <testsuites>
         <testsuite name="tests">
             <directory suffix="Test.php">../tests/Small</directory>
-            <directory suffix="Test.php">../tests/Medium</directory>
+            <!-- directory suffix="Test.php">../tests/Medium</directory //-->
             <directory suffix="Test.php">../tests/Large</directory>
         </testsuite>
     </testsuites>

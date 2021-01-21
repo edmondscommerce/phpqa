@@ -206,7 +206,7 @@ final class LinksChecker
         );
         $result         = null;
         try {
-            $headers = get_headers($href, 0, $context);
+            $headers = get_headers($href, false, $context);
             if ($headers === false) {
                 throw new RuntimeException('Failed getting headers for href ' . $href);
             }

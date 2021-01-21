@@ -3,8 +3,8 @@ echo "
 Setting Infection Minimums
 --------------------------
 "
-mutationScoreIndicator=26
-coveredCodeMSI=52
+infectionMutationScoreIndicator=74
+infectionCoveredCodeMSI=78
 
 
 pathsToIgnore+=("tests/assets")
