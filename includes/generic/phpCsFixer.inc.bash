@@ -10,6 +10,7 @@ for phpCsPathToCheck in "${pathsToCheck[@]}"; do
       --cache-file="$phpCsCacheFile.$(echo $phpCsPathToCheck | md5sum -)" \
       --allow-risky=yes \
       --show-progress=dots \
+      --vvv \
       fix \
       $phpCsPathToCheck
     csFixerExitCode=$?

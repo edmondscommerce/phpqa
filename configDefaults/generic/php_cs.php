@@ -82,6 +82,7 @@ $rules = [
     ],
     'single_line_throw'            => false,
     'global_namespace_import'      => true,
+    'phpdoc_to_return_type'        => false,
 ];
 
 
