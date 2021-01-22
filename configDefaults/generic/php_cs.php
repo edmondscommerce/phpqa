@@ -94,9 +94,13 @@ function () {
 }
 )();
 
-$finder = PhpCsFixer\Finder::create()
-                           ->in($projectRoot)
-                           ->exclude('var');
+$finderPath   = __DIR__ . '/php_cs_finder.php';
+$overridePath = "$projectRoot/qaConfig/php_cs_finder.php";
+if (file_exists($overridePath)) {
+    $finderPath = $overridePath;
+}
+
+$finder = require $finderPath;
 
 return PhpCsFixer\Config::create()
                         ->setRules($rules)
