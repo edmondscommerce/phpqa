@@ -30,7 +30,7 @@
     "phpstan/phpstan-strict-rules": "@stable",
     "infection/infection": "@stable",
     "funkyproject/reflection-file": "@stable",
-    "maglnet/composer-require-checker": "@stable",
+    "irstea/composer-require-checker-shim": "@stable",
     "phpstan/extension-installer": "@stable",
     "friendsofphp/php-cs-fixer": "@stable"
   },
@@ -44,7 +44,7 @@
     "phpstan/phpstan-deprecation-rules": "Checks for deprecated functions and methods",
     "phpstan/phpstan-symfony": "Symfony specific checks",
     "nunomaduro/larastan": "Laravel specific checks (PHPStan Wrapper)",
-    "sllh/composer-versions-check":"To be brought back in when there is a PHP8 version..."
+    "sllh/composer-versions-check": "To be brought back in when there is a PHP8 version..."
   },
   "bin": [
     "bin/qa",
