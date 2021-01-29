@@ -30,11 +30,12 @@
     "phpstan/phpstan-strict-rules": "@stable",
     "infection/infection": "@stable",
     "funkyproject/reflection-file": "@stable",
-    "irstea/composer-require-checker-shim": "@stable",
+    "maglnet/composer-require-checker": "@stable",
     "phpstan/extension-installer": "@stable",
     "friendsofphp/php-cs-fixer": "@stable"
   },
   "require-dev": {
+    "roave/security-advisories": "dev-master",
     "phpstan/phpstan-phpunit": "^0.12"
   },
   "suggest": {
