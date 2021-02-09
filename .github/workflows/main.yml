@@ -1,12 +1,14 @@
 name: PHP QA
 env:
-  #php_modules: 'bcmath, ctype, curl, dom, gd, hash, iconv, intl, mbstring, openssl, pdo_mysql, simplexml, soap, xsl,  zip'
+#php_modules: 'bcmath, ctype, curl, dom, gd, hash, iconv, intl, mbstring, openssl, pdo_mysql, simplexml, soap, xsl,  zip'
 
 on:
   push:
-    branches: [ * ]
+    branches:
+      - '*'
   pull_request:
-    branches: [ * ]
+    branches:
+      - '*'
 
 jobs:
   build:
@@ -49,7 +51,7 @@ jobs:
 
   qa:
     name: PHP QA CI
-    needs: [build]
+    needs: [ build ]
     runs-on: ubuntu-latest
     steps:
       - name: Run Composer install scripts
