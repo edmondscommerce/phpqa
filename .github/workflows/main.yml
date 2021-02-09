@@ -28,5 +28,8 @@ jobs:
       - name: Install dependencies with Composer
         uses: ramsey/composer-install@v1
 
-      - name: Run test suite
+      - name: Run CI process
         run: bash ./ci.bash
+
+      - name: Commit and changes, eg cs fixer
+        uses: EndBug/add-and-commit@v7

@@ -17,6 +17,7 @@ export phpUnitCoverage=${phpunitCoverage:-0}
 export CI=true
 
 # run the QA pipeline, echo tee to stdout and also to log file
+mkdir -p var/qa/
 bin/qa |& tee var/qa/ci.log
 
 echo "
