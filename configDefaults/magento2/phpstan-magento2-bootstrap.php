@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* Find bootstrap path */
 $rootPath = realpath(dirname(__FILE__));
 while (!file_exists($rootPath . '/app/bootstrap.php') && $rootPath !== '/') {
@@ -33,4 +35,3 @@ function phpstan_magento2_autoloader($class)
 }
 
 spl_autoload_register('phpstan_magento2_autoloader');
-

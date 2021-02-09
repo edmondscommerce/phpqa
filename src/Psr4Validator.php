@@ -170,7 +170,7 @@ final class Psr4Validator
             RecursiveIteratorIterator::SELF_FIRST
         );
 
-        return new class ($iterator) extends SplHeap {
+        return new class($iterator) extends SplHeap {
             /**
              *  constructor.
              *

@@ -7,7 +7,6 @@ namespace EdmondsCommerce\PHPQA\Tests\Small\PHPUnit;
 use EdmondsCommerce\PHPQA\PHPUnit\CheckAnnotations;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-
 use function file_put_contents;
 
 /**

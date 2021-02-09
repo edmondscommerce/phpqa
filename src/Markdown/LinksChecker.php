@@ -12,7 +12,6 @@ use RecursiveRegexIterator;
 use RegexIterator;
 use RuntimeException;
 use Throwable;
-
 use function current;
 use function dirname;
 use function explode;
