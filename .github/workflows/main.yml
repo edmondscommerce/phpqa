@@ -1,6 +1,4 @@
 name: PHP QA
-env:
-#php_modules: 'bcmath, ctype, curl, dom, gd, hash, iconv, intl, mbstring, openssl, pdo_mysql, simplexml, soap, xsl,  zip'
 
 on:
   push:
