@@ -1,0 +1,59 @@
+name: PHP QA
+env:
+  #php_modules: 'bcmath, ctype, curl, dom, gd, hash, iconv, intl, mbstring, openssl, pdo_mysql, simplexml, soap, xsl,  zip'
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Build Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout latest Ref
+        uses: actions/checkout@v2
+
+      - name: Cache Vendor
+        id: cacheVendor
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.OS }}-build-${{ hashFiles('./composer.lock') }}
+
+      - name: Setup PHP
+        if: steps.cacheVendor.outputs.cache-hit != 'true' # Cache was hit, skip this step and the others
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+          extensions: ${{ env.php_modules }}
+          tools: composer:v2
+          coverage: none # disables xdebug, can use other options
+
+      - name: Get Composer Cache Directory
+        if: steps.cacheVendor.outputs.cache-hit != 'true'
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - uses: actions/cache@v2
+        if: steps.cacheVendor.outputs.cache-hit != 'true'
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('./composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+      - name: Install composer dependencies
+        if: steps.cacheVendor.outputs.cache-hit != 'true'
+        uses: ./.github/actions/edmondscommerce/setup
+
+  qa:
+    name: PHP QA CI
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Composer install scripts
+        run: composer install
+   - name: Run test suite
+        run: ./ci.bash
