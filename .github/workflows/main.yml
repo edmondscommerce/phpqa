@@ -54,6 +54,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run Composer install scripts
-        run: composer install
-   - name: Run test suite
-        run: ./ci.bash
+      run: composer install
+      - name: Run test suite
+          run: ./ci.bash
