@@ -91,10 +91,10 @@ $rules = [
 
 $projectRoot = (
     static function () {
-    $reflection = new ReflectionClass(ClassLoader::class);
+        $reflection = new ReflectionClass(ClassLoader::class);
 
-    return dirname($reflection->getFileName(), 3);
-}
+        return dirname($reflection->getFileName(), 3);
+    }
 )();
 
 $finderPath   = __DIR__ . '/php_cs_finder.php';
