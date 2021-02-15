@@ -101,8 +101,8 @@ final class CheckAnnotations
         $matches = [];
         preg_match_all(
             <<<REGEXP
-%(?<docblock>/\\*(?:[^*]|\n|(?:\\*(?:[^/]|\n)))*\\*/|\n)\\s+?public\\s+?function\\s+?(?<method>.+?)\\(%
-REGEXP
+                %(?<docblock>/\\*(?:[^*]|\n|(?:\\*(?:[^/]|\n)))*\\*/|\n)\\s+?public\\s+?function\\s+?(?<method>.+?)\\(%
+                REGEXP
             . 'si',
             $contents,
             $matches
@@ -137,8 +137,8 @@ REGEXP
         $matches = [];
         preg_match_all(
             <<<REGEXP
-%(?<docblock>/\\*(?:[^*]|\n|(?:\\*(?:[^/]|\n)))*\\*/)\\s+?(final |)class\\s+?(?<classname>.+?)\\s+?extends%
-REGEXP
+                %(?<docblock>/\\*(?:[^*]|\n|(?:\\*(?:[^/]|\n)))*\\*/)\\s+?(final |)class\\s+?(?<classname>.+?)\\s+?extends%
+                REGEXP
             . 'si',
             $fileContent,
             $matches

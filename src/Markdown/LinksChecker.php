@@ -183,7 +183,7 @@ final class LinksChecker
     private static function validateHttpLink(array $link, array &$errors, int &$return): void
     {
         static $checked        = [];
-        list(, $anchor, $href) = $link;
+        [, $anchor, $href]     = $link;
         $hashPos               = (int)strpos($href, '#');
         if ($hashPos > 0) {
             $href = substr($href, 0, $hashPos);
