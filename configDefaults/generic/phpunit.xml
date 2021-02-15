@@ -1,46 +1,23 @@
-<phpunit
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/7.5/phpunit.xsd"
-        cacheTokens="false"
-        colors="true"
-        verbose="true"
-        timeoutForLargeTests="300"
-        timeoutForMediumTests="5"
-        timeoutForSmallTests="1"
-        failOnRisky="true"
-        cacheResult="true"
-        cacheResultFile="../../../../../var/qa/.phpunit.result.cache"
-        executionOrder="depends,random"
->
-    <!--phpunit recommended>
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/7.1/phpunit.xsd"
-            cacheTokens="false"
-            colors="true"
-            verbose="true"
-            forceCoversAnnotation="true"
-            printerClass="\EdmondsCommerce\PHPQA\PHPUnit\TestDox\CliTestDoxPrinter"
-            timeoutForMediumTests="5"
-            timeoutForSmallTests="1"
-            timeoutForLargeTests="300"
-            failOnRisky="true"
-            failOnWarning="true"
-            defaultTestSuite="tests"
-            beStrictAboutCoversAnnotation="true"
-            beStrictAboutTodoAnnotatedTests="true"
-     !-->
-    <logging>
-        <log type="coverage-html" target="../../../../../var/qa/phpunit_coverage"/>
-        <log type="coverage-text" target="php://stdout"/>
-        <log type="coverage-xml" target="../../../../../var/qa/phpunit_logs/coverage-xml"/>
-        <log type="coverage-clover" target="../../../../../var/qa/phpunit_logs/coverage.clover"/>
-        <log type="junit" target="../../../../../var/qa/phpunit_logs/phpunit.junit.xml"/>
-    </logging>
-    <filter>
-        <whitelist>
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" colors="true" verbose="true"
+         timeoutForLargeTests="300" timeoutForMediumTests="5" timeoutForSmallTests="1" failOnRisky="true"
+         cacheResult="true" cacheResultFile="../../../../../var/qa/.phpunit.result.cache"
+         executionOrder="depends,random">
+    <coverage>
+        <include>
             <directory suffix=".php">../../../../../src</directory>
-        </whitelist>
-    </filter>
+        </include>
+        <report>
+            <clover outputFile="../../../../../var/qa/phpunit_logs/coverage.clover"/>
+            <html outputDirectory="../../../../../var/qa/phpunit_coverage"/>
+            <text outputFile="php://stdout"/>
+            <xml outputDirectory="../../../../../var/qa/phpunit_logs/coverage-xml"/>
+        </report>
+    </coverage>
+    <logging>
+        <junit outputFile="../../../../../var/qa/phpunit_logs/phpunit.junit.xml"/>
+    </logging>
     <testsuites>
         <testsuite name="tests">
             <directory suffix="Test.php">../../../../../tests/</directory>
