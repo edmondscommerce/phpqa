@@ -138,28 +138,28 @@ final class CheckAnnotationsTest extends TestCase
         $class = 'final class SomethingTest extends TestCase';
 
         return <<<PHP
-<?php
+            <?php
 
-declare(strict_types=1);
+            declare(strict_types=1);
 
-namespace EdmondsCommerce\\PHPQA\\Tests\\assets\\phpunitAnnotations\\projectMissingSmall\tests\\Small;
+            namespace EdmondsCommerce\\PHPQA\\Tests\\assets\\phpunitAnnotations\\projectMissingSmall\tests\\Small;
 
-use PHPUnit\\Framework\\TestCase;
+            use PHPUnit\\Framework\\TestCase;
 
-/**
- * @internal
- * @coversNothing
- */
-{$class}
-{
-    /**
-     * @smaalll
-     * @test
-     */
-    public function itDoesSomething(): void
-    {
-    }
-}
-PHP;
+            /**
+             * @internal
+             * @coversNothing
+             */
+            {$class}
+            {
+                /**
+                 * @smaalll
+                 * @test
+                 */
+                public function itDoesSomething(): void
+                {
+                }
+            }
+            PHP;
     }
 }
