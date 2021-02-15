@@ -1,14 +1,12 @@
 <?php
-
-declare(strict_types=1);
 /**
- * This is the default PHP-CS-Fixer configs for PHPQA projects.
+ * This is the default PHP-CS-Fixer configs for PHPQA projects
  *
  * You can override this file by copying it into your qaConfig folder and editing as you see fit
  *
  * For rules, suggest you have a look at
  *
- * @see https://mlocati.github.io/php-cs-fixer-configurator/#version:2.16
+ * @see https://mlocati.github.io/php-cs-fixer-configurator/
  */
 
 use Composer\Autoload\ClassLoader;
@@ -17,6 +15,7 @@ $rules = [
     '@PhpCsFixer'                  => true,
     '@Symfony'                     => true,
     '@DoctrineAnnotation'          => true,
+    '@PHP80Migration'              => true,
     'align_multiline_comment'      => true,
     'array_indentation'            => true,
     'array_syntax'                 => ['syntax' => 'short'],
@@ -45,10 +44,10 @@ $rules = [
         'method_protected',
         'method_private',
     ],
-    // fights with PSR-12 in phpcs/phpcbf
+    # fights with PSR-12 in phpcs/phpcbf
     'ordered_imports'              => [
         'sort_algorithm' => 'alpha',
-        // this is the PSR12 order, do not change
+        # this is the PSR12 order, do not change
         'imports_order'  => [
             'class',
             'function',
@@ -85,10 +84,12 @@ $rules = [
     'single_line_throw'            => false,
     'global_namespace_import'      => true,
     'phpdoc_to_return_type'        => false,
+    'no_superfluous_phpdoc_tags'   => true,
 ];
 
+
 $projectRoot = (
-    static function () {
+function () {
     $reflection = new ReflectionClass(ClassLoader::class);
 
     return dirname($reflection->getFileName(), 3);
@@ -96,7 +97,7 @@ $projectRoot = (
 )();
 
 $finderPath   = __DIR__ . '/php_cs_finder.php';
-$overridePath = "{$projectRoot}/qaConfig/php_cs_finder.php";
+$overridePath = "$projectRoot/qaConfig/php_cs_finder.php";
 if (file_exists($overridePath)) {
     $finderPath = $overridePath;
 }
@@ -104,6 +105,5 @@ if (file_exists($overridePath)) {
 $finder = require $finderPath;
 
 return PhpCsFixer\Config::create()
-    ->setRules($rules)
-    ->setFinder($finder)
-;
+                        ->setRules($rules)
+                        ->setFinder($finder);
