@@ -47,7 +47,9 @@ do
         # Default mode - do generate coverage if configured to do so, do enforce time limits
         extraConfigs+=( --enforce-time-limit )
     fi
+
     set +e
+    set -x
 
     phpUnitQuickTests="$phpUnitQuickTests" $phpCmd -f $phpunitPath \
         -- \
@@ -60,7 +62,9 @@ do
         --log-junit "$phpunitLogFilePath"
 
     phpunitExitCode=$?
+    set +x
     set -e
+
 
     if [[ "" != "$(grep '<testsuites/>' $phpunitLogFilePath)" || ! -f  $phpunitLogFilePath ]]
     then

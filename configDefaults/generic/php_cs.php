@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /**
  * This is the default PHP-CS-Fixer configs for PHPQA projects.
  *
@@ -78,6 +79,7 @@ $rules = [
         'identical' => false,
     ],
     'fully_qualified_strict_types' => true,
+    'native_function_invocation'   => true,
     'method_argument_space'        => [
         'ensure_fully_multiline'           => true,
         'keep_multiple_spaces_after_comma' => true,
@@ -90,7 +92,7 @@ $rules = [
 ];
 
 $projectRoot = (
-    static function () {
+static function () {
     $reflection = new ReflectionClass(ClassLoader::class);
 
     return dirname($reflection->getFileName(), 3);
@@ -106,6 +108,5 @@ if (file_exists($overridePath)) {
 $finder = require $finderPath;
 
 return PhpCsFixer\Config::create()
-    ->setRules($rules)
-    ->setFinder($finder)
-;
+                        ->setRules($rules)
+                        ->setFinder($finder);
