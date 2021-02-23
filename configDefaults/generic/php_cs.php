@@ -1,7 +1,6 @@
 <?php
 
 declare(strict_types=1);
-
 /**
  * This is the default PHP-CS-Fixer configs for PHPQA projects.
  *
@@ -92,11 +91,11 @@ $rules = [
 ];
 
 $projectRoot = (
-static function () {
-    $reflection = new ReflectionClass(ClassLoader::class);
+    static function () {
+        $reflection = new ReflectionClass(ClassLoader::class);
 
-    return dirname($reflection->getFileName(), 3);
-}
+        return dirname($reflection->getFileName(), 3);
+    }
 )();
 
 $finderPath   = __DIR__ . '/php_cs_finder.php';
