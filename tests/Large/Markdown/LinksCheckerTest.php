@@ -93,9 +93,9 @@ result: NULL
      */
     protected function assertResult(string $pathToProject, int $expectedExitCode, string $expectedOutput): void
     {
-        ob_start();
+        \ob_start();
         $actualExitCode = LinksChecker::main($pathToProject);
-        $actualOutput   = ob_get_clean();
+        $actualOutput   = \ob_get_clean();
         echo $actualOutput;
         self::assertSame($expectedOutput, $actualOutput);
         self::assertSame($expectedExitCode, $actualExitCode);

@@ -12,19 +12,6 @@ use RecursiveRegexIterator;
 use RegexIterator;
 use RuntimeException;
 use Throwable;
-use function current;
-use function dirname;
-use function explode;
-use function preg_match;
-use function preg_replace;
-use function realpath;
-use function rtrim;
-use function sprintf;
-use function str_repeat;
-use function str_replace;
-use function strlen;
-use function strpos;
-use function trim;
 
 final class LinksChecker
 {
@@ -38,15 +25,15 @@ final class LinksChecker
         $projectRootDirectory = $projectRootDirectory ?? Helper::getProjectRootDirectory();
         $files                = static::getFiles($projectRootDirectory);
         foreach ($files as $file) {
-            $relativeFile = str_replace($projectRootDirectory, '', $file);
-            $title        = "\n{$relativeFile}\n" . str_repeat('-', strlen($relativeFile)) . "\n";
+            $relativeFile = \str_replace($projectRootDirectory, '', $file);
+            $title        = "\n{$relativeFile}\n" . \str_repeat('-', \strlen($relativeFile)) . "\n";
             $errors       = [];
             $links        = static::getLinks($file);
             foreach ($links as $link) {
                 static::checkLink($projectRootDirectory, $link, $file, $errors, $return);
             }
             if ($errors !== []) {
-                echo $title . implode('', $errors);
+                echo $title . \implode('', $errors);
             }
         }
 
@@ -74,7 +61,7 @@ final class LinksChecker
     {
         $files = [];
         $dir   = $projectRootDirectory . '/docs';
-        if (!is_dir($dir)) {
+        if (!\is_dir($dir)) {
             return $files;
         }
         $directory = new RecursiveDirectoryIterator($dir);
@@ -99,7 +86,7 @@ final class LinksChecker
     private static function getMainReadme(string $projectRootDirectory): string
     {
         $path = $projectRootDirectory . '/README.md';
-        if (!is_file($path)) {
+        if (!\is_file($path)) {
             throw new RuntimeException(
                 "\n\nYou have no README.md file in your project"
                 . "\n\nAs the bear minimum you need to have this file to pass QA"
@@ -117,17 +104,17 @@ final class LinksChecker
     private static function getLinks(string $file): array
     {
         $links    = [];
-        $contents = (string)file_get_contents($file);
+        $contents = (string)\file_get_contents($file);
         $matches  = null;
         if (
-            preg_match_all(
+            \preg_match_all(
                 '/\[(.+?)\].*?\((.+?)\)/',
                 $contents,
                 $matches,
                 PREG_SET_ORDER
             ) !== false
         ) {
-            $links = array_merge($links, $matches);
+            $links = \array_merge($links, $matches);
         }
 
         return $links;
@@ -146,31 +133,31 @@ final class LinksChecker
         array &$errors,
         int &$return
     ): void {
-        $path = trim($link[2]);
-        if (strpos($path, '#') === 0) {
+        $path = \trim($link[2]);
+        if (\strpos($path, '#') === 0) {
             return;
         }
-        if (preg_match('%^(http|//)%', $path) === 1) {
+        if (\preg_match('%^(http|//)%', $path) === 1) {
             self::validateHttpLink($link, $errors, $return);
 
             return;
         }
 
-        $path  = current(explode('#', $path, 2));
-        $start = rtrim($projectRootDirectory, '/');
-        if ($path[0] !== '/' || strpos($path, './') === 0) {
-            $relativeSubdirs = preg_replace(
+        $path  = \current(\explode('#', $path, 2));
+        $start = \rtrim($projectRootDirectory, '/');
+        if ($path[0] !== '/' || \strpos($path, './') === 0) {
+            $relativeSubdirs = \preg_replace(
                 '%^' . $projectRootDirectory . '%',
                 '',
-                dirname($file)
+                \dirname($file)
             );
             if ($relativeSubdirs !== null) {
-                $start .= '/' . rtrim($relativeSubdirs, '/');
+                $start .= '/' . \rtrim($relativeSubdirs, '/');
             }
         }
-        $realpath = realpath($start . '/' . $path);
+        $realpath = \realpath($start . '/' . $path);
         if ($realpath === false) {
-            $errors[] = sprintf("\nBad link for \"%s\" to \"%s\"\n", $link[1], $link[2]);
+            $errors[] = \sprintf("\nBad link for \"%s\" to \"%s\"\n", $link[1], $link[2]);
             $return   = 1;
         }
     }
@@ -184,15 +171,15 @@ final class LinksChecker
     {
         static $checked        = [];
         [, $anchor, $href]     = $link;
-        $hashPos               = (int)strpos($href, '#');
+        $hashPos               = (int)\strpos($href, '#');
         if ($hashPos > 0) {
-            $href = substr($href, 0, $hashPos);
+            $href = \substr($href, 0, $hashPos);
         }
         if (isset($checked[$href])) {
             return;
         }
         $checked[$href] = true;
-        $context        = stream_context_create(
+        $context        = \stream_context_create(
             [
                 'http' => [
                     'method'           => 'HEAD',
@@ -205,12 +192,12 @@ final class LinksChecker
         );
         $result         = null;
         try {
-            $headers = get_headers($href, false, $context);
+            $headers = \get_headers($href, false, $context);
             if ($headers === false) {
                 throw new RuntimeException('Failed getting headers for href ' . $href);
             }
             foreach ($headers as $header) {
-                if (strpos($header, ' 200 ') !== false) {
+                if (\strpos($header, ' 200 ') !== false) {
                     //$time = round(microtime(true) - $start, 2);
                     //fwrite(STDERR, "\n".'OK ('.$time.' seconds): '.$href);
 
@@ -221,11 +208,11 @@ final class LinksChecker
             throw new RuntimeException('Unexpected error ' . $e->getMessage(), $e->getCode(), $e);
         }
 
-        $errors[] = sprintf(
+        $errors[] = \sprintf(
             "\nBad link for \"%s\" to \"%s\"\nresult: %s\n",
             $anchor,
             $href,
-            var_export($result, true)
+            \var_export($result, true)
         );
         $return   = 1;
         //$time     = round(microtime(true) - $start, 2);

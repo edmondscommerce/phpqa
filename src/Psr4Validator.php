@@ -148,7 +148,7 @@ final class Psr4Validator
     private function addMissingPathError(string $path, string $namespaceRoot, string $absPathRoot): void
     {
         $invalidPathMessage = "Namespace root '{$namespaceRoot}'\ncontains a path '{$path}'\nwhich doesn't exist\n";
-        if (stripos($absPathRoot, 'Magento') !== false) {
+        if (\stripos($absPathRoot, 'Magento') !== false) {
             $invalidPathMessage .= 'Magento\'s composer includes this by default, '
                                    . 'it should be removed from the psr-4 section';
         }
@@ -189,7 +189,7 @@ final class Psr4Validator
              */
             protected function compare($item1, $item2): int
             {
-                return strcmp((string)$item2->getRealPath(), (string)$item1->getRealPath());
+                return \strcmp((string)$item2->getRealPath(), (string)$item1->getRealPath());
             }
         };
     }
@@ -241,6 +241,6 @@ final class Psr4Validator
             );
         }
 
-        return rtrim($namespaceRoot . $relativeNs, '\\');
+        return \rtrim($namespaceRoot . $relativeNs, '\\');
     }
 }

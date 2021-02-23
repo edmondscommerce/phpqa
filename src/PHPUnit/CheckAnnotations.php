@@ -46,7 +46,7 @@ final class CheckAnnotations
      */
     public function main(string $pathToTestsDirectory): array
     {
-        if (!is_dir($pathToTestsDirectory)) {
+        if (!\is_dir($pathToTestsDirectory)) {
             throw new InvalidArgumentException(
                 '$pathToTestsDirectory "' . $pathToTestsDirectory . '" does not exist"'
             );
@@ -63,7 +63,7 @@ final class CheckAnnotations
 
     private function checkLarge(): void
     {
-        if (!is_dir($this->largePath)) {
+        if (!\is_dir($this->largePath)) {
             return;
         }
         $this->checkDirectory($this->largePath, 'large');
@@ -72,7 +72,7 @@ final class CheckAnnotations
     private function checkDirectory(string $path, string $annotation): void
     {
         foreach ($this->yieldTestFilesInPath($path) as $fileInfo) {
-            if (strpos($fileInfo->getFilename(), 'Test.php') === false) {
+            if (\strpos($fileInfo->getFilename(), 'Test.php') === false) {
                 continue;
             }
             $this->checkFile($fileInfo, $annotation);
@@ -93,13 +93,13 @@ final class CheckAnnotations
 
     private function checkFile(SplFileInfo $fileInfo, string $annotation): void
     {
-        $contents = (string)file_get_contents($fileInfo->getPathname());
+        $contents = (string)\file_get_contents($fileInfo->getPathname());
         if ($this->isAnnotationInClassDocBlock($contents, $annotation) === true) {
             return;
         }
 
         $matches = [];
-        preg_match_all(
+        \preg_match_all(
             <<<REGEXP
                 %(?<docblock>/\\*(?:[^*]|\n|(?:\\*(?:[^/]|\n)))*\\*/|\n)\\s+?public\\s+?function\\s+?(?<method>.+?)\\(%
                 REGEXP
@@ -135,7 +135,7 @@ final class CheckAnnotations
     private function isAnnotationInClassDocBlock(string $fileContent, string $annotation): bool
     {
         $matches = [];
-        preg_match_all(
+        \preg_match_all(
             <<<REGEXP
                 %(?<docblock>/\\*(?:[^*]|\n|(?:\\*(?:[^/]|\n)))*\\*/)\\s+?(final |)class\\s+?(?<classname>.+?)\\s+?extends%
                 REGEXP
@@ -143,17 +143,17 @@ final class CheckAnnotations
             $fileContent,
             $matches
         );
-        if (count($matches['docblock']) !== 1) {
+        if (\count($matches['docblock']) !== 1) {
             return false;
         }
-        $docBlock = array_shift($matches['docblock']);
+        $docBlock = \array_shift($matches['docblock']);
 
-        return strpos($docBlock, '@' . $annotation) !== false;
+        return \strpos($docBlock, '@' . $annotation) !== false;
     }
 
     private function checkMedium(): void
     {
-        if (!is_dir($this->mediumPath)) {
+        if (!\is_dir($this->mediumPath)) {
             return;
         }
         $this->checkDirectory($this->mediumPath, 'medium');
@@ -161,7 +161,7 @@ final class CheckAnnotations
 
     private function checkSmall(): void
     {
-        if (!is_dir($this->smallPath)) {
+        if (!\is_dir($this->smallPath)) {
             return;
         }
         $this->checkDirectory($this->smallPath, 'small');

@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 /* Find bootstrap path */
-$rootPath = realpath(dirname(__FILE__));
-while (!file_exists($rootPath . '/app/bootstrap.php') && $rootPath !== '/') {
-    $rootPath = realpath(dirname($rootPath));
+$rootPath = \realpath(\dirname(__FILE__));
+while (!\file_exists($rootPath . '/app/bootstrap.php') && $rootPath !== '/') {
+    $rootPath = \realpath(\dirname($rootPath));
 }
 
 /* Include Magento bootstrap file */
@@ -34,4 +34,4 @@ function phpstan_magento2_autoloader($class)
     return $_git_hook_loaded_class[$class];
 }
 
-spl_autoload_register('phpstan_magento2_autoloader');
+\spl_autoload_register('phpstan_magento2_autoloader');

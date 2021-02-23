@@ -7,7 +7,6 @@ namespace EdmondsCommerce\PHPQA\Tests\Small\PHPUnit;
 use EdmondsCommerce\PHPQA\PHPUnit\CheckAnnotations;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use function file_put_contents;
 
 /**
  * Class CheckForLargeAndMediumAnnotationsTest.
@@ -65,7 +64,7 @@ final class CheckAnnotationsTest extends TestCase
         /* CS Fixer will add the tag automatically if the file is run through QA */
         $testFile      = $this->getSmallTestWithNoAnnotation();
         $smallTestName = $pathToTestsDirectory . '/Small/SomethingTest.php';
-        file_put_contents($smallTestName, $testFile);
+        \file_put_contents($smallTestName, $testFile);
 
         $expected = [
             'SomethingTest.php' => [
@@ -74,7 +73,7 @@ final class CheckAnnotationsTest extends TestCase
         ];
         $actual   = $this->checker->main($pathToTestsDirectory);
         /* Clean up the file once we are finished with it */
-        unlink($smallTestName);
+        \unlink($smallTestName);
         self::assertSame($expected, $actual);
     }
 
