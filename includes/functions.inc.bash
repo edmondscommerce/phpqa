@@ -85,9 +85,10 @@ function configPath() {
   local relativePath="$1"
   local platformPath="$defaultConfigPath/$platform/$relativePath"
   local genericPath="$defaultConfigPath/generic/$relativePath"
-  if [[ -f $projectConfigPath/$relativePath ]]; then
+  # -e FILE - True if the FILE exists and is a file, regardless of type
+  if [[ -e $projectConfigPath/$relativePath ]]; then
     echo $projectConfigPath/$relativePath
-  elif [[ -f $platformPath ]]; then
+  elif [[ -e $platformPath ]]; then
     echo $platformPath
   else
     echo $genericPath
