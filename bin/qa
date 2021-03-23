@@ -75,6 +75,7 @@ then
     echo "Xdebug is not enabled - infection and coverage not available"
 else
     xdebugEnabled=1
+    # @see https://xdebug.org/docs/all_settings#mode
     export XDEBUG_MODE=coverage
     echo "Xdebug is enabled in coverage mode"
 fi
